@@ -51,7 +51,7 @@ class UserModel {
     );
   }
 
-  factory UserModel.fromDocument(DocumentSnapshot snapshot) {
+  factory UserModel.fromDocument(DocumentSnapshot snapshot, String uid) {
     if (snapshot.data() == null) {
       throw Exception;
     }
@@ -62,7 +62,7 @@ class UserModel {
       email: data['email'] as String?,
       avatar: data['avatar'] as String?,
       phoneNumber: data['phoneNumber'] as String,
-      uId: snapshot.id,
+      uId: uid,
       facebookLink: data['facebookLink'] != null
           ? UserModel.fromJson(data['facebookLink'] as Map<String, dynamic>)
           : null,

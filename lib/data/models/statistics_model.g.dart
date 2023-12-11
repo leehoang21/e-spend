@@ -6,20 +6,23 @@ part of 'statistics_model.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$StatisticsModelImpl _$$StatisticsModelImplFromJson(
+_$StatisticsListModelImpl _$$StatisticsListModelImplFromJson(
         Map<String, dynamic> json) =>
-    _$StatisticsModelImpl(
-      revenue: (json['revenue'] as num).toDouble(),
-      expense: (json['expense'] as num).toDouble(),
-      loan: (json['loan'] as num).toDouble(),
-      debt: (json['debt'] as num).toDouble(),
+    _$StatisticsListModelImpl(
+      statistics: (json['statistics'] as Map<String, dynamic>?)?.map(
+            (k, e) => MapEntry(
+                k, StatisticsListModel.fromJson(e as Map<String, dynamic>)),
+          ) ??
+          const {},
+      data: (json['data'] as Map<String, dynamic>?)?.map(
+            (k, e) => MapEntry(k, (e as num).toDouble()),
+          ) ??
+          const {},
     );
 
-Map<String, dynamic> _$$StatisticsModelImplToJson(
-        _$StatisticsModelImpl instance) =>
+Map<String, dynamic> _$$StatisticsListModelImplToJson(
+        _$StatisticsListModelImpl instance) =>
     <String, dynamic>{
-      'revenue': instance.revenue,
-      'expense': instance.expense,
-      'loan': instance.loan,
-      'debt': instance.debt,
+      'statistics': instance.statistics,
+      'data': instance.data,
     };

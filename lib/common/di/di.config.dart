@@ -83,7 +83,8 @@ extension GetItInjectableX on _i1.GetIt {
     gh.singleton<_i6.FirebaseConfig>(_i6.FirebaseConfig()..init());
     gh.singleton<_i7.HiveConfig>(_i7.HiveConfig()..init());
     gh.lazySingleton<_i8.LoadingBloc>(() => _i8.LoadingBloc());
-    gh.factory<_i9.StatisticsRepository>(() => _i10.StatisticsRepositoryImpl());
+    gh.factory<_i9.StatisticsRepository>(
+        () => _i10.StatisticsRepositoryImpl(gh<_i6.FirebaseConfig>()));
     gh.factory<_i11.StorageRepository>(
         () => _i12.StorageRepositoryImpl(gh<_i6.FirebaseConfig>()));
     gh.factory<_i13.StorageUseCase>(
@@ -138,8 +139,10 @@ extension GetItInjectableX on _i1.GetIt {
           gh<_i7.HiveConfig>(),
           gh<_i21.WalletRepository>(),
         ));
-    gh.factory<_i37.TransactionUseCase>(
-        () => _i37.TransactionUseCase(gh<_i35.TransactionRepository>()));
+    gh.factory<_i37.TransactionUseCase>(() => _i37.TransactionUseCase(
+          gh<_i35.TransactionRepository>(),
+          gh<_i9.StatisticsRepository>(),
+        ));
     gh.factory<_i38.VerifyCubit>(() => _i38.VerifyCubit(
           gh<_i28.AuthUseCase>(),
           gh<_i17.UserUseCase>(),

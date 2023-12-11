@@ -56,7 +56,10 @@ class UserRepositoryImpl extends UserRepository {
   Future<UserModel?> getUser() async {
     try {
       final result = await _doc.get();
-      return UserModel.fromDocument(result);
+      return UserModel.fromDocument(
+        result,
+        config.auth.currentUser?.uid ?? '',
+      );
     } catch (e) {
       return null;
     }
