@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<resources>
+		<string name="app_name">eSpend</string>
+		<string name="facebook_app_id">731479038841052</string>
+		<string name="fb_login_protocol_scheme">fb731479038841052</string>
+		<string name="facebook_client_token">6c5cf1e8b532759f7e396eccdf17af32</string>
+</resources>

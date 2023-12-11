@@ -1,0 +1,1 @@
+enum LoaderEnum { start, finish }
