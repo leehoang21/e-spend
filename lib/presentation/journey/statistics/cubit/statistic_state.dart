@@ -8,16 +8,23 @@ enum StatisticStateStatus {
 }
 
 class StatisticState extends Equatable {
-  final List<TransactionModel> data;
+  final StatisticsListModel data;
   final StatisticStateStatus status;
 
   const StatisticState({
-    this.data = const [],
+    required this.data,
     this.status = StatisticStateStatus.initial,
   });
 
+  factory StatisticState.initial() {
+    return StatisticState(
+      data: StatisticsListModel.initial(),
+      status: StatisticStateStatus.initial,
+    );
+  }
+
   StatisticState copyWith({
-    List<TransactionModel>? data,
+    StatisticsListModel? data,
     StatisticStateStatus? status,
   }) {
     return StatisticState(

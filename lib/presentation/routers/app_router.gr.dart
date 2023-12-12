@@ -85,6 +85,12 @@ abstract class _$AppRouter extends RootStackRouter {
         ),
       );
     },
+    StatisticRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const StatisticScreenProvider(),
+      );
+    },
     VerifyOtpRoute.name: (routeData) {
       final args = routeData.argsAs<VerifyOtpRouteArgs>();
       return AutoRoutePage<dynamic>(
@@ -307,6 +313,20 @@ class RegisterRouteArgs {
   String toString() {
     return 'RegisterRouteArgs{key: $key, phoneNumber: $phoneNumber}';
   }
+}
+
+/// generated route for
+/// [StatisticScreenProvider]
+class StatisticRoute extends PageRouteInfo<void> {
+  const StatisticRoute({List<PageRouteInfo>? children})
+      : super(
+          StatisticRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'StatisticRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
 }
 
 /// generated route for

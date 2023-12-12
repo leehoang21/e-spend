@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_e_spend/common/di/di.dart';
@@ -5,15 +6,16 @@ import 'package:flutter_e_spend/presentation/journey/statistics/cubit/statistic_
 
 import 'statistic_screen.dart';
 
-class StatisticCcreenProvider extends StatefulWidget {
-  const StatisticCcreenProvider({super.key});
+@RoutePage()
+class StatisticScreenProvider extends StatefulWidget {
+  const StatisticScreenProvider({super.key});
 
   @override
-  State<StatisticCcreenProvider> createState() =>
-      _StatisticCcreenProviderState();
+  State<StatisticScreenProvider> createState() =>
+      _StatisticScreenProviderState();
 }
 
-class _StatisticCcreenProviderState extends State<StatisticCcreenProvider> {
+class _StatisticScreenProviderState extends State<StatisticScreenProvider> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(

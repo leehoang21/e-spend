@@ -7,8 +7,8 @@ class MockData {
       type: 'EXPENSES',
       subCategories: [
         CategoryModel(
-          name: 'COFFEE',
-          type: 'EXPENSES',
+          name: 'EXPENSES',
+          type: 'COFFEE',
         ),
         CategoryModel(
           type: 'EXPENSES',

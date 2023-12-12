@@ -10,6 +10,7 @@ import '../journey/auth/register/register_screen_provider.dart';
 import '../journey/auth/register_account/register_account_provider.dart';
 import '../journey/auth/verify_otp/verify_otp_screen_provider.dart';
 import '../journey/main/main_screen_provider.dart';
+import '../journey/statistics/statistic_screen_provider.dart';
 import '../journey/transaction/bank_list_screen/bank_list_screen_provider.dart';
 import '../journey/transaction/category_screen/category_screen_provider.dart';
 import '../journey/transaction/create/create_transaction_screen_provider.dart';

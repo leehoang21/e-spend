@@ -8,6 +8,7 @@ import '../../common/configs/firebase_config.dart';
 import '../../common/exception/app_error.dart';
 import '../../data/models/transaction_model.dart';
 import '../../domain/repositories/statistics_repository.dart';
+import '../models/category_model.dart';
 
 @Injectable(as: StatisticsRepository)
 class StatisticsRepositoryImpl implements StatisticsRepository {
@@ -17,9 +18,10 @@ class StatisticsRepositoryImpl implements StatisticsRepository {
     this.config,
   );
 
-  DocumentReference<Map<String, dynamic>> get _doc => config.userDoc
+  CollectionReference<Map<String, dynamic>> get _doc => config.userDoc
       .collection(config.auth.currentUser?.uid ?? '')
-      .doc(DefaultEnvironment.statistics);
+      .doc(DefaultEnvironment.customer)
+      .collection(DefaultEnvironment.statistics);
 
   @override
   Future<Either<StatisticsListModel, AppError>> update(
@@ -27,7 +29,7 @@ class StatisticsRepositoryImpl implements StatisticsRepository {
     TransactionModel? transactionOld,
   }) async {
     try {
-      Map<String, double> map = {};
+      Map<CategoryModel, Map<CategoryModel, double>> map = {};
       Map<String, StatisticsListModel> map2 = {};
       final listStatistics = await get();
       return listStatistics.fold(
@@ -38,27 +40,52 @@ class StatisticsRepositoryImpl implements StatisticsRepository {
           //
           int amount = transaction.amount - (transactionOld?.amount ?? 0);
           //copy with
-          map = statistics.data.map((key, value) => MapEntry(key, value));
+          map = statistics.data.map((key, value) {
+            return MapEntry(key, value);
+          });
           map.update(
-            transaction.category.type ?? '',
-            (value) => value + amount,
-            ifAbsent: () => amount.toDouble(),
+            transaction.category.copyWith(name: transaction.category.type),
+            (value) {
+              final data = value.map((key, value) => MapEntry(key, value));
+              data.update(
+                transaction.category,
+                (value) => value + amount,
+                ifAbsent: () => amount.toDouble(),
+              );
+              return data;
+            },
+            ifAbsent: () => {
+              transaction.category.copyWith(name: transaction.category.type):
+                  amount.toDouble(),
+            },
           );
           statistics = statistics.copyWith(data: map);
           //update with month
           int month = dateItem.month;
           StatisticsListModel statisticMonth =
-              statistics.statistics[month - 1] ?? StatisticsListModel();
+              statistics.statistics[month - 1] ?? StatisticsListModel.initial();
           //update with day
           int day = dateItem.day;
           StatisticsListModel? statisticDay =
-              statisticMonth.statistics[day - 1] ?? StatisticsListModel();
+              statisticMonth.statistics[day - 1] ??
+                  StatisticsListModel.initial();
           //update amount day
           map = statisticDay.data.map((key, value) => MapEntry(key, value));
           map.update(
-            transaction.category.type ?? '',
-            (value) => value + amount,
-            ifAbsent: () => amount.toDouble(),
+            transaction.category.copyWith(name: transaction.category.type),
+            (value) {
+              final data = value.map((key, value) => MapEntry(key, value));
+              data.update(
+                transaction.category,
+                (value) => value + amount,
+                ifAbsent: () => amount.toDouble(),
+              );
+              return data;
+            },
+            ifAbsent: () => {
+              transaction.category.copyWith(name: transaction.category.type):
+                  amount.toDouble(),
+            },
           );
           statisticDay = statisticDay.copyWith(data: map);
           //update list day
@@ -73,9 +100,20 @@ class StatisticsRepositoryImpl implements StatisticsRepository {
           //update amount month
           map = statisticMonth.data.map((key, value) => MapEntry(key, value));
           map.update(
-            transaction.category.type ?? '',
-            (value) => value + amount,
-            ifAbsent: () => amount.toDouble(),
+            transaction.category.copyWith(name: transaction.category.type),
+            (value) {
+              final data = value.map((key, value) => MapEntry(key, value));
+              data.update(
+                transaction.category,
+                (value) => value + amount,
+                ifAbsent: () => amount.toDouble(),
+              );
+              return data;
+            },
+            ifAbsent: () => {
+              transaction.category.copyWith(name: transaction.category.type):
+                  amount.toDouble(),
+            },
           );
           statisticMonth = statisticMonth.copyWith(data: map);
           //update list  =month
@@ -88,9 +126,7 @@ class StatisticsRepositoryImpl implements StatisticsRepository {
           );
           statistics = statistics.copyWith(statistics: map2);
           //
-          await _doc
-              .collection(dateItem.year.toString())
-              .add(statistics.toJson());
+          await _doc.doc(dateItem.year.toString()).set(statistics.toJson());
 
           return Left(statistics);
         },
@@ -106,7 +142,7 @@ class StatisticsRepositoryImpl implements StatisticsRepository {
   @override
   Future<Either<StatisticsListModel, AppError>> get() async {
     try {
-      final result = await _doc.get();
+      final result = await _doc.doc(DateTime.now().year.toString()).get();
       return Left(StatisticsListModel.fromJson(result.data() ?? {}));
     } catch (e) {
       return Right(AppError(message: e.toString()));

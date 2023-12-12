@@ -2,15 +2,16 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_e_spend/common/constants/string_constants.dart';
+import 'package:flutter_e_spend/data/models/statistics_model.dart';
+import 'package:flutter_e_spend/presentation/widgets/loading_widget/loader_widget.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
-import '../../../data/models/transaction_model.dart';
+import '../../../data/models/category_model.dart';
 import '../../widgets/image_app_widget/image_app.dart';
 import 'cubit/statistic_cubit.dart';
 
 class PieChartWidget extends StatefulWidget {
   const PieChartWidget({super.key, required this.categoryType});
-  final String categoryType;
+  final CategoryModel categoryType;
 
   @override
   State<StatefulWidget> createState() => PieChartWidgetState();
@@ -21,61 +22,75 @@ class PieChartWidgetState extends State<PieChartWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return AspectRatio(
-      aspectRatio: 1.3,
-      child: AspectRatio(
-        aspectRatio: 1,
-        child: PieChart(
-          PieChartData(
-            pieTouchData: PieTouchData(
-              touchCallback: (FlTouchEvent event, pieTouchResponse) {
-                setState(() {
-                  if (!event.isInterestedForInteractions ||
-                      pieTouchResponse == null ||
-                      pieTouchResponse.touchedSection == null) {
-                    touchedIndex = -1;
-                    return;
-                  }
-                  touchedIndex =
-                      pieTouchResponse.touchedSection!.touchedSectionIndex;
-                });
-              },
+    return context.watch<StatisticCubit>().state.status ==
+            StatisticStateStatus.loading
+        ? const LoaderWidget()
+        : AspectRatio(
+            aspectRatio: 1.3,
+            child: AspectRatio(
+              aspectRatio: 1,
+              child: PieChart(
+                PieChartData(
+                  pieTouchData: PieTouchData(
+                    touchCallback: (FlTouchEvent event, pieTouchResponse) {
+                      setState(() {
+                        if (!event.isInterestedForInteractions ||
+                            pieTouchResponse == null ||
+                            pieTouchResponse.touchedSection == null) {
+                          touchedIndex = -1;
+                          return;
+                        }
+                        touchedIndex = pieTouchResponse
+                            .touchedSection!.touchedSectionIndex;
+                      });
+                    },
+                  ),
+                  borderData: FlBorderData(
+                    show: false,
+                  ),
+                  sectionsSpace: 0,
+                  centerSpaceRadius: 0,
+                  sections: showingSections(
+                      context.watch<StatisticCubit>().state.data),
+                ),
+              ),
             ),
-            borderData: FlBorderData(
-              show: false,
-            ),
-            sectionsSpace: 0,
-            centerSpaceRadius: 0,
-            sections:
-                showingSections(context.watch<StatisticCubit>().state.data),
-          ),
-        ),
-      ),
-    );
+          );
   }
 
-  List<PieChartSectionData> showingSections(List<TransactionModel> datas) {
+  List<PieChartSectionData> showingSections(StatisticsListModel datas) {
+    final data = datas.data[widget.categoryType] ?? {};
     final List<PieChartSectionData> sections = [];
-    for (int i = 0; i < datas.length; i++) {
-      if (datas[i].category.type == widget.categoryType) {
-        sections.add(showingSection(i));
-      }
+    final total = data.values.fold(0.0, (previousValue, element) {
+      return previousValue.toDouble() + element;
+    });
+
+    for (int i = 0; i < data.entries.length; i++) {
+      sections.add(
+        showingSection(
+          i,
+          data.entries.elementAt(i).key,
+          data.entries.elementAt(i).value / total * 100,
+        ),
+      );
     }
+
     return sections;
   }
 
-  PieChartSectionData showingSection(int index) {
-    final isTouched = index == touchedIndex;
+  PieChartSectionData showingSection(
+      int index, CategoryModel type, double value) {
+    bool isTouched = index == touchedIndex;
     final fontSize = isTouched ? 20.0.sp : 16.0.sp;
-    final radius = isTouched ? 110.0.r : 100.0.r;
+    final radius = isTouched ? 110.0.sp : 100.0.sp;
     final widgetSize = isTouched ? 55.0.sp : 40.0.sp;
     const shadows = [Shadow(color: Colors.black, blurRadius: 2)];
     return PieChartSectionData(
       color: Colors.primaries.length < index
           ? Colors.primaries[index]
           : Colors.amber,
-      value: context.watch<StatisticCubit>().revenue(index),
-      title: '${context.watch<StatisticCubit>().revenue(index)}%',
+      value: value,
+      title: '$value%',
       radius: radius,
       titleStyle: TextStyle(
         fontSize: fontSize,
@@ -84,7 +99,7 @@ class PieChartWidgetState extends State<PieChartWidget> {
         shadows: shadows,
       ),
       badgeWidget: _Badge(
-        "${StringConstants.imagePath}${context.watch<StatisticCubit>().state.data[index].category.name?.toLowerCase()}.png",
+        "${StringConstants.imagePath}${type.type?.toLowerCase()}.png",
         size: widgetSize,
         borderColor: Colors.black,
       ),
