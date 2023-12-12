@@ -41,18 +41,6 @@ class $AssetsIconsGen {
   SvgGenImage get bottomBarGoal =>
       const SvgGenImage('assets/icons/bottom_bar_goal.svg');
 
-  /// File path: assets/icons/bottom_bar_my_page.svg
-  SvgGenImage get bottomBarMyPage =>
-      const SvgGenImage('assets/icons/bottom_bar_my_page.svg');
-
-  /// File path: assets/icons/bottom_bar_statistic.svg
-  SvgGenImage get bottomBarStatistic =>
-      const SvgGenImage('assets/icons/bottom_bar_statistic.svg');
-
-  /// File path: assets/icons/bottom_bar_transactions.svg
-  SvgGenImage get bottomBarTransactions =>
-      const SvgGenImage('assets/icons/bottom_bar_transactions.svg');
-
   /// File path: assets/icons/categories.png
   AssetGenImage get categories =>
       const AssetGenImage('assets/icons/categories.png');
@@ -94,6 +82,9 @@ class $AssetsIconsGen {
   SvgGenImage get notification =>
       const SvgGenImage('assets/icons/notification.svg');
 
+  /// File path: assets/icons/password.svg
+  SvgGenImage get password => const SvgGenImage('assets/icons/password.svg');
+
   /// File path: assets/icons/rateme.png
   AssetGenImage get rateme => const AssetGenImage('assets/icons/rateme.png');
 
@@ -110,9 +101,6 @@ class $AssetsIconsGen {
         addCircle,
         avataDefault,
         bottomBarGoal,
-        bottomBarMyPage,
-        bottomBarStatistic,
-        bottomBarTransactions,
         categories,
         check,
         clock,
@@ -125,6 +113,7 @@ class $AssetsIconsGen {
         language,
         logout,
         notification,
+        password,
         rateme,
         snackbarFailed,
         success
@@ -157,6 +146,18 @@ class $AssetsImagesGen {
 
   /// File path: assets/images/borrow.png
   AssetGenImage get borrow => const AssetGenImage('assets/images/borrow.png');
+
+  /// File path: assets/images/bottom_bar_my_page.png
+  AssetGenImage get bottomBarMyPage =>
+      const AssetGenImage('assets/images/bottom_bar_my_page.png');
+
+  /// File path: assets/images/bottom_bar_statistic.png
+  AssetGenImage get bottomBarStatistic =>
+      const AssetGenImage('assets/images/bottom_bar_statistic.png');
+
+  /// File path: assets/images/bottom_bar_transactions.png
+  AssetGenImage get bottomBarTransactions =>
+      const AssetGenImage('assets/images/bottom_bar_transactions.png');
 
   /// File path: assets/images/business.png
   AssetGenImage get business =>
@@ -383,6 +384,9 @@ class $AssetsImagesGen {
         bonus,
         book,
         borrow,
+        bottomBarMyPage,
+        bottomBarStatistic,
+        bottomBarTransactions,
         business,
         calendar,
         category,

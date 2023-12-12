@@ -15,11 +15,11 @@ class MainConstants {
 
   static final List<Map<String, dynamic>> bottomIconsData = [
     {
-      "iconPath": Assets.icons.bottomBarTransactions.path,
+      "iconPath": Assets.images.bottomBarTransactions.path,
       "label": 'transactions',
     },
     {
-      "iconPath": Assets.icons.bottomBarStatistic.path,
+      "iconPath": Assets.images.bottomBarStatistic.path,
       "label": translate('report'),
     },
     {
@@ -27,7 +27,7 @@ class MainConstants {
       "label": translate('planning'),
     },
     {
-      "iconPath": Assets.icons.bottomBarMyPage.path,
+      "iconPath": Assets.images.bottomBarMyPage.path,
       "label": 'my_page',
     },
   ];
