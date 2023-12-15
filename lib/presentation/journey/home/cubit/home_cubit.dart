@@ -1,8 +1,13 @@
+import 'dart:async';
+
+import 'package:either_dart/either.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter_e_spend/common/enums/category.dart';
 import 'package:flutter_e_spend/common/extension/string_extension.dart';
 import 'package:flutter_e_spend/data/models/transaction_model.dart';
 import 'package:injectable/injectable.dart';
 
+import '../../../../common/exception/app_error.dart';
 import '../../../../common/utils/format_utils.dart';
 import '../../../../domain/use_cases/transaction_use_case.dart';
 import '../../../../domain/use_cases/user_use_case.dart';
@@ -16,19 +21,25 @@ class HomeCubit extends BaseBloc<HomeState> {
   final TransactionUseCase useCase;
   final UserUseCase userUseCase;
   DateTime date = DateTime.now();
+  StreamSubscription? _subscription;
 
   @override
   Future onInit() async {
-    await getData();
+    _subscription = useCase.stream().listen(listen);
     super.onInit();
+  }
+
+  @override
+  Future<void> close() {
+    _subscription?.cancel();
+    return super.close();
   }
 
   changeDate(DateTime time) {
     date = time;
   }
 
-  Future getData() async {
-    final result = await useCase.get();
+  void listen(Either<List<TransactionModel>, AppError> result) {
     result.fold((l) {
       emit(state.copyWith(data: l, status: HomeStateStatus.loaded));
     }, (r) {
@@ -39,11 +50,11 @@ class HomeCubit extends BaseBloc<HomeState> {
   String get revenue {
     final data = state.data;
     return data.fold(0, (previousValue, element) {
-      final dateItem = DateTime.fromMillisecondsSinceEpoch(element.spendTime);
+      final dateItem = element.spendTime.toDate();
       if (dateItem.month != date.month || dateItem.year != date.year) {
         return previousValue;
       }
-      if (element.category.type != 'REVENUE') return previousValue;
+      if (element.category.category.type != 'REVENUE') return previousValue;
       return previousValue + element.amount;
     }).toString();
   }
@@ -51,11 +62,11 @@ class HomeCubit extends BaseBloc<HomeState> {
   String get expense {
     final data = state.data;
     return data.fold(0, (previousValue, element) {
-      final dateItem = DateTime.fromMillisecondsSinceEpoch(element.spendTime);
+      final dateItem = element.spendTime.toDate();
       if (dateItem.month != date.month || dateItem.year != date.year) {
         return previousValue;
       }
-      if (element.category.type != 'EXPENSES') return previousValue;
+      if (element.category.category.type != 'EXPENSES') return previousValue;
       return previousValue + element.amount;
     }).toString();
   }
@@ -67,7 +78,7 @@ class HomeCubit extends BaseBloc<HomeState> {
     data.sort((a, b) => b.spendTime.compareTo(a.spendTime));
     Map<String, List<TransactionModel>> result = {};
     for (final item in data) {
-      final dateItem = DateTime.fromMillisecondsSinceEpoch(item.spendTime);
+      final dateItem = item.spendTime.toDate();
       if (isMonth) {
         if (dateItem.month == date.month && dateItem.year == date.year) {
           if (dateItem.day == date.day) {
@@ -75,8 +86,7 @@ class HomeCubit extends BaseBloc<HomeState> {
           } else if (dateItem.day == date.day - 1) {
             result['Yesterday'.tr] = [...result['Yesterday'.tr] ?? [], item];
           } else {
-            final timeString = formatDateMonth(
-                DateTime.fromMillisecondsSinceEpoch(item.spendTime));
+            final timeString = formatDateMonth(item.spendTime);
             result[timeString] = [...result[timeString] ?? [], item];
           }
         }
@@ -89,8 +99,7 @@ class HomeCubit extends BaseBloc<HomeState> {
           dateItem.year == date.year) {
         result['Yesterday'.tr] = [...result['Yesterday'.tr] ?? [], item];
       } else {
-        final timeString = formatDateMonth(
-            DateTime.fromMillisecondsSinceEpoch(item.spendTime));
+        final timeString = formatDateMonth(item.spendTime);
         result[timeString] = [...result[timeString] ?? [], item];
       }
     }
@@ -100,11 +109,11 @@ class HomeCubit extends BaseBloc<HomeState> {
   double get total {
     final data = state.data;
     return data.fold(0, (previousValue, element) {
-      final dateItem = DateTime.fromMillisecondsSinceEpoch(element.spendTime);
+      final dateItem = element.spendTime.toDate();
       if (dateItem.month != date.month || dateItem.year != date.year) {
         return previousValue;
       }
-      if (element.category.type != 'EXPENSES') {
+      if (element.category.category.type != 'EXPENSES') {
         return previousValue + element.amount;
       }
       return previousValue - element.amount;

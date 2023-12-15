@@ -35,7 +35,10 @@ class LoginConstants {
           },
         ),
         ItemLoginWithModel(
-          icon: const Text('pass'),
+          icon: Assets.icons.password.svg(
+            width: LoginConstants.sizeIcon,
+            height: LoginConstants.sizeIcon,
+          ),
           onPressed: () {
             context.read<LoginCubit>().checkLoginPassword();
           },

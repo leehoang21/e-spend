@@ -32,25 +32,17 @@ class WalletListScreen extends StatelessWidget {
           style: ThemeText.style18Bold.copyWith(color: AppColor.white),
         ),
         //  color: AppColor.ebonyClay,
-        leading: GestureDetector(
-          onTap: () => Navigator.pop(context),
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: AppDimens.space_16),
-            child: const Icon(
-              Icons.arrow_back_ios_new,
-              color: AppColor.white,
-            ),
-          ),
-        ),
       ),
       body: Container(
           margin: EdgeInsets.only(top: AppDimens.space_16),
           padding: EdgeInsets.only(top: AppDimens.height_20),
           decoration: BoxDecoration(
-              color: AppColor.white,
-              borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(AppDimens.radius_20),
-                  topRight: Radius.circular(AppDimens.radius_20))),
+            color: AppColor.white,
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(AppDimens.radius_20),
+              topRight: Radius.circular(AppDimens.radius_20),
+            ),
+          ),
           child: BlocBuilder<WalletListCubit, WalletListState>(
               builder: (context, walletListState) {
             if (walletListState is WalletListLoaded) {

@@ -1,222 +1,173 @@
 import '../../data/models/category_model.dart';
+import '../enums/category.dart';
 
 class MockData {
   static List<CategoryModel> categoriesData = [
     const CategoryModel(
-      name: 'EATING',
-      type: 'EXPENSES',
+      category: CategoryType.eating,
       subCategories: [
         CategoryModel(
-          name: 'COFFEE',
-          type: 'EXPENSES',
+          category: CategoryType.coffee,
         ),
         CategoryModel(
-          type: 'EXPENSES',
-          name: 'DRINKING',
+          category: CategoryType.drinking,
         ),
         CategoryModel(
-          type: 'EXPENSES',
-          name: 'RESTAURANT',
+          category: CategoryType.restaurant,
         ),
       ],
     ),
     const CategoryModel(
-      name: 'FRIEND_AND_LOVER',
-      type: 'EXPENSES',
+      category: CategoryType.friendAndLover,
     ),
     const CategoryModel(
-      name: 'MOVE',
-      type: 'EXPENSES',
+      category: CategoryType.move,
       subCategories: [
         CategoryModel(
-          type: 'EXPENSES',
-          name: 'MAINTENANCE',
+          category: CategoryType.maintenance,
         ),
         CategoryModel(
-          type: 'EXPENSES',
-          name: 'PARKING',
+          category: CategoryType.parking,
         ),
         CategoryModel(
-          type: 'EXPENSES',
-          name: 'TAXI',
+          category: CategoryType.taxi,
         ),
         CategoryModel(
-          type: 'EXPENSES',
-          name: 'OIL',
+          category: CategoryType.oil,
         ),
       ],
     ),
     const CategoryModel(
-      name: 'FAMILY',
-      type: 'EXPENSES',
+      category: CategoryType.family,
       subCategories: [
         CategoryModel(
-          name: 'CHILDREN',
-          type: 'EXPENSES',
+          category: CategoryType.children,
         ),
         CategoryModel(
-          name: 'HOME_REPAIR',
-          type: 'EXPENSES',
+          category: CategoryType.homeRepair,
         ),
         CategoryModel(
-          name: 'HOME_SERVICE',
-          type: 'EXPENSES',
+          category: CategoryType.homeService,
         ),
         CategoryModel(
-          name: 'PETS',
-          type: 'EXPENSES',
+          category: CategoryType.pets,
         ),
       ],
     ),
     const CategoryModel(
-      name: 'TRAVELING',
-      type: 'EXPENSES',
+      category: CategoryType.traveling,
     ),
     const CategoryModel(
-      name: 'SHOPPING',
-      type: 'EXPENSES',
+      category: CategoryType.shopping,
       subCategories: [
         CategoryModel(
-          type: 'EXPENSES',
-          name: 'CLOTHES',
+          category: CategoryType.clothes,
         ),
         CategoryModel(
-          type: 'EXPENSES',
-          name: 'ACCESSORY',
+          category: CategoryType.accessory,
         ),
         CategoryModel(
-          type: 'EXPENSES',
-          name: 'ELECTRONIC_DEVICE',
+          category: CategoryType.electronicDevice,
         ),
       ],
     ),
     const CategoryModel(
-      name: 'DONATE',
-      type: 'EXPENSES',
+      category: CategoryType.donate,
       subCategories: [
         CategoryModel(
-          type: 'EXPENSES',
-          name: 'WEDDING',
+          category: CategoryType.wedding,
         ),
         CategoryModel(
-          type: 'EXPENSES',
-          name: 'FUNERAL',
+          category: CategoryType.funeral,
         ),
         CategoryModel(
-          type: 'EXPENSES',
-          name: 'CHARITY',
+          category: CategoryType.charity,
         ),
       ],
     ),
     const CategoryModel(
-      name: 'BILLS_AND_UTILITIES',
-      type: 'EXPENSES',
+      category: CategoryType.billsAndUtilities,
       subCategories: [
         CategoryModel(
-          type: 'EXPENSES',
-          name: 'ELECTRIC_BILL',
+          category: CategoryType.electricBill,
         ),
         CategoryModel(
-          type: 'EXPENSES',
-          name: 'RENT_HOUSE',
+          category: CategoryType.rentHouse,
         ),
         CategoryModel(
-          type: 'EXPENSES',
-          name: 'TV_BILL',
+          category: CategoryType.tvBill,
         ),
         CategoryModel(
-          type: 'EXPENSES',
-          name: 'GAS_BILL',
+          category: CategoryType.gasBill,
         ),
         CategoryModel(
-          type: 'EXPENSES',
-          name: 'WATER_BILL',
+          category: CategoryType.waterBill,
         ),
       ],
     ),
     const CategoryModel(
-      name: 'INVESTMENT',
-      type: 'EXPENSES',
+      category: CategoryType.investment,
     ),
     const CategoryModel(
-      name: 'OTHER',
-      type: 'EXPENSES',
+      category: CategoryType.other,
     ),
     const CategoryModel(
-      name: 'EDUCATION',
-      type: 'EXPENSES',
+      category: CategoryType.education,
       subCategories: [
         CategoryModel(
-          type: 'EXPENSES',
-          name: 'BOOK',
+          category: CategoryType.book,
         ),
         CategoryModel(
-          type: 'EXPENSES',
-          name: 'COURSE',
+          category: CategoryType.course,
         ),
       ],
     ),
     const CategoryModel(
-      name: 'HEALTH',
-      type: 'EXPENSES',
+      category: CategoryType.heath,
       subCategories: [
         CategoryModel(
-          type: 'EXPENSES',
-          name: 'PERSONAL_HYGIENE',
+          category: CategoryType.personalHygiene,
         ),
         CategoryModel(
-          type: 'EXPENSES',
-          name: 'HEALTHCARE',
+          category: CategoryType.healthcare,
         ),
         CategoryModel(
-          type: 'EXPENSES',
-          name: 'MEDICINE',
+          category: CategoryType.medicine,
         ),
       ],
     ),
     const CategoryModel(
-      name: 'BUSINESS',
-      type: 'EXPENSES',
+      category: CategoryType.business,
     ),
     const CategoryModel(
-      name: 'SELL_THINGS',
-      type: 'REVENUE',
+      category: CategoryType.sellThings,
     ),
     const CategoryModel(
-      name: 'SALARY',
-      type: 'REVENUE',
+      category: CategoryType.salary,
     ),
     const CategoryModel(
-      name: 'BONUS',
-      type: 'REVENUE',
+      category: CategoryType.bonus,
     ),
     const CategoryModel(
-      name: 'LIVING_EXPENSE',
-      type: 'REVENUE',
+      category: CategoryType.livingExpense,
     ),
     const CategoryModel(
-      name: 'AWARDED',
-      type: 'REVENUE',
+      category: CategoryType.awarded,
     ),
     const CategoryModel(
-      name: 'OTHER',
-      type: 'REVENUE',
+      category: CategoryType.otherRevenue,
     ),
     const CategoryModel(
-      name: 'DEBT_COLLECTION',
-      type: 'DEBTS_AND_LOAN',
+      category: CategoryType.debtCollection,
     ),
     const CategoryModel(
-      name: 'BORROW',
-      type: 'DEBTS_AND_LOAN',
+      category: CategoryType.borrow,
     ),
     const CategoryModel(
-      name: 'LOAN',
-      type: 'DEBTS_AND_LOAN',
+      category: CategoryType.loan,
     ),
     const CategoryModel(
-      name: 'PAY',
-      type: 'DEBTS_AND_LOAN',
+      category: CategoryType.pay,
     ),
   ];
 }

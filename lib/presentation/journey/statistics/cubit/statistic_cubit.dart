@@ -1,9 +1,14 @@
+import 'dart:async';
+
+import 'package:either_dart/either.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter_e_spend/common/extension/bloc_extension.dart';
+import 'package:flutter_e_spend/data/models/statistics_model.dart';
 import 'package:injectable/injectable.dart';
 
+import '../../../../common/exception/app_error.dart';
 import '../../../../common/utils/app_utils.dart';
-import '../../../../data/models/transaction_model.dart';
-import '../../../../domain/use_cases/transaction_use_case.dart';
+import '../../../../domain/use_cases/statistic_use_case.dart';
 import '../../../../domain/use_cases/user_use_case.dart';
 import '../../../bloc/base_bloc/base_bloc.dart';
 part 'statistic_state.dart';
@@ -11,59 +16,41 @@ part 'statistic_state.dart';
 @injectable
 class StatisticCubit extends BaseBloc<StatisticState> {
   StatisticCubit(this.useCase, this.userUseCase)
-      : super(const StatisticState());
-  final TransactionUseCase useCase;
+      : super(StatisticState.initial());
+  final StatisticUseCase useCase;
   final UserUseCase userUseCase;
+  StreamSubscription? _subscription;
 
   @override
-  void onInit() {
-    getData();
+  Future<void> close() {
+    _subscription?.cancel();
+    return super.close();
+  }
+
+  @override
+  Future onInit() async {
+    showLoading();
+
+    _subscription?.cancel();
+    _subscription = useCase.stream().listen(listen);
+    hideLoading();
     super.onInit();
   }
 
-  void getData() async {
-    final result = await useCase.get();
+  void listen(Either<StatisticsListModel, AppError> event) {
+    emit(state.copyWith(status: StatisticStateStatus.loading));
+    final result = event;
     result.fold(
       (left) {
         emit(state.copyWith(data: left, status: StatisticStateStatus.loaded));
+        hideLoading();
       },
       (right) {
+        hideLoading();
         logger(right.toString());
+        showSnackbar(translationKey: right.toString());
         emit(state.copyWith(status: StatisticStateStatus.error));
       },
     );
-  }
-
-  double get _revenue {
-    final data = state.data;
-    return data.fold(0, (previousValue, element) {
-      if (element.category.type != 'REVENUE') return previousValue;
-      return previousValue + element.amount;
-    });
-  }
-
-  double revenue(int index) {
-    final data = state.data[index];
-    return data.amount / _revenue;
-  }
-
-  double get _expense {
-    final data = state.data;
-    return data.fold(0, (previousValue, element) {
-      if (element.category.type != 'EXPENSES') return previousValue;
-      return previousValue + element.amount;
-    });
-  }
-
-  double expense(int index) {
-    final data = state.data[index];
-    return data.amount / _expense;
-  }
-
-  String get total {
-    final data = state.data;
-    return data.fold(0, (previousValue, element) {
-      return previousValue + element.amount;
-    }).toString();
   }
 }

@@ -159,5 +159,18 @@
   "Password_incorrect": "Mật khẩu không khớp",
   "your_password": "Mật khẩu của bạn",
   "create_password": "Tạo mật khẩu",
-  "password_or_email_incorrect": "Mật khẩu hoặc email không chính xác"
+  "password_or_email_incorrect": "Mật khẩu hoặc email không chính xác",
+  "EXPENSES": "Chi tiêu",
+  "REVENUE": "Thu nhập",
+  "DEBTS AND LOAN": "Nợ và vay",
+  "net_income": "Net income",
+  "DEBT": "Khoản nợ",
+  "LOAN": "Khoản vay",
+  "Planning": "Lập kế hoạch",
+  "Buget": "Ngân sách",
+  "subtitleBuget": "Lập ngân sách giúp bạn cân bằng thu nhập và chi tiêu. Và tôi cá với bạn rằng, khi có ngân sách, bạn sẽ thận trọng hơn khi dự định chi tiêu một thứ gì đó.",
+  "event": "Sự kiện",
+  "subtitleEvent": "Đôi khi bạn có một sự kiện như đi du lịch, đi dã ngoại cùng bạn bè,… Thống kê chi tiêu cho sự kiện cũng rất cần thiết để xem trình độ chơi của bạn đến đâu.",
+  "recurringTransactions": "Giao dịch định kỳ",
+  "subtitleRecurringTransactions": "Bạn có các giao dịch lặp lại hàng tháng, hàng quý hoặc hàng năm. Chúng tôi tạo nó tự động cho bạn"
 }

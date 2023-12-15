@@ -14,36 +14,32 @@ T _$identity<T>(T value) => value;
 final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
-StatisticsModel _$StatisticsModelFromJson(Map<String, dynamic> json) {
-  return _StatisticsModel.fromJson(json);
-}
-
 /// @nodoc
-mixin _$StatisticsModel {
-  double get revenue => throw _privateConstructorUsedError;
-  double get expense => throw _privateConstructorUsedError;
-  double get loan => throw _privateConstructorUsedError;
-  double get debt => throw _privateConstructorUsedError;
+mixin _$StatisticsListModel {
+  Map<int, StatisticsListModel>? get subStatistics =>
+      throw _privateConstructorUsedError;
+  Map<CategoryType, num> get data => throw _privateConstructorUsedError;
 
-  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
-  $StatisticsModelCopyWith<StatisticsModel> get copyWith =>
+  $StatisticsListModelCopyWith<StatisticsListModel> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $StatisticsModelCopyWith<$Res> {
-  factory $StatisticsModelCopyWith(
-          StatisticsModel value, $Res Function(StatisticsModel) then) =
-      _$StatisticsModelCopyWithImpl<$Res, StatisticsModel>;
+abstract class $StatisticsListModelCopyWith<$Res> {
+  factory $StatisticsListModelCopyWith(
+          StatisticsListModel value, $Res Function(StatisticsListModel) then) =
+      _$StatisticsListModelCopyWithImpl<$Res, StatisticsListModel>;
   @useResult
-  $Res call({double revenue, double expense, double loan, double debt});
+  $Res call(
+      {Map<int, StatisticsListModel>? subStatistics,
+      Map<CategoryType, num> data});
 }
 
 /// @nodoc
-class _$StatisticsModelCopyWithImpl<$Res, $Val extends StatisticsModel>
-    implements $StatisticsModelCopyWith<$Res> {
-  _$StatisticsModelCopyWithImpl(this._value, this._then);
+class _$StatisticsListModelCopyWithImpl<$Res, $Val extends StatisticsListModel>
+    implements $StatisticsListModelCopyWith<$Res> {
+  _$StatisticsListModelCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
@@ -53,156 +49,137 @@ class _$StatisticsModelCopyWithImpl<$Res, $Val extends StatisticsModel>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? revenue = null,
-    Object? expense = null,
-    Object? loan = null,
-    Object? debt = null,
+    Object? subStatistics = freezed,
+    Object? data = null,
   }) {
     return _then(_value.copyWith(
-      revenue: null == revenue
-          ? _value.revenue
-          : revenue // ignore: cast_nullable_to_non_nullable
-              as double,
-      expense: null == expense
-          ? _value.expense
-          : expense // ignore: cast_nullable_to_non_nullable
-              as double,
-      loan: null == loan
-          ? _value.loan
-          : loan // ignore: cast_nullable_to_non_nullable
-              as double,
-      debt: null == debt
-          ? _value.debt
-          : debt // ignore: cast_nullable_to_non_nullable
-              as double,
+      subStatistics: freezed == subStatistics
+          ? _value.subStatistics
+          : subStatistics // ignore: cast_nullable_to_non_nullable
+              as Map<int, StatisticsListModel>?,
+      data: null == data
+          ? _value.data
+          : data // ignore: cast_nullable_to_non_nullable
+              as Map<CategoryType, num>,
     ) as $Val);
   }
 }
 
 /// @nodoc
-abstract class _$$StatisticsModelImplCopyWith<$Res>
-    implements $StatisticsModelCopyWith<$Res> {
-  factory _$$StatisticsModelImplCopyWith(_$StatisticsModelImpl value,
-          $Res Function(_$StatisticsModelImpl) then) =
-      __$$StatisticsModelImplCopyWithImpl<$Res>;
+abstract class _$$StatisticsListModelImplCopyWith<$Res>
+    implements $StatisticsListModelCopyWith<$Res> {
+  factory _$$StatisticsListModelImplCopyWith(_$StatisticsListModelImpl value,
+          $Res Function(_$StatisticsListModelImpl) then) =
+      __$$StatisticsListModelImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({double revenue, double expense, double loan, double debt});
+  $Res call(
+      {Map<int, StatisticsListModel>? subStatistics,
+      Map<CategoryType, num> data});
 }
 
 /// @nodoc
-class __$$StatisticsModelImplCopyWithImpl<$Res>
-    extends _$StatisticsModelCopyWithImpl<$Res, _$StatisticsModelImpl>
-    implements _$$StatisticsModelImplCopyWith<$Res> {
-  __$$StatisticsModelImplCopyWithImpl(
-      _$StatisticsModelImpl _value, $Res Function(_$StatisticsModelImpl) _then)
+class __$$StatisticsListModelImplCopyWithImpl<$Res>
+    extends _$StatisticsListModelCopyWithImpl<$Res, _$StatisticsListModelImpl>
+    implements _$$StatisticsListModelImplCopyWith<$Res> {
+  __$$StatisticsListModelImplCopyWithImpl(_$StatisticsListModelImpl _value,
+      $Res Function(_$StatisticsListModelImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? revenue = null,
-    Object? expense = null,
-    Object? loan = null,
-    Object? debt = null,
+    Object? subStatistics = freezed,
+    Object? data = null,
   }) {
-    return _then(_$StatisticsModelImpl(
-      revenue: null == revenue
-          ? _value.revenue
-          : revenue // ignore: cast_nullable_to_non_nullable
-              as double,
-      expense: null == expense
-          ? _value.expense
-          : expense // ignore: cast_nullable_to_non_nullable
-              as double,
-      loan: null == loan
-          ? _value.loan
-          : loan // ignore: cast_nullable_to_non_nullable
-              as double,
-      debt: null == debt
-          ? _value.debt
-          : debt // ignore: cast_nullable_to_non_nullable
-              as double,
+    return _then(_$StatisticsListModelImpl(
+      subStatistics: freezed == subStatistics
+          ? _value._subStatistics
+          : subStatistics // ignore: cast_nullable_to_non_nullable
+              as Map<int, StatisticsListModel>?,
+      data: null == data
+          ? _value._data
+          : data // ignore: cast_nullable_to_non_nullable
+              as Map<CategoryType, num>,
     ));
   }
 }
 
 /// @nodoc
-@JsonSerializable()
-class _$StatisticsModelImpl implements _StatisticsModel {
-  const _$StatisticsModelImpl(
-      {required this.revenue,
-      required this.expense,
-      required this.loan,
-      required this.debt});
 
-  factory _$StatisticsModelImpl.fromJson(Map<String, dynamic> json) =>
-      _$$StatisticsModelImplFromJson(json);
+class _$StatisticsListModelImpl extends _StatisticsListModel {
+  _$StatisticsListModelImpl(
+      {final Map<int, StatisticsListModel>? subStatistics,
+      final Map<CategoryType, num> data = const {
+        CategoryType.revenue: 0.0,
+        CategoryType.expense: 0.0,
+        CategoryType.debt: 0.0,
+        CategoryType.loan: 0.0
+      }})
+      : _subStatistics = subStatistics,
+        _data = data,
+        super._();
 
+  final Map<int, StatisticsListModel>? _subStatistics;
   @override
-  final double revenue;
+  Map<int, StatisticsListModel>? get subStatistics {
+    final value = _subStatistics;
+    if (value == null) return null;
+    if (_subStatistics is EqualUnmodifiableMapView) return _subStatistics;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableMapView(value);
+  }
+
+  final Map<CategoryType, num> _data;
   @override
-  final double expense;
-  @override
-  final double loan;
-  @override
-  final double debt;
+  @JsonKey()
+  Map<CategoryType, num> get data {
+    if (_data is EqualUnmodifiableMapView) return _data;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableMapView(_data);
+  }
 
   @override
   String toString() {
-    return 'StatisticsModel(revenue: $revenue, expense: $expense, loan: $loan, debt: $debt)';
+    return 'StatisticsListModel(subStatistics: $subStatistics, data: $data)';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$StatisticsModelImpl &&
-            (identical(other.revenue, revenue) || other.revenue == revenue) &&
-            (identical(other.expense, expense) || other.expense == expense) &&
-            (identical(other.loan, loan) || other.loan == loan) &&
-            (identical(other.debt, debt) || other.debt == debt));
+            other is _$StatisticsListModelImpl &&
+            const DeepCollectionEquality()
+                .equals(other._subStatistics, _subStatistics) &&
+            const DeepCollectionEquality().equals(other._data, _data));
   }
 
-  @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, revenue, expense, loan, debt);
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(_subStatistics),
+      const DeepCollectionEquality().hash(_data));
 
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$StatisticsModelImplCopyWith<_$StatisticsModelImpl> get copyWith =>
-      __$$StatisticsModelImplCopyWithImpl<_$StatisticsModelImpl>(
+  _$$StatisticsListModelImplCopyWith<_$StatisticsListModelImpl> get copyWith =>
+      __$$StatisticsListModelImplCopyWithImpl<_$StatisticsListModelImpl>(
           this, _$identity);
-
-  @override
-  Map<String, dynamic> toJson() {
-    return _$$StatisticsModelImplToJson(
-      this,
-    );
-  }
 }
 
-abstract class _StatisticsModel implements StatisticsModel {
-  const factory _StatisticsModel(
-      {required final double revenue,
-      required final double expense,
-      required final double loan,
-      required final double debt}) = _$StatisticsModelImpl;
-
-  factory _StatisticsModel.fromJson(Map<String, dynamic> json) =
-      _$StatisticsModelImpl.fromJson;
+abstract class _StatisticsListModel extends StatisticsListModel {
+  factory _StatisticsListModel(
+      {final Map<int, StatisticsListModel>? subStatistics,
+      final Map<CategoryType, num> data}) = _$StatisticsListModelImpl;
+  _StatisticsListModel._() : super._();
 
   @override
-  double get revenue;
+  Map<int, StatisticsListModel>? get subStatistics;
   @override
-  double get expense;
-  @override
-  double get loan;
-  @override
-  double get debt;
+  Map<CategoryType, num> get data;
   @override
   @JsonKey(ignore: true)
-  _$$StatisticsModelImplCopyWith<_$StatisticsModelImpl> get copyWith =>
+  _$$StatisticsListModelImplCopyWith<_$StatisticsListModelImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

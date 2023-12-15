@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_e_spend/common/assets/assets.gen.dart';
 import 'package:flutter_e_spend/common/constants/string_constants.dart';
+import 'package:flutter_e_spend/common/enums/category.dart';
 import 'package:flutter_translate/flutter_translate.dart';
 
 import '../../../../../common/constants/app_dimens.dart';
@@ -25,7 +26,7 @@ class CategoryTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final imagePath =
-        "${StringConstants.imagePath}${categoryModel.name!.toLowerCase()}.png";
+        "${StringConstants.imagePath}${categoryModel.category.title.toLowerCase()}.png";
     return InkWell(
       onTap: () {
         onTap(categoryModel);
@@ -51,7 +52,7 @@ class CategoryTile extends StatelessWidget {
             ),
             Text(
               translate(
-                  "transaction_category_screen_${categoryModel.name!.toLowerCase()}"),
+                  "transaction_category_screen_${categoryModel.category.title.toLowerCase()}"),
               style: TextStyle(
                   fontSize: AppDimens.space_14,
                   fontWeight: FontWeight.bold,

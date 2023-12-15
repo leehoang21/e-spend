@@ -35,11 +35,11 @@ class CreateTransactionBloc extends BaseBloc<CreateTransactionState> {
         wallet: transaction.wallet,
         category: transaction.category,
         photo: transaction.photos,
-        spendTime: DateTime.fromMillisecondsSinceEpoch(transaction.spendTime),
+        spendTime: transaction.spendTime,
         buttonIsValid: AppValidator.validateCreateTransactionButton(
           transaction.amount,
           transaction.category,
-          DateTime.fromMillisecondsSinceEpoch(transaction.spendTime),
+          transaction.spendTime,
           transaction.wallet,
         ),
         lastUpdate: DateTime.now(),
@@ -58,7 +58,7 @@ class CreateTransactionBloc extends BaseBloc<CreateTransactionState> {
     );
   }
 
-  Future<void> changeSpendTime(DateTime spendTime) async {
+  Future<void> changeSpendTime(Timestamp spendTime) async {
     emit(
       state.copyWith(
         spendTime: spendTime,
@@ -98,7 +98,7 @@ class CreateTransactionBloc extends BaseBloc<CreateTransactionState> {
         TransactionModel transaction = TransactionModel(
             amount: state.amount!,
             category: state.category!,
-            spendTime: state.spendTime.millisecondsSinceEpoch,
+            spendTime: state.spendTime,
             wallet: state.wallet!,
             note: note,
             createAt: DateTime.now().millisecondsSinceEpoch,
@@ -160,7 +160,7 @@ class CreateTransactionBloc extends BaseBloc<CreateTransactionState> {
               id: id,
               amount: state.amount!,
               category: state.category!,
-              spendTime: state.spendTime.millisecondsSinceEpoch,
+              spendTime: state.spendTime,
               wallet: state.wallet!,
               photos: state.photo,
               note: note,

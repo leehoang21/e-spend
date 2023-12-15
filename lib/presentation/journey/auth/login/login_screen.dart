@@ -1,12 +1,10 @@
-import 'package:auto_route/auto_route.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_e_spend/common/assets/assets.gen.dart';
 
 import 'package:flutter_e_spend/presentation/journey/auth/login/cubit/login_cubit.dart';
 import 'package:flutter_e_spend/presentation/journey/auth/login/widget/login_with_item.dart';
-import 'package:flutter_e_spend/presentation/routers/app_router.dart';
+
 import '../../../../common/utils/formatter/mask_input_formatter.dart';
 import '../../../../common/utils/validator.dart';
 import '../../../themes/themes.dart';
@@ -107,27 +105,27 @@ class LoginScreen extends StatelessWidget {
                     ),
                   ),
 
-                  //bạn chưa có tài khoản
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: RichText(
-                      text: TextSpan(
-                        text: LoginConstants.notHaveAccount,
-                        style: ThemeText.style14Medium
-                            .copyWith(fontWeight: FontWeight.w400),
-                        children: [
-                          TextSpan(
-                            recognizer: TapGestureRecognizer()
-                              ..onTap = () {
-                                context.pushRoute(const RegisterAccountRoute());
-                              },
-                            text: '  ${LoginConstants.register}',
-                            style: ThemeText.style14Medium,
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
+                  // //bạn chưa có tài khoản
+                  // Align(
+                  //   alignment: Alignment.centerRight,
+                  //   child: RichText(
+                  //     text: TextSpan(
+                  //       text: LoginConstants.notHaveAccount,
+                  //       style: ThemeText.style14Medium
+                  //           .copyWith(fontWeight: FontWeight.w400),
+                  //       children: [
+                  //         TextSpan(
+                  //           recognizer: TapGestureRecognizer()
+                  //             ..onTap = () {
+                  //               context.pushRoute(const RegisterAccountRoute());
+                  //             },
+                  //           text: '  ${LoginConstants.register}',
+                  //           style: ThemeText.style14Medium,
+                  //         )
+                  //       ],
+                  //     ),
+                  //   ),
+                  // ),
                   SizedBox(
                     height: LoginConstants.distanceButtonToField,
                   ),

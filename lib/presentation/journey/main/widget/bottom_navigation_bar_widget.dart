@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_e_spend/common/extension/string_extension.dart';
+import 'package:flutter_e_spend/presentation/themes/themes.dart';
 import 'package:flutter_e_spend/presentation/widgets/image_app_widget/image_app.dart';
-import '../../../themes/themes.dart';
 import 'bottom_navigation_bar_constants.dart';
 
 class BottomNavigationBarWidget extends StatelessWidget {
   const BottomNavigationBarWidget({
     Key? key,
     required this.iconsData,
-    required this.currentIndex,
     required this.onTap,
+    required this.currentIndex,
   }) : super(key: key);
 
-  final int currentIndex;
   final void Function(int) onTap;
   final List<Map<String, dynamic>> iconsData;
+  final int currentIndex;
 
   @override
   Widget build(BuildContext context) {
@@ -28,18 +28,15 @@ class BottomNavigationBarWidget extends StatelessWidget {
             child: AppImageWidget(
               path: entry.value["iconPath"],
               width: BottomNavigationBarConstants.iconWidth,
-              // ignore: deprecated_member_use
-              color: entry.key == currentIndex
+              height: BottomNavigationBarConstants.iconWidth,
+              color: currentIndex == entry.key
                   ? AppColor.ebonyClay
                   : AppColor.grey,
-              height: BottomNavigationBarConstants.iconHeight,
             ),
           ),
           label: (entry.value["label"] as String).tr,
         );
       }).toList(),
-      selectedFontSize: BottomNavigationBarConstants.labelFontSize,
-      unselectedFontSize: BottomNavigationBarConstants.labelFontSize,
     );
   }
 }

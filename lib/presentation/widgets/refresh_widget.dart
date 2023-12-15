@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_e_spend/presentation/themes/themes.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 
 class RefreshWidget extends StatelessWidget {
@@ -25,10 +26,15 @@ class RefreshWidget extends StatelessWidget {
       enablePullDown: true,
       enablePullUp: enableLoadMore,
       controller: controller ?? RefreshController(),
-      onRefresh: onRefresh,
+      onRefresh: () async {
+        await onRefresh?.call();
+        controller?.refreshCompleted();
+      },
       onLoading: onLoadMore,
       physics: const AlwaysScrollableScrollPhysics(),
-      header: const MaterialClassicHeader(),
+      header: const MaterialClassicHeader(
+        color: AppColor.blue,
+      ),
       footer: CustomFooter(
         onClick: onLoadMore,
         builder: (context, mode) {

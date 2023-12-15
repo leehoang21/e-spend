@@ -1,5 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter_e_spend/common/extension/date_time_extension.dart';
+import '../../../../../../common/enums/category.dart';
 import '../../../../../../data/models/category_model.dart';
 import '../../../../../../data/models/wallet_model.dart';
 
@@ -7,7 +8,7 @@ enum CreateTransactionStatus { initial, loading, succes, failed, noInternet }
 
 class CreateTransactionState extends Equatable {
   final CreateTransactionStatus status;
-  final DateTime spendTime;
+  final Timestamp spendTime;
   final bool buttonIsValid;
   final int? amount;
   final CategoryModel? category;
@@ -28,14 +29,11 @@ class CreateTransactionState extends Equatable {
         status: CreateTransactionStatus.initial,
         photo: const [],
         category: const CategoryModel(
-          name: 'OTHER',
-          type: 'EXPENSES',
+          category: CategoryType.other,
           subCategories: [],
-          createAt: 1633019574625,
-          lastUpdate: 1633019574625,
         ),
         lastUpdate: DateTime.now(),
-        spendTime: DateTime.now().date,
+        spendTime: Timestamp.now(),
       );
   @override
   List<Object?> get props => [
@@ -51,7 +49,7 @@ class CreateTransactionState extends Equatable {
 
   CreateTransactionState copyWith({
     CreateTransactionStatus? status,
-    DateTime? spendTime,
+    Timestamp? spendTime,
     bool? buttonIsValid,
     int? amount,
     CategoryModel? category,

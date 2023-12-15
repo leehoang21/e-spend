@@ -162,5 +162,18 @@
   "Password_incorrect": "Password incorrect",
   "your_password": "Your password",
   "create_password": "Create password",
-  "password_or_email_incorrect": "Password or email incorrect"
+  "password_or_email_incorrect": "Password or email incorrect",
+  "EXPENSES": "Expenses",
+  "REVENUE": "Revenue",
+  "DEBTS_AND_LOAN": "Debts and Loan",
+  "net_income": "Net income",
+  "DEBT": "Debts",
+  "LOAN": "Loan",
+  "Planning": "Planning",
+  "Buget": "Buget",
+  "subtitleBuget": "Setting a budget helps you balance your income and expenses. And I’ll bet you, when you have a budget, you’ll be more cautious when planning to spend something.",
+  "event": "Event",
+  "subtitleEvent": "Sometimes you have an event like traveling, having a picnic with friends, etc. Event spending statistics are also essential to see how well your playing level is.",
+  "recurringTransactions": "Recurring Transactions",
+  "subtitleRecurringTransactions": "You have transactions that repeat monthly, quarterly, or annually. We create it automatically for you"
 }

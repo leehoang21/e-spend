@@ -38,12 +38,12 @@ class CategoriesWidget extends StatelessWidget {
               );
             }),
         SettingsItem(
-          icons: Assets.icons.bottomBarTransactions.path,
+          icons: Assets.icons.rateme.path,
           title: 'Rate me',
           onTap: () {},
         ),
         SettingsItem(
-          icons: 'assets/icons/aboutme.png',
+          icons: Assets.icons.aboutme.path,
           title: 'About me',
           onTap: () {},
         ),
