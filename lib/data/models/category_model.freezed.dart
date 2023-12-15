@@ -20,10 +20,7 @@ CategoryModel _$CategoryModelFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$CategoryModel {
-  String? get name => throw _privateConstructorUsedError;
-  String? get type => throw _privateConstructorUsedError;
-  int? get createAt => throw _privateConstructorUsedError;
-  int? get lastUpdate => throw _privateConstructorUsedError;
+  CategoryType get category => throw _privateConstructorUsedError;
   List<CategoryModel>? get subCategories => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -38,12 +35,7 @@ abstract class $CategoryModelCopyWith<$Res> {
           CategoryModel value, $Res Function(CategoryModel) then) =
       _$CategoryModelCopyWithImpl<$Res, CategoryModel>;
   @useResult
-  $Res call(
-      {String? name,
-      String? type,
-      int? createAt,
-      int? lastUpdate,
-      List<CategoryModel>? subCategories});
+  $Res call({CategoryType category, List<CategoryModel>? subCategories});
 }
 
 /// @nodoc
@@ -59,29 +51,14 @@ class _$CategoryModelCopyWithImpl<$Res, $Val extends CategoryModel>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? name = freezed,
-    Object? type = freezed,
-    Object? createAt = freezed,
-    Object? lastUpdate = freezed,
+    Object? category = null,
     Object? subCategories = freezed,
   }) {
     return _then(_value.copyWith(
-      name: freezed == name
-          ? _value.name
-          : name // ignore: cast_nullable_to_non_nullable
-              as String?,
-      type: freezed == type
-          ? _value.type
-          : type // ignore: cast_nullable_to_non_nullable
-              as String?,
-      createAt: freezed == createAt
-          ? _value.createAt
-          : createAt // ignore: cast_nullable_to_non_nullable
-              as int?,
-      lastUpdate: freezed == lastUpdate
-          ? _value.lastUpdate
-          : lastUpdate // ignore: cast_nullable_to_non_nullable
-              as int?,
+      category: null == category
+          ? _value.category
+          : category // ignore: cast_nullable_to_non_nullable
+              as CategoryType,
       subCategories: freezed == subCategories
           ? _value.subCategories
           : subCategories // ignore: cast_nullable_to_non_nullable
@@ -98,12 +75,7 @@ abstract class _$$CategoryModelImplCopyWith<$Res>
       __$$CategoryModelImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {String? name,
-      String? type,
-      int? createAt,
-      int? lastUpdate,
-      List<CategoryModel>? subCategories});
+  $Res call({CategoryType category, List<CategoryModel>? subCategories});
 }
 
 /// @nodoc
@@ -117,29 +89,14 @@ class __$$CategoryModelImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? name = freezed,
-    Object? type = freezed,
-    Object? createAt = freezed,
-    Object? lastUpdate = freezed,
+    Object? category = null,
     Object? subCategories = freezed,
   }) {
     return _then(_$CategoryModelImpl(
-      name: freezed == name
-          ? _value.name
-          : name // ignore: cast_nullable_to_non_nullable
-              as String?,
-      type: freezed == type
-          ? _value.type
-          : type // ignore: cast_nullable_to_non_nullable
-              as String?,
-      createAt: freezed == createAt
-          ? _value.createAt
-          : createAt // ignore: cast_nullable_to_non_nullable
-              as int?,
-      lastUpdate: freezed == lastUpdate
-          ? _value.lastUpdate
-          : lastUpdate // ignore: cast_nullable_to_non_nullable
-              as int?,
+      category: null == category
+          ? _value.category
+          : category // ignore: cast_nullable_to_non_nullable
+              as CategoryType,
       subCategories: freezed == subCategories
           ? _value._subCategories
           : subCategories // ignore: cast_nullable_to_non_nullable
@@ -152,24 +109,14 @@ class __$$CategoryModelImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$CategoryModelImpl implements _CategoryModel {
   const _$CategoryModelImpl(
-      {this.name,
-      this.type,
-      this.createAt,
-      this.lastUpdate,
-      final List<CategoryModel>? subCategories})
+      {required this.category, final List<CategoryModel>? subCategories})
       : _subCategories = subCategories;
 
   factory _$CategoryModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$CategoryModelImplFromJson(json);
 
   @override
-  final String? name;
-  @override
-  final String? type;
-  @override
-  final int? createAt;
-  @override
-  final int? lastUpdate;
+  final CategoryType category;
   final List<CategoryModel>? _subCategories;
   @override
   List<CategoryModel>? get subCategories {
@@ -182,7 +129,7 @@ class _$CategoryModelImpl implements _CategoryModel {
 
   @override
   String toString() {
-    return 'CategoryModel(name: $name, type: $type, createAt: $createAt, lastUpdate: $lastUpdate, subCategories: $subCategories)';
+    return 'CategoryModel(category: $category, subCategories: $subCategories)';
   }
 
   @override
@@ -190,19 +137,15 @@ class _$CategoryModelImpl implements _CategoryModel {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$CategoryModelImpl &&
-            (identical(other.name, name) || other.name == name) &&
-            (identical(other.type, type) || other.type == type) &&
-            (identical(other.createAt, createAt) ||
-                other.createAt == createAt) &&
-            (identical(other.lastUpdate, lastUpdate) ||
-                other.lastUpdate == lastUpdate) &&
+            (identical(other.category, category) ||
+                other.category == category) &&
             const DeepCollectionEquality()
                 .equals(other._subCategories, _subCategories));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, name, type, createAt, lastUpdate,
+  int get hashCode => Object.hash(runtimeType, category,
       const DeepCollectionEquality().hash(_subCategories));
 
   @JsonKey(ignore: true)
@@ -221,23 +164,14 @@ class _$CategoryModelImpl implements _CategoryModel {
 
 abstract class _CategoryModel implements CategoryModel {
   const factory _CategoryModel(
-      {final String? name,
-      final String? type,
-      final int? createAt,
-      final int? lastUpdate,
+      {required final CategoryType category,
       final List<CategoryModel>? subCategories}) = _$CategoryModelImpl;
 
   factory _CategoryModel.fromJson(Map<String, dynamic> json) =
       _$CategoryModelImpl.fromJson;
 
   @override
-  String? get name;
-  @override
-  String? get type;
-  @override
-  int? get createAt;
-  @override
-  int? get lastUpdate;
+  CategoryType get category;
   @override
   List<CategoryModel>? get subCategories;
   @override

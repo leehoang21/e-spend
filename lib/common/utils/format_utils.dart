@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_e_spend/common/constants/string_constants.dart';
 import 'package:intl/intl.dart';
@@ -29,7 +30,8 @@ class AmountInputFormatter extends TextInputFormatter {
   }
 }
 
-String formatDateMonth(DateTime time) {
+String formatDateMonth(Timestamp tim) {
+  final time = tim.toDate();
   if (time.day == 1) {
     return '${DateFormat('MMM, d').format(time)}st';
   } else if (time.day == 2) {

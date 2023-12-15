@@ -11,5 +11,9 @@ class CategoryScreenConstants {
 
   static final categoryListViewPadding = EdgeInsets.symmetric(horizontal: 18.w);
 
-  static final tabs = ["EXPENSES", "REVENUE"];
+  static final tabs = [
+    "EXPENSES",
+    "REVENUE",
+    'DEBTS_AND_LOAN',
+  ];
 }

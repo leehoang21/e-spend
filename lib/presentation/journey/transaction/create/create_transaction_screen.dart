@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_e_spend/common/enums/category.dart';
 import 'package:flutter_e_spend/common/extension/date_time_extension.dart';
 import 'package:flutter_e_spend/common/extension/num_extension.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../common/constants/app_dimens.dart';
 import '../../../../data/models/transaction_model.dart';
-import '../../../themes/themes.dart';
 import '../../../widgets/appbar_widget/appbar_widget.dart';
 import '../../../widgets/button_widget/text_button_widget.dart';
 import '../../../widgets/scaffold_wdiget/scaffold_widget.dart';
@@ -49,10 +48,8 @@ class _CreateTransactionScreenState extends State<CreateTransactionScreen> {
     _addPhotoBloc = BlocProvider.of<AddPhotoBloc>(context);
     if (_transaction != null) {
       _amountCtrl.text = _transaction!.amount.getTextAmount;
-      _walletCtrl.text = _transaction!.category.name!;
-      _dateCtl.text =
-          DateTime.fromMillisecondsSinceEpoch(_transaction!.spendTime)
-              .getTextDate;
+      _walletCtrl.text = _transaction!.category.category.title;
+      _dateCtl.text = _transaction!.spendTime.toDate().getTextDate;
       _noteCtl.text = _transaction?.note ?? '';
       _createTransactionBloc.initial(_transaction!);
     }
@@ -74,22 +71,8 @@ class _CreateTransactionScreenState extends State<CreateTransactionScreen> {
   @override
   Widget build(BuildContext context) {
     return ScaffoldWidget(
-      backgroundColor: AppColor.white,
       appbar: AppBarWidget(
-        color: AppColor.white,
         title: CreateTransactionConstants.addTransaction,
-        leading: IconButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          icon: Padding(
-            padding: EdgeInsets.only(left: 20.w),
-            child: const Icon(
-              Icons.arrow_back_ios_new,
-              color: AppColor.tuna,
-            ),
-          ),
-        ),
       ),
       body: BlocListener<CreateTransactionBloc, CreateTransactionState>(
         bloc: _createTransactionBloc,

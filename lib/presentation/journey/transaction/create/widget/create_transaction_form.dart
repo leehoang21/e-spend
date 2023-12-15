@@ -1,9 +1,11 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_e_spend/common/assets/assets.gen.dart';
+import 'package:flutter_e_spend/common/enums/category.dart';
 import 'package:flutter_e_spend/common/extension/date_time_extension.dart';
 import 'package:flutter_e_spend/common/extension/string_extension.dart';
 import 'package:flutter_e_spend/presentation/routers/app_router.dart';
@@ -92,7 +94,7 @@ class _CreateTransactionFormState extends State<CreateTransactionForm> {
                 controller: widget.categoryCtl,
                 prefixIcon: AppImageWidget(
                   path: state.category != null
-                      ? "${StringConstants.imagePath}${state.category!.name!.toLowerCase()}.png"
+                      ? "${StringConstants.imagePath}${state.category!.category.title.toLowerCase()}.png"
                       : Assets.images.category.path,
                 ),
                 hintText: CreateTransactionConstants.category,
@@ -129,7 +131,7 @@ class _CreateTransactionFormState extends State<CreateTransactionForm> {
     if (category != null) {
       _createTransactionBloc.chooseCategory(category as CategoryModel);
       widget.categoryCtl.text = translate(
-          "transaction_category_screen_${category.name!.toLowerCase()}");
+          "transaction_category_screen_${category.category.title.toLowerCase()}");
     }
   }
 
@@ -155,7 +157,7 @@ class _CreateTransactionFormState extends State<CreateTransactionForm> {
             builder: (context, state) {
               return CupertinoDatePicker(
                 onDateTimeChanged: _onChangeDate,
-                initialDateTime: state.spendTime,
+                initialDateTime: state.spendTime.toDate(),
                 mode: CupertinoDatePickerMode.date,
                 maximumDate: DateTime.now(),
               );
@@ -168,6 +170,6 @@ class _CreateTransactionFormState extends State<CreateTransactionForm> {
 
   void _onChangeDate(DateTime date) {
     widget.dateCtl.text = date.getTextDate;
-    _createTransactionBloc.changeSpendTime(date);
+    _createTransactionBloc.changeSpendTime(Timestamp.fromDate(date));
   }
 }

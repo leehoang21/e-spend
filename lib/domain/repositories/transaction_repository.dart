@@ -7,4 +7,5 @@ abstract class TransactionRepository {
   Future<Either<String, AppError>> create(TransactionModel transaction);
   Future<AppError?> update(TransactionModel transaction);
   Future<Either<List<TransactionModel>, AppError>> get();
+  Stream<Either<List<TransactionModel>, AppError>> stream();
 }

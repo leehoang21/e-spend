@@ -67,6 +67,10 @@ class $AssetsIconsGen {
   /// File path: assets/icons/ic_money.svg
   SvgGenImage get icMoney => const SvgGenImage('assets/icons/ic_money.svg');
 
+  /// File path: assets/icons/icons8-debt-96.svg
+  SvgGenImage get icons8Debt96 =>
+      const SvgGenImage('assets/icons/icons8-debt-96.svg');
+
   /// File path: assets/icons/icons8-test-account-90.svg
   SvgGenImage get icons8TestAccount90 =>
       const SvgGenImage('assets/icons/icons8-test-account-90.svg');
@@ -109,6 +113,7 @@ class $AssetsIconsGen {
         icFacebook,
         icGoogle,
         icMoney,
+        icons8Debt96,
         icons8TestAccount90,
         language,
         logout,
@@ -257,12 +262,29 @@ class $AssetsImagesGen {
   AssetGenImage get icBankCards =>
       const AssetGenImage('assets/images/ic_bank_cards.png');
 
+  /// File path: assets/images/ic_cash.png
+  AssetGenImage get icCash => const AssetGenImage('assets/images/ic_cash.png');
+
+  /// File path: assets/images/ic_coin.png
+  AssetGenImage get icCoin => const AssetGenImage('assets/images/ic_coin.png');
+
   /// File path: assets/images/ic_coins.png
   AssetGenImage get icCoins =>
       const AssetGenImage('assets/images/ic_coins.png');
 
+  /// File path: assets/images/ic_debt.png
+  AssetGenImage get icDebt => const AssetGenImage('assets/images/ic_debt.png');
+
+  /// File path: assets/images/ic_event.png
+  AssetGenImage get icEvent =>
+      const AssetGenImage('assets/images/ic_event.png');
+
   /// File path: assets/images/ic_form.png
   AssetGenImage get icForm => const AssetGenImage('assets/images/ic_form.png');
+
+  /// File path: assets/images/ic_money.png
+  AssetGenImage get icMoney =>
+      const AssetGenImage('assets/images/ic_money.png');
 
   /// File path: assets/images/ic_paper_money.png
   AssetGenImage get icPaperMoney =>
@@ -414,8 +436,13 @@ class $AssetsImagesGen {
         homeRepair,
         homeService,
         icBankCards,
+        icCash,
+        icCoin,
         icCoins,
+        icDebt,
+        icEvent,
         icForm,
+        icMoney,
         icPaperMoney,
         icWallet,
         icWalletList,

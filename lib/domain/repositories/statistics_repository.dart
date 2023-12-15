@@ -10,4 +10,5 @@ abstract class StatisticsRepository {
     TransactionModel? transactionOld,
   });
   Future<Either<StatisticsListModel, AppError>> get();
+  Stream<Either<StatisticsListModel, AppError>> stream();
 }

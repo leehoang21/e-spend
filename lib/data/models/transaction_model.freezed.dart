@@ -20,7 +20,7 @@ mixin _$TransactionModel {
   int get amount => throw _privateConstructorUsedError;
   String? get note => throw _privateConstructorUsedError;
   CategoryModel get category => throw _privateConstructorUsedError;
-  int get spendTime => throw _privateConstructorUsedError;
+  Timestamp get spendTime => throw _privateConstructorUsedError;
   List<String>? get photos => throw _privateConstructorUsedError;
   WalletModel get wallet => throw _privateConstructorUsedError;
   int get createAt => throw _privateConstructorUsedError;
@@ -42,7 +42,7 @@ abstract class $TransactionModelCopyWith<$Res> {
       int amount,
       String? note,
       CategoryModel category,
-      int spendTime,
+      Timestamp spendTime,
       List<String>? photos,
       WalletModel wallet,
       int createAt,
@@ -95,7 +95,7 @@ class _$TransactionModelCopyWithImpl<$Res, $Val extends TransactionModel>
       spendTime: null == spendTime
           ? _value.spendTime
           : spendTime // ignore: cast_nullable_to_non_nullable
-              as int,
+              as Timestamp,
       photos: freezed == photos
           ? _value.photos
           : photos // ignore: cast_nullable_to_non_nullable
@@ -145,7 +145,7 @@ abstract class _$$TransactionModelImplCopyWith<$Res>
       int amount,
       String? note,
       CategoryModel category,
-      int spendTime,
+      Timestamp spendTime,
       List<String>? photos,
       WalletModel wallet,
       int createAt,
@@ -198,7 +198,7 @@ class __$$TransactionModelImplCopyWithImpl<$Res>
       spendTime: null == spendTime
           ? _value.spendTime
           : spendTime // ignore: cast_nullable_to_non_nullable
-              as int,
+              as Timestamp,
       photos: freezed == photos
           ? _value._photos
           : photos // ignore: cast_nullable_to_non_nullable
@@ -244,7 +244,7 @@ class _$TransactionModelImpl extends _TransactionModel {
   @override
   final CategoryModel category;
   @override
-  final int spendTime;
+  final Timestamp spendTime;
   final List<String>? _photos;
   @override
   List<String>? get photos {
@@ -314,7 +314,7 @@ abstract class _TransactionModel extends TransactionModel {
       required final int amount,
       final String? note,
       required final CategoryModel category,
-      required final int spendTime,
+      required final Timestamp spendTime,
       final List<String>? photos,
       required final WalletModel wallet,
       required final int createAt,
@@ -330,7 +330,7 @@ abstract class _TransactionModel extends TransactionModel {
   @override
   CategoryModel get category;
   @override
-  int get spendTime;
+  Timestamp get spendTime;
   @override
   List<String>? get photos;
   @override

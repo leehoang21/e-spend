@@ -8,7 +8,6 @@ import '../home/home_screen.dart';
 import '../statistics/statistic_screen_provider.dart';
 
 class MainConstants {
-  static final floatingActionButtonDimension = 56.sp;
   static final floatingActionButtonIconSize = 52.sp;
 
   static const screenAnimatingDuration = Duration(milliseconds: 300);

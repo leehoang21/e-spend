@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 import '../../data/models/category_model.dart';
 import '../../data/models/wallet_model.dart';
 
@@ -15,7 +17,7 @@ class AppValidator {
 
   bool isNullEmpty(Object o) => "" == o;
   static bool validateCreateTransactionButton(int? amount,
-          CategoryModel? category, DateTime? spendTime, WalletModel? wallet) =>
+          CategoryModel? category, Timestamp? spendTime, WalletModel? wallet) =>
       amount != null &&
       amount != 0 &&
       category != null &&

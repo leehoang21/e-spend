@@ -42,13 +42,15 @@ class AppImageWidget extends StatelessWidget {
       size = 6;
     }
     return Center(
-        child: SizedBox(
-            width: size,
-            height: size,
-            child: const CircularProgressIndicator(
-              strokeWidth: 1.5,
-              valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
-            )));
+      child: SizedBox(
+        width: size,
+        height: size,
+        child: const CircularProgressIndicator(
+          strokeWidth: 1.5,
+          valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
+        ),
+      ),
+    );
   }
 
   Widget get _errorWidget {
@@ -144,6 +146,7 @@ class AppImageWidget extends StatelessWidget {
         fit: fit,
         width: width,
         height: height,
+        color: color,
         loadingBuilder: (context, child, loadingProgress) {
           if (loadingProgress == null) {
             return child;

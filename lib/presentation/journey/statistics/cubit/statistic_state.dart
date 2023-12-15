@@ -18,7 +18,10 @@ class StatisticState extends Equatable {
 
   factory StatisticState.initial() {
     return StatisticState(
-      data: StatisticsListModel.initial(),
+      data: StatisticsListModel(
+        data: {},
+        subStatistics: {},
+      ),
       status: StatisticStateStatus.initial,
     );
   }

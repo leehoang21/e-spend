@@ -2,8 +2,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_e_spend/common/assets/assets.gen.dart';
+import 'package:flutter_e_spend/common/constants/app_dimens.dart';
 import 'package:flutter_e_spend/common/constants/string_constants.dart';
 import 'package:flutter_e_spend/common/di/di.dart';
+import 'package:flutter_e_spend/common/enums/category.dart';
 import 'package:flutter_e_spend/common/extension/string_extension.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
@@ -47,15 +49,15 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
+                      SizedBox(
+                        height: AppDimens.height_20,
+                      ),
                       Padding(
                         padding: EdgeInsets.symmetric(
                           horizontal: 20.w,
                         ),
                         child: Column(
                           children: [
-                            SizedBox(
-                              height: 20.h,
-                            ),
                             GestureDetector(
                               onTap: () {
                                 _selectDate(context);
@@ -228,7 +230,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       ),
                                       Text(
                                         '${e.value.fold(0, (previousValue, element) {
-                                          if (element.category.type !=
+                                          if (element.category.category.type !=
                                               'EXPENSES') {
                                             return previousValue +
                                                 element.amount;
@@ -253,7 +255,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                             height: 44.sp,
                                             child: AppImageWidget(
                                                 path:
-                                                    "${StringConstants.imagePath}${item.category.name?.toLowerCase()}.png"),
+                                                    "${StringConstants.imagePath}${item.category.category.title.toLowerCase()}.png"),
                                           ),
                                           SizedBox(
                                             width: 10.w,
@@ -263,7 +265,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                 CrossAxisAlignment.start,
                                             children: [
                                               Text(
-                                                "transaction_category_screen_${(item.category.name ?? '').toLowerCase()}"
+                                                "transaction_category_screen_${(item.category.category.title).toLowerCase()}"
                                                     .tr,
                                                 style: ThemeText.caption,
                                               ),
@@ -275,12 +277,13 @@ class _HomeScreenState extends State<HomeScreen> {
                                           ),
                                           const Spacer(),
                                           Text(
-                                            '${item.category.type == 'EXPENSES' ? '-' : '+'}${item.amount}đ',
+                                            '${item.category.category.type == 'EXPENSES' ? '-' : '+'}${item.amount}đ',
                                             style: ThemeText.caption.copyWith(
-                                              color: item.category.type ==
-                                                      'EXPENSES'
-                                                  ? AppColor.red
-                                                  : AppColor.blue,
+                                              color:
+                                                  item.category.category.type ==
+                                                          'EXPENSES'
+                                                      ? AppColor.red
+                                                      : AppColor.blue,
                                             ),
                                           ),
                                         ],

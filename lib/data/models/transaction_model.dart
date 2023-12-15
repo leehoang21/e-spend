@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_e_spend/common/enums/category.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../../../common/utils/format_utils.dart';
@@ -13,7 +15,7 @@ class TransactionModel with _$TransactionModel {
     required int amount,
     String? note,
     required CategoryModel category,
-    required int spendTime,
+    required Timestamp spendTime,
     List<String>? photos,
     required WalletModel wallet,
     required int createAt,
@@ -31,8 +33,10 @@ class TransactionModel with _$TransactionModel {
             ? CategoryModel.fromJson(
                 json['category'] as Map<String, dynamic>,
               )
-            : const CategoryModel(),
-        spendTime: json['spendTime'] as int? ?? 0,
+            : const CategoryModel(
+                category: CategoryType.other,
+              ),
+        spendTime: json['spendTime'] as Timestamp? ?? Timestamp.now(),
         photos:
             (json['photo'] as List<dynamic>?)?.map((e) => e as String).toList(),
         wallet: (json['wallet'] as Map<String, dynamic>?) != null
@@ -47,8 +51,10 @@ class TransactionModel with _$TransactionModel {
 
   factory TransactionModel.empty() => TransactionModel(
         amount: 0,
-        category: const CategoryModel(),
-        spendTime: 0,
+        category: const CategoryModel(
+          category: CategoryType.other,
+        ),
+        spendTime: Timestamp.now(),
         wallet: WalletModel(),
         createAt: 0,
         lastUpdate: 0,
@@ -56,7 +62,7 @@ class TransactionModel with _$TransactionModel {
 
   String get time {
     final date = DateTime.now();
-    final dateItem = DateTime.fromMillisecondsSinceEpoch(spendTime);
+    final dateItem = spendTime.toDate();
     if (dateItem.day == date.day &&
         dateItem.month == date.month &&
         dateItem.year == date.year) {
@@ -66,7 +72,7 @@ class TransactionModel with _$TransactionModel {
         dateItem.year == date.year) {
       return 'Yesterday';
     } else {
-      return formatDateMonth(DateTime.fromMillisecondsSinceEpoch(spendTime));
+      return formatDateMonth(spendTime);
     }
   }
 

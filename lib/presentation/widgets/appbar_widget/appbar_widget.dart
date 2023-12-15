@@ -1,5 +1,6 @@
 // ignore_for_file: deprecated_member_use
 
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -53,7 +54,7 @@ class AppBarWidget extends StatelessWidget implements PreferredSize {
   final String? title;
   final Widget? centerWidget;
   final TextStyle? titleStyle;
-  final Color color;
+  final Color? color;
 
   const AppBarWidget({
     Key? key,
@@ -62,46 +63,62 @@ class AppBarWidget extends StatelessWidget implements PreferredSize {
     this.action,
     this.centerWidget,
     this.titleStyle,
-    this.color = AppColor.white,
+    this.color,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final top = MediaQuery.of(context).padding.top;
     return Container(
-      color: color,
-      height: AppbarConstants.buttonSize,
-      margin: EdgeInsets.only(top: top),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          leading ??
-              SizedBox(
-                width: AppbarConstants.buttonSize,
-                height: AppbarConstants.buttonSize,
+      color: color ?? Theme.of(context).appBarTheme.backgroundColor,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          SizedBox(
+            height: top,
+          ),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              InkWell(
+                onTap: () {
+                  context.popRoute();
+                },
+                child: leading ??
+                    SizedBox(
+                      width: AppbarConstants.buttonSize,
+                      height: AppbarConstants.buttonSize,
+                      child: const Icon(
+                        Icons.arrow_back_ios_new,
+                        color: AppColor.white,
+                      ),
+                    ),
               ),
-          SizedBox(
-            width: 20.w,
+              SizedBox(
+                width: 20.w,
+              ),
+              Expanded(
+                child: centerWidget ??
+                    Text(
+                      title ?? '',
+                      style: titleStyle ??
+                          ThemeText.subtitle1.copyWith(
+                              fontWeight: FontWeight.bold,
+                              color: AppColor.white),
+                      textAlign: TextAlign.center,
+                    ),
+              ),
+              SizedBox(
+                width: 20.w,
+              ),
+              action != null
+                  ? action!
+                  : SizedBox(
+                      width: AppbarConstants.buttonSize,
+                      height: AppbarConstants.buttonSize,
+                    ),
+            ],
           ),
-          Expanded(
-            child: centerWidget ??
-                Text(
-                  title ?? '',
-                  style: titleStyle ??
-                      ThemeText.subtitle1.copyWith(
-                          fontWeight: FontWeight.bold, color: AppColor.black),
-                  textAlign: TextAlign.left,
-                ),
-          ),
-          SizedBox(
-            width: 20.w,
-          ),
-          action != null
-              ? action!
-              : SizedBox(
-                  width: AppbarConstants.buttonSize,
-                  height: AppbarConstants.buttonSize,
-                ),
         ],
       ),
     );

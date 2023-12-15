@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:either_dart/either.dart';
 import 'package:flutter_e_spend/common/configs/firebase_config.dart';
 import 'package:flutter_e_spend/common/configs/hive/hive_config.dart';
+import 'package:flutter_e_spend/common/enums/category.dart';
 import 'package:flutter_e_spend/common/exception/app_error.dart';
 import 'package:injectable/injectable.dart';
 
@@ -56,7 +57,7 @@ class TransactionRepositoryImpl extends TransactionRepository {
 
   Future<TransactionModel> _changeWallet(TransactionModel transaction) async {
     TransactionModel model = transaction;
-    if (model.category.type == 'REVENUE') {
+    if (model.category.category.type == 'REVENUE') {
       model = model.copyWith(
         wallet: model.wallet.copyWith(
           balance: (model.wallet.balance ?? 0) + transaction.amount,
@@ -90,6 +91,31 @@ class TransactionRepositoryImpl extends TransactionRepository {
       return Left(data);
     } catch (e) {
       return Right(AppError(message: e.toString()));
+    }
+  }
+
+  @override
+  Stream<Either<List<TransactionModel>, AppError>> stream() {
+    try {
+      return _doc
+          .orderBy('spendTime', descending: true)
+          .snapshots()
+          .map((event) {
+        try {
+          final data = event.docs.map(
+            (e) {
+              logger(e.data().toString());
+              final data = e.data();
+              return TransactionModel.fromJson(data, e.id);
+            },
+          ).toList();
+          return Left(data);
+        } catch (e) {
+          return Right(AppError(message: e.toString()));
+        }
+      });
+    } catch (e) {
+      return Stream.value(Right(AppError(message: e.toString())));
     }
   }
 }

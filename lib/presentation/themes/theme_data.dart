@@ -21,8 +21,7 @@ ThemeData appTheme() {
     ),
     scaffoldBackgroundColor: AppColor.backgroundColor,
     iconTheme: ThemeIcon.getDefaultIconTheme(),
-    appBarTheme:
-        const AppBarTheme(color: AppColor.backgroundColor, elevation: 0.0),
+    appBarTheme: const AppBarTheme(color: AppColor.ebonyClay, elevation: 0.0),
     bottomNavigationBarTheme: const BottomNavigationBarThemeData(
       type: BottomNavigationBarType.fixed,
       selectedIconTheme: IconThemeData(color: AppColor.ebonyClay),

@@ -10,7 +10,7 @@ class StatisticUseCase {
 
   StatisticUseCase(this._statisticsRepository);
 
-  Future<Either<StatisticsListModel, AppError>> get() async {
-    return await _statisticsRepository.get();
+  Stream<Either<StatisticsListModel, AppError>> stream() {
+    return _statisticsRepository.stream();
   }
 }

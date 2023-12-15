@@ -30,7 +30,7 @@ class TransactionUseCase {
     return result;
   }
 
-  Future<Either<List<TransactionModel>, AppError>> get() async {
-    return await _remoteRepository.get();
+  Stream<Either<List<TransactionModel>, AppError>> stream() {
+    return _remoteRepository.stream();
   }
 }

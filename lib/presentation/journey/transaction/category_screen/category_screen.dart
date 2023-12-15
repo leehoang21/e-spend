@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_e_spend/common/enums/category.dart';
+import 'package:flutter_e_spend/presentation/widgets/scaffold_wdiget/scaffold_widget.dart';
 import 'package:flutter_translate/flutter_translate.dart';
 
 import '../../../../common/__mock__/categories_mock.dart';
@@ -37,17 +39,9 @@ class _CategoryScreenState extends State<CategoryScreen> {
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: CategoryScreenConstants.tabs.length,
-      child: Scaffold(
-        appBar: AppBarWidget(
+      child: ScaffoldWidget(
+        appbar: AppBarWidget(
           title: translate("transaction_category_screen_categories"),
-          titleStyle: ThemeText.subtitle1
-              .copyWith(fontWeight: FontWeight.bold, color: AppColor.black),
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back_ios_new_rounded),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          ),
         ),
         body: Column(
           children: [
@@ -72,12 +66,10 @@ class _CategoryScreenState extends State<CategoryScreen> {
                       children: CategoryScreenConstants.tabs.map(
                         (title) {
                           final categories = MockData.categoriesData
-                              .where((element) => element.type! == title)
+                              .where(
+                                  (element) => element.category.type == title)
                               .toList();
                           return ListView.builder(
-                            padding: EdgeInsets.symmetric(
-                              horizontal: AppDimens.width_18,
-                            ),
                             itemBuilder: (context, index) {
                               final category = categories[index];
                               if (category.subCategories == null ||
@@ -85,7 +77,8 @@ class _CategoryScreenState extends State<CategoryScreen> {
                                 return CategoryTile(
                                     categoryModel: category,
                                     isSubCategory: false,
-                                    isSelected: category.name == state?.name,
+                                    isSelected: category.category.title ==
+                                        state?.category.title,
                                     onTap: (category) {
                                       select(context, category);
                                       Navigator.pop(context, category);
@@ -98,7 +91,8 @@ class _CategoryScreenState extends State<CategoryScreen> {
                                   CategoryTile(
                                     categoryModel: category,
                                     isSubCategory: false,
-                                    isSelected: category.name! == state?.name,
+                                    isSelected: category.category.title ==
+                                        state?.category.title,
                                     onTap: (category) {
                                       select(context, category);
                                       Navigator.pop(context, category);
@@ -114,7 +108,8 @@ class _CategoryScreenState extends State<CategoryScreen> {
                                             Navigator.pop(context, category);
                                           },
                                           isSelected:
-                                              subCategory.name! == state?.name,
+                                              subCategory.category.title ==
+                                                  state?.category.title,
                                         ),
                                       )
                                       .toList(),
