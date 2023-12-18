@@ -53,15 +53,17 @@ class CategoriesWidget extends StatelessWidget {
             onTap: () {
               context.pushRoute(const SettingsRoute());
             }),
-        SettingsItem(
-          icons: Assets.icons.rateme.path,
-          title: AccountConstants.rateMe.tr,
-          onTap: () {},
-        ),
+        // SettingsItem(
+        //   icons: Assets.icons.rateme.path,
+        //   title: AccountConstants.rateMe.tr,
+        //   onTap: () {},
+        // ),
         SettingsItem(
           icons: Assets.icons.aboutme.path,
           title: AccountConstants.aboutMe.tr,
-          onTap: () {},
+          onTap: () {
+            context.read<AccountCubit>().aboutUs();
+          },
         ),
         SettingsItem(
           onTap: () {
