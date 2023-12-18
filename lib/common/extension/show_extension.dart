@@ -54,11 +54,10 @@ extension ShowExtensionContext on BuildContext {
     return;
   }
 
-  Future<dynamic> showBottomSheet(
-      {required Widget child,
-      String? title,
-      double? height,
-      Function? whenComplete}) async {
+  Future<dynamic> showBottomSheet({
+    required Widget child,
+    Function? whenComplete,
+  }) async {
     return await showModalBottomSheet(
       useSafeArea: true,
       isScrollControlled: true,
@@ -70,7 +69,7 @@ extension ShowExtensionContext on BuildContext {
           topRight: Radius.circular(LayoutConstants.borderSmall),
         ),
       ),
-      backgroundColor: Theme.of(this).cardColor,
+      backgroundColor: Theme.of(this).scaffoldBackgroundColor,
       builder: (BuildContext context) {
         return child;
       },

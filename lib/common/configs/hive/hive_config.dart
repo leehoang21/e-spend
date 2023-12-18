@@ -20,10 +20,6 @@ class HiveConfig {
     appBox = await Hive.openBox(HiveBoxName.appBox);
   }
 
-  Future setLocalAuth(bool value) async {
-    await appBox.put(DefaultEnvironment.localAuth, value);
-  }
-
   UserModel? get user => appBox.get(DefaultEnvironment.user) as UserModel?;
   ThemeData get theme =>
       appBox.get(DefaultEnvironment.theme) as String == 'dark'
@@ -31,6 +27,4 @@ class HiveConfig {
           : ThemeData.light();
   Locale get locale =>
       Locale(appBox.get(DefaultEnvironment.lang) as String? ?? 'en');
-  bool get localAuth =>
-      appBox.get(DefaultEnvironment.localAuth) as bool? ?? false;
 }

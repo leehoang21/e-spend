@@ -1,5 +1,6 @@
 import 'package:either_dart/either.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_e_spend/common/configs/biometric/biometric_config.dart';
 import 'package:flutter_e_spend/common/configs/firebase_config.dart';
 import 'package:flutter_e_spend/common/configs/hive/hive_config.dart';
 import 'package:flutter_e_spend/common/constants/string_constants.dart';
@@ -11,8 +12,6 @@ import 'package:flutter_e_spend/data/models/user_model.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:injectable/injectable.dart';
-import 'package:local_auth/local_auth.dart';
-
 import '../../common/configs/default_environment.dart';
 import '../../domain/repositories/auth_repository.dart';
 
@@ -20,11 +19,11 @@ import '../../domain/repositories/auth_repository.dart';
 class AuthRepositoryImpl extends AuthRepository {
   final FirebaseConfig config;
   final HiveConfig hiveConfig;
-  final LocalAuthentication auth;
+  final BiometricConfig biometricConfig;
   AuthRepositoryImpl(
     this.hiveConfig,
     this.config,
-    this.auth,
+    this.biometricConfig,
   );
 
   @override
@@ -189,15 +188,6 @@ class AuthRepositoryImpl extends AuthRepository {
   }
 
   @override
-  Future<bool> localAuth() async {
-    final result = await auth.authenticate(
-        localizedReason: 'Vplease_auth_local'.tr,
-        options: const AuthenticationOptions(biometricOnly: true));
-    hiveConfig.setLocalAuth(result);
-    return result;
-  }
-
-  @override
   Future<Either<UserModel, AppError>> loginWithGoogle() async {
     try {
       //nếu chưa login thì login rồi lấy token
@@ -222,12 +212,50 @@ class AuthRepositoryImpl extends AuthRepository {
   }
 
   @override
-  Future<bool> verifyEmail() async {
+  Future<Either<UserModel, AppError>> registerWithBiometric({
+    required String verificationId,
+    required String smsCode,
+  }) async {
     try {
-      await config.auth.currentUser?.sendEmailVerification();
-      return true;
+      final result = await loginPhoneNumber(verificationId, smsCode);
+      return result.fold(
+        (left) async {
+          final (email, password) = await getEmailAndPassword();
+          if (isNullEmpty(email) && isNullEmpty(password)) {
+            return Right(AppError(message: 'auth_fail'));
+          } else {
+            final result = await biometricConfig.saveUser(email, password);
+            if (result != null) {
+              return Right(result);
+            }
+            return loginWithPassword(userName: email, pass: password);
+          }
+        },
+        (right) => Right(right),
+      );
     } catch (e) {
-      return false;
+      return Right(AppError(message: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<UserModel, AppError>> loginWithBiometric() async {
+    try {
+      final canAuth = await biometricConfig.canAuthenticateBiometric;
+      if (canAuth) {
+        final (email, password) = await biometricConfig.user ?? ('', '');
+        if (isNullEmpty(email) && isNullEmpty(password)) {
+          return Right(AppError(message: 'auth_fail'));
+        } else {
+          return loginWithPassword(
+            userName: email.toString(),
+            pass: password.toString(),
+          );
+        }
+      }
+      return Right(AppError(message: 'biometrics_auth_fail'.tr));
+    } catch (e) {
+      return Right(AppError(message: e.toString()));
     }
   }
 }

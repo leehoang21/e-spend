@@ -5,7 +5,7 @@ import 'package:flutter_e_spend/common/configs/hive/hive_config.dart';
 import 'package:flutter_e_spend/common/constants/string_constants.dart';
 import 'package:flutter_e_spend/common/enums/login_type.dart';
 import 'package:flutter_e_spend/common/extension/bloc_extension.dart';
-import 'package:flutter_e_spend/common/utils/format_utils.dart';
+import 'package:flutter_e_spend/common/extension/string_extension.dart';
 import 'package:flutter_e_spend/presentation/bloc/base_bloc/base_bloc.dart';
 import 'package:flutter_e_spend/presentation/routers/app_router.dart';
 import 'package:injectable/injectable.dart';
@@ -41,6 +41,13 @@ class VerifyCubit extends BaseBloc<VerifyState> {
     _phoneNumber = phoneNumber;
     _loginType = loginType;
     _password = password;
+  }
+
+  @override
+  Future<void> close() {
+    _streamSubscription?.cancel();
+
+    return super.close();
   }
 
   String get phoneNumber => _phoneNumber!;
@@ -81,7 +88,7 @@ class VerifyCubit extends BaseBloc<VerifyState> {
   }
 
   void verifyOtp() async {
-    showLoading();
+    //showLoading();
     try {
       String smsCode = pinCodeController.text;
       if (_loginType == LoginType.phone) {
@@ -90,15 +97,6 @@ class VerifyCubit extends BaseBloc<VerifyState> {
           userName: _verificationId!,
           password: smsCode,
         );
-        //xác minh bước 2
-        if (hiveConfig.localAuth) {
-          final isLocalAuth = await authenticationUseCase.localAuth();
-          if (!isLocalAuth) {
-            await pop(true);
-            hideLoading();
-            return;
-          }
-        }
         //
         if (result.isRight &&
             result.right.message == StringConstants.accountNotExits) {
@@ -116,6 +114,17 @@ class VerifyCubit extends BaseBloc<VerifyState> {
             showSnackbar(translationKey: right.message);
           });
         }
+      } else if (_loginType == LoginType.biometrics) {
+        final user = await authenticationUseCase.registerWithBiometric(
+          verificationId: _verificationId!,
+          smsCode: smsCode,
+        );
+        if (user.isRight) {
+          await pop(false);
+          showSnackbar(translationKey: user.right.message);
+          hideLoading();
+          return;
+        }
       } else {
         if (_loginType == null) {
           await pop(false);
@@ -127,7 +136,7 @@ class VerifyCubit extends BaseBloc<VerifyState> {
             verificationId: _verificationId!,
             smsCode: smsCode,
             emailAndPassword: (
-              formatPhoneToEmail(_phoneNumber ?? ''),
+              (_phoneNumber ?? '').formatPhoneToEmail,
               _password ?? '',
             ));
         if (user.isRight) {

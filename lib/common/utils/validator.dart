@@ -1,4 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_e_spend/common/extension/string_extension.dart';
+import 'package:flutter_e_spend/common/utils/app_utils.dart';
 
 import '../../data/models/category_model.dart';
 import '../../data/models/wallet_model.dart';
@@ -15,7 +17,6 @@ class AppValidator {
 
   static RegExp expEmail = RegExp(_validateEmail);
 
-  bool isNullEmpty(Object o) => "" == o;
   static bool validateCreateTransactionButton(int? amount,
           CategoryModel? category, Timestamp? spendTime, WalletModel? wallet) =>
       amount != null &&
@@ -29,6 +30,20 @@ class AppValidator {
         password.isEmpty ||
         !expPassword.hasMatch(password)) {
       return 'invalid_password';
+    }
+    return null;
+  }
+
+  static String? validateEmail(String? email) {
+    if (email == null || email.isEmpty || !expEmail.hasMatch(email)) {
+      return 'invalid_email'.tr;
+    }
+    return null;
+  }
+
+  static String? validateUseName(String? userName) {
+    if (isNullEmpty(userName)) {
+      return 'user_empty'.tr;
     }
     return null;
   }

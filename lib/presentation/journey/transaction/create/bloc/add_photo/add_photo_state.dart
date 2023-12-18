@@ -17,7 +17,8 @@ class AddPhotoState extends Equatable {
 
   factory AddPhotoState.initial() => AddPhotoState(
         status: AddPhotoStatus.initial,
-        photos: const [],
+        // ignore: prefer_const_literals_to_create_immutables
+        photos: [],
         lastUpdate: DateTime.now(),
       );
 

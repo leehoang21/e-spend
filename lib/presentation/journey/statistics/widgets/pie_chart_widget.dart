@@ -5,7 +5,6 @@ import 'package:flutter_e_spend/common/constants/string_constants.dart';
 import 'package:flutter_e_spend/common/enums/category.dart';
 import 'package:flutter_e_spend/common/extension/num_extension.dart';
 import 'package:flutter_e_spend/common/extension/string_extension.dart';
-import 'package:flutter_e_spend/data/models/statistics_model.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../themes/themes.dart';
 import '../../../widgets/image_app_widget/image_app.dart';
@@ -17,7 +16,7 @@ class PieChartWidget extends StatefulWidget {
     required this.data,
   });
   final CategoryType categoryType;
-  final StatisticsListModel data;
+  final Map<CategoryType, num> data;
 
   @override
   State<StatefulWidget> createState() => PieChartWidgetState();
@@ -29,7 +28,7 @@ class PieChartWidgetState extends State<PieChartWidget> {
 
   @override
   Widget build(BuildContext context) {
-    data = widget.data.data.entries
+    data = widget.data.entries
         .where((element) => element.key.categoryType == widget.categoryType)
         .toList();
     total = data
@@ -46,7 +45,7 @@ class PieChartWidgetState extends State<PieChartWidget> {
           style: ThemeText.caption,
         ),
         Text(
-          total.getTextAmount,
+          total.getTextCompactCurrencyAmount,
           style: ThemeText.body1.copyWith(
             color: widget.categoryType.type == CategoryType.expense.type ||
                     widget.categoryType.type == CategoryType.loan.type
@@ -58,7 +57,9 @@ class PieChartWidgetState extends State<PieChartWidget> {
           height: AppDimens.height_20,
         ),
         data.isEmpty
-            ? const SizedBox()
+            ? SizedBox(
+                height: 130.h,
+              )
             : AspectRatio(
                 aspectRatio: 1,
                 child: PieChart(

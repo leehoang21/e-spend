@@ -26,16 +26,16 @@ class _LineChartState extends State<_LineChart> {
     double revenue = 0;
     for (int i = 0; i < widget.data.length; i++) {
       if (widget.data[i].key.categoryType ==
-          CategoryType.expense.categoryType) {
+              CategoryType.expense.categoryType ||
+          widget.data[i].key.categoryType == CategoryType.loan.categoryType) {
         expense += widget.data[i].value;
       } else {
         revenue += widget.data[i].value;
       }
     }
     widget.data.clear();
-
-    widget.data.add(MapEntry(CategoryType.revenue, revenue));
     widget.data.add(MapEntry(CategoryType.expense, expense));
+    widget.data.add(MapEntry(CategoryType.revenue, revenue));
   }
 
   @override
@@ -232,8 +232,8 @@ class LineChartWidgetState extends State<LineChartWidget> {
           ),
           Text(
             _netIncome > 0
-                ? '+${_netIncome.getTextCompactAmount}'
-                : _netIncome.getTextCompactAmount,
+                ? '+${_netIncome.getTextCompactCurrencyAmount}'
+                : _netIncome.getTextCompactCurrencyAmount,
             style: ThemeText.body1.copyWith(
               color: _netIncome > 0 ? AppColor.blue : AppColor.red,
             ),
@@ -249,8 +249,42 @@ class LineChartWidgetState extends State<LineChartWidget> {
               ),
             ),
           ),
-          const SizedBox(
-            height: 10,
+          SizedBox(
+            height: AppDimens.height_12,
+          ),
+          Row(
+            children: [
+              Container(
+                height: AppDimens.space_16,
+                width: AppDimens.space_16,
+                color: AppColor.blue,
+              ),
+              SizedBox(
+                width: AppDimens.width_8,
+              ),
+              Text(
+                CategoryType.revenue.type.tr,
+                style: ThemeText.caption,
+              ),
+              SizedBox(
+                width: AppDimens.width_16,
+              ),
+              Container(
+                height: AppDimens.space_16,
+                width: AppDimens.space_16,
+                color: AppColor.red,
+              ),
+              SizedBox(
+                width: AppDimens.width_8,
+              ),
+              Text(
+                CategoryType.expense.type.tr,
+                style: ThemeText.caption,
+              ),
+            ],
+          ),
+          SizedBox(
+            height: AppDimens.height_12,
           ),
         ],
       ),

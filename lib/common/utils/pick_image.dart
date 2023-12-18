@@ -12,10 +12,11 @@ class PickImage {
         source: source,
       );
 
-      return Compress.compressAndGetFile(
+      final result = await Compress.compressAndGetFile(
         File(pickedFile!.path),
         90,
       );
+      return result;
     } catch (e) {
       logger("pick image file$e");
     }

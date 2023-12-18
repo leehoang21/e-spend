@@ -3,9 +3,12 @@ import 'package:flutter/material.dart';
 
 import '../../common/enums/login_type.dart';
 import '../../data/models/category_model.dart';
+import '../../data/models/transaction_model.dart';
 import '../journey/account/account_screen_provider.dart';
 import '../journey/account/auth_setting/auth_setting_screen_provider.dart';
 import '../journey/account/auth_setting/widgets/login_with_password_screen.dart';
+import '../journey/account/profile/profile_screen_provider.dart';
+import '../journey/account/settings/setting_screen_provider.dart';
 import '../journey/auth/login/login_screen_provider.dart';
 import '../journey/auth/register/register_screen_provider.dart';
 import '../journey/auth/register_account/register_account_provider.dart';
@@ -17,6 +20,7 @@ import '../journey/statistics/statistic_screen_provider.dart';
 import '../journey/transaction/bank_list_screen/bank_list_screen_provider.dart';
 import '../journey/transaction/category_screen/category_screen_provider.dart';
 import '../journey/transaction/create/create_transaction_screen_provider.dart';
+import '../journey/transaction/transaction_list_screen/transaction_list_screen_provider.dart';
 import '../journey/wallet/screens/create_wallet_screen/create_wallet_screen_provider.dart';
 import '../journey/wallet/screens/wallet_list_screen/wallet_list_screen_provider.dart';
 part 'app_router.gr.dart';
@@ -82,6 +86,16 @@ class AppRouter extends _$AppRouter {
         ),
         AutoRoute(
           page: LoginWithPasswordRoute.page,
+        ),
+        AutoRoute(
+          page: SettingsRoute.page,
+        ),
+        AutoRoute(
+          page: ProfileRoute.page,
+        ),
+        //transaction
+        AutoRoute(
+          page: TransactionListRoute.page,
         ),
       ];
 }

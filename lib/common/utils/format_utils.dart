@@ -1,6 +1,5 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_e_spend/common/constants/string_constants.dart';
+
 import 'package:intl/intl.dart';
 
 class AmountInputFormatter extends TextInputFormatter {
@@ -28,28 +27,4 @@ class AmountInputFormatter extends TextInputFormatter {
         text: newText,
         selection: TextSelection.collapsed(offset: newText.length));
   }
-}
-
-String formatDateMonth(Timestamp tim) {
-  final time = tim.toDate();
-  if (time.day == 1) {
-    return '${DateFormat('MMM, d').format(time)}st';
-  } else if (time.day == 2) {
-    return '${DateFormat('MMM, d').format(time)}nd';
-  } else if (time.day == 3) {
-    return '${DateFormat('MMM, d').format(time)}rd';
-  }
-  return '${DateFormat('MMM, d').format(time)}th';
-}
-
-String formatYear(DateTime time) {
-  return DateFormat('MMM, yyyy').format(time);
-}
-
-String formatPhoneToEmail(String phone) {
-  phone = phone.replaceAll(' ', '');
-  if (phone.startsWith('+')) {
-    phone = phone.substring(1);
-  }
-  return '${StringConstants.espend}$phone@${StringConstants.espend}.com';
 }

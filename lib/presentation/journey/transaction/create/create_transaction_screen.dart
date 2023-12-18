@@ -36,22 +36,18 @@ class _CreateTransactionScreenState extends State<CreateTransactionScreen> {
 
   final TextEditingController _noteCtl = TextEditingController();
 
-  late CreateTransactionBloc _createTransactionBloc;
-  late AddPhotoBloc _addPhotoBloc;
-
   TransactionModel? _transaction;
 
   @override
   void initState() {
     _transaction = widget.transaction;
-    _createTransactionBloc = BlocProvider.of<CreateTransactionBloc>(context);
-    _addPhotoBloc = BlocProvider.of<AddPhotoBloc>(context);
+
     if (_transaction != null) {
       _amountCtrl.text = _transaction!.amount.getTextAmount;
       _walletCtrl.text = _transaction!.category.category.title;
       _dateCtl.text = _transaction!.spendTime.toDate().getTextDate;
       _noteCtl.text = _transaction?.note ?? '';
-      _createTransactionBloc.initial(_transaction!);
+      context.read<CreateTransactionBloc>().initial(_transaction!);
     }
     super.initState();
   }
@@ -63,8 +59,6 @@ class _CreateTransactionScreenState extends State<CreateTransactionScreen> {
     _categoryCtl.dispose();
     _dateCtl.dispose();
     _noteCtl.dispose();
-    _createTransactionBloc.close();
-    _addPhotoBloc.close();
     super.dispose();
   }
 
@@ -72,10 +66,11 @@ class _CreateTransactionScreenState extends State<CreateTransactionScreen> {
   Widget build(BuildContext context) {
     return ScaffoldWidget(
       appbar: AppBarWidget(
-        title: CreateTransactionConstants.addTransaction,
+        title: widget.transaction == null
+            ? CreateTransactionConstants.addTransaction
+            : CreateTransactionConstants.updateTransaction,
       ),
       body: BlocListener<CreateTransactionBloc, CreateTransactionState>(
-        bloc: _createTransactionBloc,
         listener: (context, state) {
           if (state.status == CreateTransactionStatus.succes) {
             Navigator.pop(context);
@@ -111,19 +106,22 @@ class _CreateTransactionScreenState extends State<CreateTransactionScreen> {
                     ],
                   ),
                   BlocBuilder<CreateTransactionBloc, CreateTransactionState>(
-                    bloc: _createTransactionBloc,
                     buildWhen: (previous, current) =>
                         previous.buttonIsValid != current.buttonIsValid,
                     builder: (context, state) {
                       return TextButtonWidget(
-                          onPressed: state.buttonIsValid
-                              ? _transaction != null
-                                  ? _onEdit
-                                  : _onCreate
-                              : null,
-                          title: _transaction != null
-                              ? CreateTransactionConstants.update
-                              : CreateTransactionConstants.create);
+                          onPressed: () {
+                            if (state.buttonIsValid) {
+                              if (widget.transaction != null) {
+                                _onEdit(context);
+                              } else {
+                                _onCreate(context);
+                              }
+                            }
+                          },
+                          title: widget.transaction == null
+                              ? CreateTransactionConstants.create
+                              : CreateTransactionConstants.update);
                     },
                   ),
                 ],
@@ -135,12 +133,14 @@ class _CreateTransactionScreenState extends State<CreateTransactionScreen> {
     );
   }
 
-  void _onCreate() {
-    _createTransactionBloc.onCreate(
-        note: _noteCtl.text, photos: _addPhotoBloc.state.photos);
+  void _onCreate(BuildContext context) {
+    context.read<CreateTransactionBloc>().onCreate(
+        note: _noteCtl.text, photos: context.read<AddPhotoBloc>().state.photos);
   }
 
-  void _onEdit() {
-    _createTransactionBloc.onEdit(id: _transaction!.id!, note: _noteCtl.text);
+  void _onEdit(BuildContext context) {
+    context
+        .read<CreateTransactionBloc>()
+        .onEdit(id: _transaction!.id!, note: _noteCtl.text);
   }
 }

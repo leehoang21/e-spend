@@ -8,28 +8,34 @@ part 'user_model.g.dart';
 @HiveType(typeId: HiveTypeId.userType)
 class UserModel {
   @HiveField(0)
-  final String userName;
+  final String? userName;
   @HiveField(1)
   final String? email;
   @HiveField(2)
   final String? avatar;
   @HiveField(3)
-  final String phoneNumber;
+  final String? phoneNumber;
   @HiveField(4)
   final String? uId;
   @HiveField(5)
   final UserModel? facebookLink;
   @HiveField(6)
   final UserModel? googleLink;
+  @HiveField(7)
+  final bool? isPassword;
+  @HiveField(8)
+  final bool? isBiometricsAuth;
 
   UserModel({
-    required this.phoneNumber,
+    this.phoneNumber,
     this.userName = '',
     this.email,
     this.avatar,
-    required this.uId,
+    this.uId,
     this.facebookLink,
     this.googleLink,
+    this.isPassword,
+    this.isBiometricsAuth,
   });
 
   UserModel copyWith({
@@ -39,6 +45,8 @@ class UserModel {
     String? uId,
     UserModel? facebookLink,
     UserModel? googleLink,
+    bool? isPassword,
+    bool? isBiometricsAuth,
   }) {
     return UserModel(
       phoneNumber: phoneNumber,
@@ -48,6 +56,8 @@ class UserModel {
       uId: uId,
       facebookLink: facebookLink ?? this.facebookLink,
       googleLink: googleLink ?? this.googleLink,
+      isPassword: isPassword ?? this.isPassword,
+      isBiometricsAuth: isBiometricsAuth ?? this.isBiometricsAuth,
     );
   }
 
@@ -69,6 +79,8 @@ class UserModel {
       googleLink: data['googleLink'] != null
           ? UserModel.fromJson(data['googleLink'] as Map<String, dynamic>)
           : null,
+      isBiometricsAuth: data['isBiometricsAuth'] as bool? ?? false,
+      isPassword: data['isPassword'] as bool? ?? false,
     );
   }
 
@@ -81,6 +93,8 @@ class UserModel {
       'uId': uId,
       'facebookLink': facebookLink?.toJson(),
       'googleLink': googleLink?.toJson(),
+      'isPassword': isPassword,
+      'isBiometricsAuth': isBiometricsAuth,
     };
   }
 

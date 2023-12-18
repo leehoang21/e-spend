@@ -1,13 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:either_dart/either.dart';
 import 'package:flutter_e_spend/common/configs/firebase_config.dart';
-import 'package:flutter_e_spend/common/configs/hive/hive_config.dart';
 import 'package:flutter_e_spend/common/enums/category.dart';
 import 'package:flutter_e_spend/common/exception/app_error.dart';
+import 'package:flutter_e_spend/domain/repositories/storage_repository.dart';
 import 'package:injectable/injectable.dart';
 
 import '../../common/configs/default_environment.dart';
-import '../../common/utils/app_utils.dart';
 import '../../domain/repositories/transaction_repository.dart';
 import '../../domain/repositories/wallet_repository.dart';
 import '../models/transaction_model.dart';
@@ -15,15 +14,15 @@ import '../models/transaction_model.dart';
 @Injectable(as: TransactionRepository)
 class TransactionRepositoryImpl extends TransactionRepository {
   final FirebaseConfig firebaseConfig;
-  final HiveConfig hiveConfig;
   final WalletRepository walletRepository;
+  final StorageRepository storageRepository;
   TransactionRepositoryImpl(
     this.firebaseConfig,
-    this.hiveConfig,
     this.walletRepository,
+    this.storageRepository,
   );
 
-  String get _uid => hiveConfig.user?.uId ?? '';
+  String get _uid => firebaseConfig.auth.currentUser?.uid ?? '';
 
   CollectionReference<Map<String, dynamic>> get _doc => firebaseConfig.userDoc
       .collection(_uid)
@@ -77,43 +76,84 @@ class TransactionRepositoryImpl extends TransactionRepository {
   }
 
   @override
-  Future<Either<List<TransactionModel>, AppError>> get() async {
+  Future<Either<List<TransactionModel>, AppError>> get({
+    required Timestamp toTime,
+    required Timestamp fromTime,
+    required DocumentSnapshot<Object?>? documentSnapshot,
+    required int limit,
+  }) async {
     try {
-      final result = await _doc.get();
+      if (documentSnapshot == null) [];
+      final result = await _doc
+          .orderBy('spendTime', descending: true)
+          .where(
+            'spendTime',
+            isGreaterThanOrEqualTo: fromTime,
+            isLessThanOrEqualTo: toTime,
+          )
+          .limit(limit)
+          .startAtDocument(documentSnapshot!)
+          .get();
 
-      final data = result.docs.map(
-        (e) {
-          logger(e.data().toString());
-          final data = e.data();
-          return TransactionModel.fromJson(data, e.id);
-        },
-      ).toList();
+      final data = <TransactionModel>[];
+      for (var element in result.docs) {
+        final transaction = await _get(element);
+        data.add(transaction);
+      }
       return Left(data);
     } catch (e) {
       return Right(AppError(message: e.toString()));
     }
   }
 
+  Future<TransactionModel> _get(
+      QueryDocumentSnapshot<Map<String, dynamic>> element) async {
+    final transaction = TransactionModel.fromJson(element);
+    //get image
+    final photos = await Future.wait(
+      (transaction.photos ?? []).map((e) async => await _getUrlImage(e)),
+    );
+    return transaction.copyWith(
+      photos:
+          photos.where((element) => element.isNotEmpty).toList(growable: false),
+    );
+  }
+
+  Future<String> _getUrlImage(String path) async {
+    final result = await storageRepository.downloadUrl(pathStorage: path);
+    return result.isLeft ? result.left : '';
+  }
+
   @override
-  Stream<Either<List<TransactionModel>, AppError>> stream() {
+  Stream<Either<List<TransactionModel>, AppError>> stream({
+    required Timestamp toTime,
+    required Timestamp fromTime,
+    required int limit,
+  }) {
     try {
-      return _doc
+      //lấy giao dịch trong khoản thời gian time
+      final result = _doc
           .orderBy('spendTime', descending: true)
+          .where(
+            'spendTime',
+            isGreaterThanOrEqualTo: fromTime,
+            isLessThanOrEqualTo: toTime,
+          )
+          .limit(limit)
           .snapshots()
-          .map((event) {
+          .map<Future<Either<List<TransactionModel>, AppError>>>((event) async {
         try {
-          final data = event.docs.map(
-            (e) {
-              logger(e.data().toString());
-              final data = e.data();
-              return TransactionModel.fromJson(data, e.id);
-            },
-          ).toList();
+          final data = <TransactionModel>[];
+          for (var element in event.docs) {
+            final transaction = await _get(element);
+            data.add(transaction);
+          }
           return Left(data);
         } catch (e) {
           return Right(AppError(message: e.toString()));
         }
       });
+      return result.asyncMap((event) => event);
     } catch (e) {
       return Stream.value(Right(AppError(message: e.toString())));
     }

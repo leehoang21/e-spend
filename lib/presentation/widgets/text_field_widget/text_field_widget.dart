@@ -71,9 +71,17 @@ class TextFieldWidget extends StatelessWidget {
       textAlign: textAlign ?? TextAlign.start,
       textCapitalization: textCapitalization ?? TextCapitalization.none,
       obscureText: obscureText ?? false,
-      style: textStyle ??
-          ThemeText.caption
-              .copyWith(color: AppColor.tuna, fontWeight: FontWeight.w400),
+      style: textStyle?.copyWith(
+            color: enabled == false
+                ? textStyle?.color?.withOpacity(0.5)
+                : textStyle?.color,
+          ) ??
+          ThemeText.caption.copyWith(
+            color: enabled == false
+                ? AppColor.tuna.withOpacity(0.5)
+                : AppColor.tuna,
+            fontWeight: FontWeight.w400,
+          ),
       onSaved: onSaved,
       validator: validate,
       autovalidateMode: autovalidateMode,

@@ -2,7 +2,6 @@ import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:either_dart/either.dart';
-import 'package:flutter_e_spend/common/configs/hive/hive_config.dart';
 import 'package:flutter_e_spend/common/exception/app_error.dart';
 import 'package:injectable/injectable.dart';
 
@@ -15,11 +14,10 @@ import '../models/wallet_model.dart';
 @Injectable(as: WalletRepository)
 class WalletRepositoryImpl extends WalletRepository {
   final FirebaseConfig firebaseConfig;
-  final HiveConfig hiveConfig;
 
-  WalletRepositoryImpl(this.firebaseConfig, this.hiveConfig);
+  WalletRepositoryImpl(this.firebaseConfig);
 
-  String get _uid => hiveConfig.user?.uId ?? '';
+  String get _uid => firebaseConfig.auth.currentUser?.uid ?? '';
 
   CollectionReference<Map<String, dynamic>> get _doc => firebaseConfig.userDoc
       .collection(_uid)
@@ -48,8 +46,7 @@ class WalletRepositoryImpl extends WalletRepository {
   @override
   Future<AppError?> put({required WalletModel walletModel}) async {
     try {
-      final result = await _doc.doc(walletModel.id.toString()).get();
-      if (!result.exists) {
+      if (walletModel.id == null) {
         await _doc.add(walletModel.toJson());
       } else {
         await _doc.doc(walletModel.id.toString()).update(walletModel.toJson());

@@ -80,19 +80,8 @@ class AppBarWidget extends StatelessWidget implements PreferredSize {
           Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
-              InkWell(
-                onTap: () {
-                  context.popRoute();
-                },
-                child: leading ??
-                    SizedBox(
-                      width: AppbarConstants.buttonSize,
-                      height: AppbarConstants.buttonSize,
-                      child: const Icon(
-                        Icons.arrow_back_ios_new,
-                        color: AppColor.white,
-                      ),
-                    ),
+              _LeadingWidget(
+                leading: leading,
               ),
               SizedBox(
                 width: 20.w,
@@ -129,4 +118,37 @@ class AppBarWidget extends StatelessWidget implements PreferredSize {
 
   @override
   Size get preferredSize => AppbarConstants.appbarSize;
+}
+
+class _LeadingWidget extends StatelessWidget {
+  const _LeadingWidget({
+    Key? key,
+    this.leading,
+  }) : super(key: key);
+  final Widget? leading;
+
+  @override
+  Widget build(BuildContext context) {
+    if (leading != null) {
+      return leading!;
+    }
+    return !context.router.canPop()
+        ? SizedBox(
+            width: AppbarConstants.buttonSize,
+            height: AppbarConstants.buttonSize,
+          )
+        : InkWell(
+            onTap: () {
+              context.popRoute();
+            },
+            child: SizedBox(
+              width: AppbarConstants.buttonSize,
+              height: AppbarConstants.buttonSize,
+              child: const Icon(
+                Icons.arrow_back_ios_new,
+                color: AppColor.white,
+              ),
+            ),
+          );
+  }
 }

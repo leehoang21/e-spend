@@ -1,5 +1,7 @@
 import 'package:flutter_translate/flutter_translate.dart';
 
+import '../constants/string_constants.dart';
+
 extension StringExtension on String {
   String get toTitleCase {
     if (isEmpty) {
@@ -13,5 +15,14 @@ extension StringExtension on String {
 
   String get tr {
     return translate(this);
+  }
+
+  String get formatPhoneToEmail {
+    String phone = this;
+    phone = phone.replaceAll(' ', '');
+    if (phone.startsWith('+')) {
+      phone = phone.substring(1);
+    }
+    return '${StringConstants.espend}$phone@${StringConstants.espend}.com';
   }
 }

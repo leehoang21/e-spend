@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_e_spend/common/assets/assets.gen.dart';
-
 import 'package:flutter_e_spend/presentation/journey/auth/login/cubit/login_cubit.dart';
 import 'package:flutter_e_spend/presentation/journey/auth/login/widget/login_with_item.dart';
 
@@ -52,6 +51,23 @@ class LoginScreen extends StatelessWidget {
                       inputFormatter: [MaskedInputFormatter('#### ### ###')],
                       controller: controller,
                       keyboardType: TextInputType.phone,
+                      suffixIcon: !context
+                              .watch<LoginCubit>()
+                              .state
+                              .canAuthBiometric
+                          ? const SizedBox()
+                          : InkWell(
+                              onTap: () {
+                                context.read<LoginCubit>().loginWithBiometric();
+                              },
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Assets.icons.biometrics.image(
+                                  height: LoginConstants.sizeIcon,
+                                  width: LoginConstants.sizeIcon,
+                                ),
+                              ),
+                            ),
                       hintText: LoginConstants.yourPhone,
                       textStyle: ThemeText.style14Medium
                           .copyWith(fontWeight: FontWeight.normal),
@@ -104,33 +120,7 @@ class LoginScreen extends StatelessWidget {
                       title: LoginConstants.signIn,
                     ),
                   ),
-
-                  // //bạn chưa có tài khoản
-                  // Align(
-                  //   alignment: Alignment.centerRight,
-                  //   child: RichText(
-                  //     text: TextSpan(
-                  //       text: LoginConstants.notHaveAccount,
-                  //       style: ThemeText.style14Medium
-                  //           .copyWith(fontWeight: FontWeight.w400),
-                  //       children: [
-                  //         TextSpan(
-                  //           recognizer: TapGestureRecognizer()
-                  //             ..onTap = () {
-                  //               context.pushRoute(const RegisterAccountRoute());
-                  //             },
-                  //           text: '  ${LoginConstants.register}',
-                  //           style: ThemeText.style14Medium,
-                  //         )
-                  //       ],
-                  //     ),
-                  //   ),
-                  // ),
-                  SizedBox(
-                    height: LoginConstants.distanceButtonToField,
-                  ),
                   const DeviderTextWidget(),
-
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: LoginConstants.listIconsLogin(context)

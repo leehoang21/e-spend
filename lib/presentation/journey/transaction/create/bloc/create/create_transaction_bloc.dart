@@ -4,7 +4,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_e_spend/common/di/injector.dart';
 import 'package:flutter_e_spend/common/extension/show_extension.dart';
-import 'package:flutter_e_spend/domain/use_cases/pick_image_use_case.dart';
+import 'package:flutter_e_spend/domain/use_cases/storage_use_case.dart';
 import 'package:injectable/injectable.dart';
 
 import '../../../../../../common/configs/default_environment.dart';
@@ -106,11 +106,11 @@ class CreateTransactionBloc extends BaseBloc<CreateTransactionState> {
         final transactionId = await _transactionUseCase.create(transaction);
         log('transaction id : $transactionId');
         final List<String> imagePaths = [];
-        for (final photo in photos) {
+        for (int i = 0; i < photos.length; i++) {
           final String storagePath =
-              '/${DefaultEnvironment.transaction}/$transactionId/${DateTime.now().millisecondsSinceEpoch}.png';
+              '${DefaultEnvironment.transaction}/$transactionId/$i.jpeg';
           await storageUseCase.put(
-              imageToUpload: photo, imagePathStorage: storagePath);
+              imageToUpload: photos[i], imagePathStorage: storagePath);
           imagePaths.add(storagePath);
         }
         transactionId.fold(

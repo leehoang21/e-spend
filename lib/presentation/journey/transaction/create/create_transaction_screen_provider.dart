@@ -5,11 +5,16 @@ import 'package:flutter_e_spend/common/di/di.dart';
 import 'package:flutter_e_spend/presentation/journey/transaction/create/bloc/add_photo/add_photo_bloc.dart';
 import 'package:flutter_e_spend/presentation/journey/transaction/create/create_transaction_screen.dart';
 
+import '../../../../data/models/transaction_model.dart';
 import 'bloc/create/create_transaction_bloc.dart';
 
 @RoutePage()
 class CreateTransactionScreenProvider extends StatefulWidget {
-  const CreateTransactionScreenProvider({super.key});
+  const CreateTransactionScreenProvider({
+    super.key,
+    this.transaction,
+  });
+  final TransactionModel? transaction;
 
   @override
   State<CreateTransactionScreenProvider> createState() =>
@@ -29,7 +34,9 @@ class _CreateTransactionScreenProviderState
           create: (context) => getIt.get<AddPhotoBloc>(),
         ),
       ],
-      child: const CreateTransactionScreen(),
+      child: CreateTransactionScreen(
+        transaction: widget.transaction,
+      ),
     );
   }
 }

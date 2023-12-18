@@ -4,28 +4,48 @@ enum HomeStateStatus {
   initial,
   loading,
   loaded,
-  error,
 }
 
 class HomeState extends Equatable {
-  final List<TransactionModel> data;
+  final Map<String, List<TransactionModel>> data;
+  final (num, num) statistic;
   final HomeStateStatus status;
+  final DocumentSnapshot<Object?>? lastDocument;
 
   const HomeState({
-    this.data = const [],
+    required this.data,
     this.status = HomeStateStatus.initial,
+    required this.statistic,
+    this.lastDocument,
   });
 
+  factory HomeState.initial() => const HomeState(
+        status: HomeStateStatus.initial,
+        // ignore: prefer_const_literals_to_create_immutables
+        data: {},
+        statistic: (0, 0),
+      );
+
   HomeState copyWith({
-    List<TransactionModel>? data,
+    Map<String, List<TransactionModel>>? data,
     HomeStateStatus? status,
+    ParamsTransactionUsecase? params,
+    (num, num)? statistic,
+    DocumentSnapshot<Object?>? lastDocument,
   }) {
     return HomeState(
       data: data ?? this.data,
       status: status ?? this.status,
+      statistic: statistic ?? this.statistic,
+      lastDocument: lastDocument,
     );
   }
 
   @override
-  List<Object?> get props => [data, status];
+  List<Object?> get props => [
+        data,
+        status,
+        statistic,
+        lastDocument,
+      ];
 }

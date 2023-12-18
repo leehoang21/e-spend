@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../../../../common/constants/app_dimens.dart';
 import '../../../widgets/image_app_widget/image_app.dart';
 
 class SettingsItem extends StatelessWidget {
-  final String icons;
+  final dynamic icons;
   final String? iconDefault;
   final String title;
   final TextStyle? titleStyle;
@@ -42,16 +43,24 @@ class SettingsItem extends StatelessWidget {
           padding: const EdgeInsets.all(5),
           child: ClipRRect(
             borderRadius: BorderRadius.circular(500.r),
-            child: AppImageWidget(
-              path: icons,
-              height: 30.sp,
-              width: 30.sp,
-              defultImage: AppImageWidget(
-                path: iconDefault,
-                height: 30.sp,
-                width: 30.sp,
-              ),
-            ),
+            child: icons is IconData
+                ? Icon(
+                    icons,
+                    size: AppDimens.space_30,
+                    color: Theme.of(context).appBarTheme.backgroundColor,
+                  )
+                : icons is Widget
+                    ? icons
+                    : AppImageWidget(
+                        path: icons.toString(),
+                        height: AppDimens.space_30,
+                        width: AppDimens.space_30,
+                        defultImage: AppImageWidget(
+                          path: iconDefault,
+                          height: AppDimens.space_30,
+                          width: AppDimens.space_30,
+                        ),
+                      ),
           ),
         ),
         title: Text(

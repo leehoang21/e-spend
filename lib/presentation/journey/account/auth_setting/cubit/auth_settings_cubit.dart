@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:flutter_e_spend/common/configs/biometric/biometric_config.dart';
 import 'package:flutter_e_spend/common/configs/hive/hive_config.dart';
 import 'package:flutter_e_spend/common/extension/bloc_extension.dart';
 import 'package:flutter_e_spend/domain/use_cases/auth_use_case.dart';
@@ -14,17 +15,23 @@ class AuthSettingsCubit extends BaseBloc<AuthSettingsState> {
   AuthSettingsCubit(
     this.hiveConfig,
     this.authUseCase,
+    this.biometricConfig,
   ) : super(AuthSettingsState.initial());
 
   final HiveConfig hiveConfig;
+  final BiometricConfig biometricConfig;
   final AuthUseCase authUseCase;
+  @override
+  onInit() {
+    _isLocalAuth();
+  }
 
   Future<void> linkSocial({
     required LoginType loginType,
   }) async {
     final result = await push(
       VerifyOtpRoute(
-        phoneNumber: hiveConfig.user!.phoneNumber,
+        phoneNumber: hiveConfig.user!.phoneNumber!,
         loginType: loginType,
       ),
     );
@@ -37,8 +44,22 @@ class AuthSettingsCubit extends BaseBloc<AuthSettingsState> {
     }
   }
 
-  Future<void> localAuth() async {
-    await authUseCase.localAuth();
+  authBiometric() async {
+    final isAuth = await biometricConfig.canAuthenticateBiometric;
+
+    if (isAuth) {
+      linkSocial(loginType: LoginType.biometrics);
+    } else {
+      final result = await biometricConfig.registerBiometric;
+      if (result) {
+        linkSocial(loginType: LoginType.biometrics);
+      }
+    }
+  }
+
+  Future<void> _isLocalAuth() async {
+    final result = await biometricConfig.canCheckBiometrics;
+    emit(state.copyWith(isLocalAuth: result));
   }
 
   Future<void> loginWithPassword() async {

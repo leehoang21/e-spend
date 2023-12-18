@@ -9,7 +9,7 @@ class DefaultEnvironment {
   static const String transaction = 'transaction';
   static const String statistics = 'statistics';
   static const String walletList = 'wallet';
-  static const String avatar = 'avatar';
+  static const String avatar = 'avatar.jpeg';
   static const String user = 'user';
   //local
   static const String lang = 'lang';

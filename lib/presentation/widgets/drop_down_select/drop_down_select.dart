@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_e_spend/common/constants/layout_constants.dart';
+import 'package:flutter_e_spend/common/extension/string_extension.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../common/constants/app_dimens.dart';
 import '../../../../common/constants/string_constants.dart';
@@ -10,7 +11,7 @@ import '../text_field_widget/text_field_constants.dart';
 
 class DropDownSelectCustome<T> extends StatelessWidget {
   final Function(T?)? onChanged;
-  final String lable;
+  final String? lable;
   final String hintText;
   final List<T> items;
   final T? value;
@@ -20,10 +21,11 @@ class DropDownSelectCustome<T> extends StatelessWidget {
   final bool? isRequired;
   final List<DropdownMenuItem<T>>? childBuilder;
   final VoidCallback? onTapEmpty;
+  final Widget? prefixIcon;
   const DropDownSelectCustome({
     Key? key,
     this.onChanged,
-    required this.lable,
+    this.lable,
     required this.hintText,
     required this.items,
     this.value,
@@ -33,37 +35,31 @@ class DropDownSelectCustome<T> extends StatelessWidget {
     this.borderRadius,
     this.childBuilder,
     this.onTapEmpty,
+    this.prefixIcon,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    OutlineInputBorder commonBoder = OutlineInputBorder(
-      borderSide: BorderSide(color: borderColor ?? AppColor.iron, width: 0.5),
-      borderRadius: BorderRadius.all(
-        Radius.circular(
-          borderRadius ?? LayoutConstants.roundedRadius,
-        ),
-      ),
-    );
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          lable,
-          style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-              fontSize: 16.sp,
-              height: 1,
-              fontWeight: FontWeight.bold,
-              fontFamily: FontFamily.qs),
-        ),
-        SizedBox(
-          height: AppDimens.height_12,
-        ),
+        if (lable != null)
+          Padding(
+            padding: EdgeInsets.only(bottom: AppDimens.height_12),
+            child: Text(
+              lable!,
+              style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                  fontSize: 16.sp,
+                  height: 1,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: FontFamily.qs),
+            ),
+          ),
         DropdownButtonFormField<T>(
           value: value,
-          icon: const Icon(Icons.keyboard_arrow_down_rounded,
-              color: AppColor.iron),
+          icon: const Icon(
+            Icons.keyboard_arrow_down_rounded,
+          ),
           elevation: 2,
           validator: validate ??
               (value) {
@@ -78,36 +74,56 @@ class DropDownSelectCustome<T> extends StatelessWidget {
               horizontal: TextFieldConstants.contentPaddingHorizontal,
               vertical: TextFieldConstants.contentPaddingVertical,
             ),
+            fillColor: AppColor.fieldColor,
+            prefixIcon: prefixIcon,
             filled: true,
-            fillColor: Theme.of(context).cardColor,
-            enabledBorder: commonBoder,
-            focusedBorder: OutlineInputBorder(
-              borderSide:
-                  BorderSide(color: borderColor ?? AppColor.primaryColor),
+            enabledBorder: OutlineInputBorder(
+              borderSide: const BorderSide(color: AppColor.transparent),
               borderRadius: BorderRadius.all(
-                Radius.circular(
-                    borderRadius ?? LayoutConstants.borderTextField),
+                Radius.circular(LayoutConstants.borderSmall),
+              ),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderSide: const BorderSide(color: AppColor.transparent),
+              borderRadius: BorderRadius.all(
+                Radius.circular(LayoutConstants.borderSmall),
               ),
             ),
             errorBorder: OutlineInputBorder(
-              borderSide: const BorderSide(color: AppColor.errorColor),
+              borderSide: const BorderSide(color: AppColor.transparent),
               borderRadius: BorderRadius.all(
-                Radius.circular(
-                    borderRadius ?? LayoutConstants.borderTextField),
+                Radius.circular(LayoutConstants.borderSmall),
               ),
             ),
-            focusedErrorBorder: commonBoder,
-            disabledBorder: commonBoder,
-            border: commonBoder,
+            focusedErrorBorder: OutlineInputBorder(
+              borderSide: const BorderSide(color: AppColor.transparent),
+              borderRadius: BorderRadius.all(
+                Radius.circular(LayoutConstants.borderSmall),
+              ),
+            ),
+            disabledBorder: OutlineInputBorder(
+              borderSide: const BorderSide(color: AppColor.transparent),
+              borderRadius: BorderRadius.all(
+                Radius.circular(LayoutConstants.borderSmall),
+              ),
+            ),
+            border: OutlineInputBorder(
+              borderSide: const BorderSide(color: AppColor.transparent),
+              borderRadius: BorderRadius.all(
+                Radius.circular(LayoutConstants.borderSmall),
+              ),
+            ),
           ),
-          dropdownColor: Theme.of(context).cardColor,
+          dropdownColor: Theme.of(context).scaffoldBackgroundColor,
           borderRadius: BorderRadius.circular(LayoutConstants.borderTextField),
           onChanged: onChanged,
           menuMaxHeight: 1.sw / 2,
           isExpanded: true,
           hint: Text(
             hintText,
-            style: ThemeText.body2,
+            style: ThemeText.caption.copyWith(
+              color: AppColor.tuna,
+            ),
           ),
           items: childBuilder ??
               items.map((e) => _buildDropDownMenu(context, e)).toList(),
@@ -120,8 +136,10 @@ class DropDownSelectCustome<T> extends StatelessWidget {
     return DropdownMenuItem<T>(
       value: value,
       child: Text(
-        value.toString(),
-        style: Theme.of(context).textTheme.bodySmall?.copyWith(fontSize: 16.sp),
+        value.toString().tr,
+        style: ThemeText.caption.copyWith(
+          color: AppColor.tuna,
+        ),
       ),
     );
   }

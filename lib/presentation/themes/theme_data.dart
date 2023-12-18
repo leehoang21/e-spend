@@ -34,6 +34,7 @@ ThemeData appTheme() {
     floatingActionButtonTheme: const FloatingActionButtonThemeData(
       backgroundColor: AppColor.ebonyClay,
       foregroundColor: Colors.white,
+      shape: CircleBorder(),
     ),
     tabBarTheme: TabBarTheme(
       labelStyle:

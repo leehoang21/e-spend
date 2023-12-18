@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_e_spend/common/assets/assets.gen.dart';
 import 'package:flutter_e_spend/common/extension/string_extension.dart';
 import 'package:flutter_e_spend/presentation/routers/app_router.dart';
+import 'package:flutter_e_spend/presentation/widgets/scaffold_wdiget/scaffold_widget.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 
 import '../../../../../common/constants/app_dimens.dart';
@@ -23,9 +24,8 @@ class WalletListScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColor.ebonyClay,
-      appBar: AppBarWidget(
+    return ScaffoldWidget(
+      appbar: AppBarWidget(
         centerWidget: Text(
           'wallets'.tr,
           textAlign: TextAlign.center,
@@ -33,43 +33,36 @@ class WalletListScreen extends StatelessWidget {
         ),
         //  color: AppColor.ebonyClay,
       ),
-      body: Container(
-          margin: EdgeInsets.only(top: AppDimens.space_16),
-          padding: EdgeInsets.only(top: AppDimens.height_20),
-          decoration: BoxDecoration(
-            color: AppColor.white,
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(AppDimens.radius_20),
-              topRight: Radius.circular(AppDimens.radius_20),
-            ),
-          ),
-          child: BlocBuilder<WalletListCubit, WalletListState>(
-              builder: (context, walletListState) {
-            if (walletListState is WalletListLoaded) {
-              return RefreshWidget(
-                  controller: refreshController,
-                  onRefresh: () async {
-                    await context.read<WalletListCubit>().getWalletList();
-                    refreshController.refreshCompleted();
-                  },
-                  child: ListView.builder(
-                    itemBuilder: (context, index) => _buildWalletItem(
-                        context, walletListState.walletList[index]),
-                    itemCount: walletListState.walletList.length,
-                  ));
-            }
+      body: Padding(
+        padding: EdgeInsets.only(top: AppDimens.height_20),
+        child: BlocBuilder<WalletListCubit, WalletListState>(
+            builder: (context, walletListState) {
+          if (walletListState is WalletListLoaded) {
+            return RefreshWidget(
+                controller: refreshController,
+                onRefresh: () async {
+                  await context.read<WalletListCubit>().getWalletList();
+                  refreshController.refreshCompleted();
+                },
+                child: ListView.builder(
+                  itemBuilder: (context, index) => _buildWalletItem(
+                      context, walletListState.walletList[index]),
+                  itemCount: walletListState.walletList.length,
+                ));
+          }
 
-            if (walletListState is WalletListError) {
-              return Center(
-                child: Text('error_message'.tr),
-              );
-            }
-            if (walletListState is WalletListNoResult) {
-              return Container();
-            }
+          if (walletListState is WalletListError) {
+            return Center(
+              child: Text('error_message'.tr),
+            );
+          }
+          if (walletListState is WalletListNoResult) {
+            return Container();
+          }
 
-            return const LoaderWidget();
-          })),
+          return const LoaderWidget();
+        }),
+      ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: AppColor.black,
         onPressed: () async {

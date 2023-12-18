@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:auto_route/auto_route.dart';
 import 'package:either_dart/either.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -20,8 +21,14 @@ Future<Either<File, String>?> pickImageFuncion({
         child: BlocBuilder<PickImageCubit, PickImageState>(
           builder: (context, state) {
             return PickImageWidget(
-              camera: ((context) => camera(context)),
-              gallery: ((context) => gallery(context)),
+              camera: ((context) async {
+                await camera(context);
+                await context.popRoute();
+              }),
+              gallery: ((context) async {
+                await gallery(context);
+                await context.popRoute();
+              }),
             );
           },
         ),

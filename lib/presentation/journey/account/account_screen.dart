@@ -26,6 +26,9 @@ class AccountScreen extends StatelessWidget {
             const Information(),
             const CategoriesWidget(),
             version(),
+            SizedBox(
+              height: AppDimens.height_28,
+            ),
           ],
         ),
       );

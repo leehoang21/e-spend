@@ -27,7 +27,7 @@ class MainScreen extends StatelessWidget {
         floatingActionButton: FloatingActionButton(
           backgroundColor: AppColor.black,
           onPressed: () async {
-            context.pushRoute(const CreateTransactionRoute());
+            context.pushRoute(CreateTransactionRoute());
           },
           shape: const CircleBorder(),
           child: Icon(

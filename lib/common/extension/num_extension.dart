@@ -27,4 +27,13 @@ extension NumExtension on num {
     );
     return formatter.format(this);
   }
+
+  String get getTextCompactCurrencyAmount {
+    final formatter = NumberFormat.compactCurrency(
+      locale: getIt<HiveConfig>().locale.countryCode == null
+          ? 'vi_VN'
+          : ('${getIt<HiveConfig>().locale.countryCode ?? ''}_${getIt<HiveConfig>().locale.languageCode}'),
+    );
+    return formatter.format(this);
+  }
 }

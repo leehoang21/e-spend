@@ -4,15 +4,14 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_e_spend/common/assets/assets.gen.dart';
+import 'package:flutter_e_spend/common/constants/app_dimens.dart';
 import 'package:flutter_e_spend/common/extension/string_extension.dart';
 import 'package:flutter_e_spend/presentation/journey/account/account_constants.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_e_spend/presentation/themes/themes.dart';
 import '../../../routers/app_router.dart';
-import '../../../themes/themes.dart';
 import '../cubit/account_cubit.dart';
 import 'babs_component_settings_group.dart';
 import 'babs_component_settings_item.dart';
-import 'change_language_widget.dart';
 
 class CategoriesWidget extends StatelessWidget {
   const CategoriesWidget({Key? key}) : super(key: key);
@@ -22,29 +21,46 @@ class CategoriesWidget extends StatelessWidget {
     return SettingsGroup(
       items: [
         SettingsItem(
-          icons: Assets.icons.help.path,
-          title: AccountConstants.authentications.tr,
+          icons: Assets.images.bottomBarTransactions.path,
+          title: AccountConstants.transactions.tr,
+          onTap: () {
+            context.pushRoute(const TransactionListRoute());
+          },
+        ),
+        SettingsItem(
+            icons: Assets.icons.icWallet.svg(
+              height: AppDimens.space_30,
+              width: AppDimens.space_30,
+              colorFilter: const ColorFilter.mode(
+                AppColor.blue,
+                BlendMode.srcIn,
+              ),
+            ),
+            title: AccountConstants.wallets.tr,
+            onTap: () {
+              context.pushRoute(const WalletListRoute());
+            }),
+        SettingsItem(
+          icons: Assets.icons.logIn.path,
+          title: AccountConstants.loginMethods.tr,
           onTap: () {
             context.pushRoute(const AuthSettingsRoute());
           },
         ),
         SettingsItem(
-            icons: 'assets/icons/language.png',
-            title: 'Language'.tr,
+            icons: Icons.settings,
+            title: AccountConstants.settings.tr,
             onTap: () {
-              showBottomSheet(
-                context: context,
-                child: const ChangeLanguegeWidget(),
-              );
+              context.pushRoute(const SettingsRoute());
             }),
         SettingsItem(
           icons: Assets.icons.rateme.path,
-          title: 'Rate me',
+          title: AccountConstants.rateMe.tr,
           onTap: () {},
         ),
         SettingsItem(
           icons: Assets.icons.aboutme.path,
-          title: 'About me',
+          title: AccountConstants.aboutMe.tr,
           onTap: () {},
         ),
         SettingsItem(
@@ -55,43 +71,10 @@ class CategoriesWidget extends StatelessWidget {
               predicate: (route) => false,
             );
           },
-          icons: 'assets/icons/logout.png',
-          title: 'Logout'.tr,
+          icons: Assets.icons.logout.path,
+          title: AccountConstants.logout.tr,
         ),
       ],
     );
   }
-}
-
-Future<dynamic> showBottomSheet(
-    {required Widget child, required BuildContext context}) async {
-  return await showModalBottomSheet(
-    isScrollControlled: true,
-    context: context,
-    barrierColor: Colors.black.withOpacity(0.25),
-    shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.only(
-        topLeft: Radius.circular(8.r),
-        topRight: Radius.circular(8.r),
-      ),
-    ),
-    backgroundColor: AppColor.iron,
-    builder: (BuildContext context) {
-      return SafeArea(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              "change_language".tr,
-              style: ThemeText.body1,
-            ),
-            SizedBox(
-              height: 10.h,
-            ),
-            child,
-          ],
-        ),
-      );
-    },
-  );
 }

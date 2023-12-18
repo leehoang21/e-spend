@@ -1,6 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_e_spend/common/utils/pick_image.dart';
-import 'package:flutter_e_spend/domain/use_cases/pick_image_use_case.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:injectable/injectable.dart';
 
@@ -8,9 +7,7 @@ import 'add_photo_state.dart';
 
 @injectable
 class AddPhotoBloc extends Cubit<AddPhotoState> {
-  final StorageUseCase storageUseCase;
-
-  AddPhotoBloc(this.storageUseCase) : super(AddPhotoState.initial());
+  AddPhotoBloc() : super(AddPhotoState.initial());
 
   Future<void> openGallery() async {
     final images = await PickImage().multiImage();

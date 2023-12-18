@@ -13,7 +13,7 @@ class RefreshWidget extends StatelessWidget {
   const RefreshWidget(
       {Key? key,
       this.controller,
-      this.enableLoadMore = true,
+      this.enableLoadMore = false,
       this.onRefresh,
       this.onLoadMore,
       this.footer,

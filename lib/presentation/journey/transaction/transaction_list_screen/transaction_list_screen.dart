@@ -1,0 +1,98 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_e_spend/common/assets/assets.gen.dart';
+import 'package:flutter_e_spend/common/constants/app_dimens.dart';
+import 'package:flutter_e_spend/common/constants/layout_constants.dart';
+import 'package:flutter_e_spend/common/extension/show_extension.dart';
+import 'package:flutter_e_spend/common/extension/string_extension.dart';
+import 'package:flutter_e_spend/presentation/journey/transaction/transaction_list_screen/bloc/transaction_list_cubit.dart';
+import 'package:flutter_e_spend/presentation/themes/themes.dart';
+import 'package:flutter_e_spend/presentation/widgets/scaffold_wdiget/scaffold_widget.dart';
+import 'package:visibility_detector/visibility_detector.dart';
+import '../../../widgets/appbar_widget/appbar_widget.dart';
+import '../../../widgets/loading_widget/loader_widget.dart';
+import 'transaction_list_screen_constants.dart';
+import 'widgets/filter_transaction_widget.dart';
+import 'widgets/transaction_widget.dart';
+
+class TransactionListScreen extends StatelessWidget {
+  TransactionListScreen({Key? key}) : super(key: key);
+
+  final bankSearchController = TextEditingController();
+
+  @override
+  Widget build(BuildContext context) {
+    return ScaffoldWidget(
+      appbar: AppBarWidget(
+        title: TransactionListScreenConstants.title.tr,
+        action: Row(
+          children: [
+            IconButton(
+              onPressed: () {},
+              icon: Icon(
+                Icons.search,
+                size: LayoutConstants.iconMediumSize,
+                color: AppColor.primaryColor,
+              ),
+            ),
+            IconButton(
+              onPressed: () {
+                context.showBottomSheet(
+                    child: FilterTransactionWidget(
+                  parentContext: context,
+                ));
+              },
+              icon: Assets.icons.filter.svg(
+                height: LayoutConstants.iconSize,
+                width: LayoutConstants.iconSize,
+                colorFilter: const ColorFilter.mode(
+                  AppColor.primaryColor,
+                  BlendMode.srcIn,
+                ),
+              ),
+            ),
+            SizedBox(
+              width: AppDimens.width_12,
+            ),
+          ],
+        ),
+      ),
+      body: BlocBuilder<TransactionListCubit, TransactionListState>(
+        builder: (context, state) {
+          return Padding(
+            padding: EdgeInsets.only(top: AppDimens.height_20),
+            child: BlocBuilder<TransactionListCubit, TransactionListState>(
+              builder: (context, state) {
+                return ListView.builder(
+                  itemCount: state.data.length + 1,
+                  itemBuilder: (context, index) {
+                    if (index >= state.data.entries.length) {
+                      return (state.params.documentSnapshot == null)
+                          ? Container()
+                          : VisibilityDetector(
+                              key: Key('${UniqueKey().toString()}_loader_key'),
+                              onVisibilityChanged: (info) {
+                                if (info.visibleFraction > 0) {
+                                  context.read<TransactionListCubit>().get();
+                                }
+                              },
+                              child: SizedBox(
+                                height: LayoutConstants.iconMediumSize,
+                                width: LayoutConstants.iconMediumSize,
+                                child: const LoaderWidget(),
+                              ),
+                            );
+                    }
+                    return TransactionWidget(
+                      data: state.data.entries.toList()[index],
+                    );
+                  },
+                );
+              },
+            ),
+          );
+        },
+      ),
+    );
+  }
+}

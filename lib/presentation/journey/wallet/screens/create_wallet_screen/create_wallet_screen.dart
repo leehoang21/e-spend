@@ -45,7 +45,7 @@ class _CreateWalletScreenState extends State<CreateWalletScreen> {
 
   String _formatNumber(String s) =>
       NumberFormat.decimalPattern(CreateWalletScreen._locale)
-          .format(int.parse(s));
+          .format(int.tryParse(s) ?? 0);
 
   String get _currency =>
       NumberFormat.compactSimpleCurrency(locale: 'vi').currencySymbol;

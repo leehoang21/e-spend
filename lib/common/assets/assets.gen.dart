@@ -37,6 +37,10 @@ class $AssetsIconsGen {
   AssetGenImage get avataDefault =>
       const AssetGenImage('assets/icons/avata_default.png');
 
+  /// File path: assets/icons/biometrics.png
+  AssetGenImage get biometrics =>
+      const AssetGenImage('assets/icons/biometrics.png');
+
   /// File path: assets/icons/bottom_bar_goal.svg
   SvgGenImage get bottomBarGoal =>
       const SvgGenImage('assets/icons/bottom_bar_goal.svg');
@@ -50,6 +54,9 @@ class $AssetsIconsGen {
 
   /// File path: assets/icons/clock.svg
   SvgGenImage get clock => const SvgGenImage('assets/icons/clock.svg');
+
+  /// File path: assets/icons/filter.svg
+  SvgGenImage get filter => const SvgGenImage('assets/icons/filter.svg');
 
   /// File path: assets/icons/help.svg
   SvgGenImage get help => const SvgGenImage('assets/icons/help.svg');
@@ -67,6 +74,9 @@ class $AssetsIconsGen {
   /// File path: assets/icons/ic_money.svg
   SvgGenImage get icMoney => const SvgGenImage('assets/icons/ic_money.svg');
 
+  /// File path: assets/icons/ic_wallet.svg
+  SvgGenImage get icWallet => const SvgGenImage('assets/icons/ic_wallet.svg');
+
   /// File path: assets/icons/icons8-debt-96.svg
   SvgGenImage get icons8Debt96 =>
       const SvgGenImage('assets/icons/icons8-debt-96.svg');
@@ -78,6 +88,9 @@ class $AssetsIconsGen {
   /// File path: assets/icons/language.png
   AssetGenImage get language =>
       const AssetGenImage('assets/icons/language.png');
+
+  /// File path: assets/icons/log-in.svg
+  SvgGenImage get logIn => const SvgGenImage('assets/icons/log-in.svg');
 
   /// File path: assets/icons/logout.png
   AssetGenImage get logout => const AssetGenImage('assets/icons/logout.png');
@@ -104,18 +117,22 @@ class $AssetsIconsGen {
         aboutme,
         addCircle,
         avataDefault,
+        biometrics,
         bottomBarGoal,
         categories,
         check,
         clock,
+        filter,
         help,
         icApple,
         icFacebook,
         icGoogle,
         icMoney,
+        icWallet,
         icons8Debt96,
         icons8TestAccount90,
         language,
+        logIn,
         logout,
         notification,
         password,
@@ -243,12 +260,12 @@ class $AssetsImagesGen {
   AssetGenImage get gasBill =>
       const AssetGenImage('assets/images/gas_bill.png');
 
-  /// File path: assets/images/health.png
-  AssetGenImage get health => const AssetGenImage('assets/images/health.png');
-
   /// File path: assets/images/healthcare.png
   AssetGenImage get healthcare =>
       const AssetGenImage('assets/images/healthcare.png');
+
+  /// File path: assets/images/heath.png
+  AssetGenImage get heath => const AssetGenImage('assets/images/heath.png');
 
   /// File path: assets/images/home_repair.png
   AssetGenImage get homeRepair =>
@@ -431,8 +448,8 @@ class $AssetsImagesGen {
         friendAndLover,
         funeral,
         gasBill,
-        health,
         healthcare,
+        heath,
         homeRepair,
         homeService,
         icBankCards,

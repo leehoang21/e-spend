@@ -25,6 +25,8 @@ mixin _$TransactionModel {
   WalletModel get wallet => throw _privateConstructorUsedError;
   int get createAt => throw _privateConstructorUsedError;
   int get lastUpdate => throw _privateConstructorUsedError;
+  DocumentSnapshot<Object?>? get documentSnapshot =>
+      throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $TransactionModelCopyWith<TransactionModel> get copyWith =>
@@ -46,7 +48,8 @@ abstract class $TransactionModelCopyWith<$Res> {
       List<String>? photos,
       WalletModel wallet,
       int createAt,
-      int lastUpdate});
+      int lastUpdate,
+      DocumentSnapshot<Object?>? documentSnapshot});
 
   $CategoryModelCopyWith<$Res> get category;
   $WalletModelCopyWith<$Res> get wallet;
@@ -74,6 +77,7 @@ class _$TransactionModelCopyWithImpl<$Res, $Val extends TransactionModel>
     Object? wallet = null,
     Object? createAt = null,
     Object? lastUpdate = null,
+    Object? documentSnapshot = freezed,
   }) {
     return _then(_value.copyWith(
       id: freezed == id
@@ -112,6 +116,10 @@ class _$TransactionModelCopyWithImpl<$Res, $Val extends TransactionModel>
           ? _value.lastUpdate
           : lastUpdate // ignore: cast_nullable_to_non_nullable
               as int,
+      documentSnapshot: freezed == documentSnapshot
+          ? _value.documentSnapshot
+          : documentSnapshot // ignore: cast_nullable_to_non_nullable
+              as DocumentSnapshot<Object?>?,
     ) as $Val);
   }
 
@@ -149,7 +157,8 @@ abstract class _$$TransactionModelImplCopyWith<$Res>
       List<String>? photos,
       WalletModel wallet,
       int createAt,
-      int lastUpdate});
+      int lastUpdate,
+      DocumentSnapshot<Object?>? documentSnapshot});
 
   @override
   $CategoryModelCopyWith<$Res> get category;
@@ -177,6 +186,7 @@ class __$$TransactionModelImplCopyWithImpl<$Res>
     Object? wallet = null,
     Object? createAt = null,
     Object? lastUpdate = null,
+    Object? documentSnapshot = freezed,
   }) {
     return _then(_$TransactionModelImpl(
       id: freezed == id
@@ -215,6 +225,10 @@ class __$$TransactionModelImplCopyWithImpl<$Res>
           ? _value.lastUpdate
           : lastUpdate // ignore: cast_nullable_to_non_nullable
               as int,
+      documentSnapshot: freezed == documentSnapshot
+          ? _value.documentSnapshot
+          : documentSnapshot // ignore: cast_nullable_to_non_nullable
+              as DocumentSnapshot<Object?>?,
     ));
   }
 }
@@ -231,7 +245,8 @@ class _$TransactionModelImpl extends _TransactionModel {
       final List<String>? photos,
       required this.wallet,
       required this.createAt,
-      required this.lastUpdate})
+      required this.lastUpdate,
+      this.documentSnapshot})
       : _photos = photos,
         super._();
 
@@ -261,10 +276,12 @@ class _$TransactionModelImpl extends _TransactionModel {
   final int createAt;
   @override
   final int lastUpdate;
+  @override
+  final DocumentSnapshot<Object?>? documentSnapshot;
 
   @override
   String toString() {
-    return 'TransactionModel(id: $id, amount: $amount, note: $note, category: $category, spendTime: $spendTime, photos: $photos, wallet: $wallet, createAt: $createAt, lastUpdate: $lastUpdate)';
+    return 'TransactionModel(id: $id, amount: $amount, note: $note, category: $category, spendTime: $spendTime, photos: $photos, wallet: $wallet, createAt: $createAt, lastUpdate: $lastUpdate, documentSnapshot: $documentSnapshot)';
   }
 
   @override
@@ -284,7 +301,9 @@ class _$TransactionModelImpl extends _TransactionModel {
             (identical(other.createAt, createAt) ||
                 other.createAt == createAt) &&
             (identical(other.lastUpdate, lastUpdate) ||
-                other.lastUpdate == lastUpdate));
+                other.lastUpdate == lastUpdate) &&
+            (identical(other.documentSnapshot, documentSnapshot) ||
+                other.documentSnapshot == documentSnapshot));
   }
 
   @override
@@ -298,7 +317,8 @@ class _$TransactionModelImpl extends _TransactionModel {
       const DeepCollectionEquality().hash(_photos),
       wallet,
       createAt,
-      lastUpdate);
+      lastUpdate,
+      documentSnapshot);
 
   @JsonKey(ignore: true)
   @override
@@ -310,15 +330,17 @@ class _$TransactionModelImpl extends _TransactionModel {
 
 abstract class _TransactionModel extends TransactionModel {
   const factory _TransactionModel(
-      {final String? id,
-      required final int amount,
-      final String? note,
-      required final CategoryModel category,
-      required final Timestamp spendTime,
-      final List<String>? photos,
-      required final WalletModel wallet,
-      required final int createAt,
-      required final int lastUpdate}) = _$TransactionModelImpl;
+          {final String? id,
+          required final int amount,
+          final String? note,
+          required final CategoryModel category,
+          required final Timestamp spendTime,
+          final List<String>? photos,
+          required final WalletModel wallet,
+          required final int createAt,
+          required final int lastUpdate,
+          final DocumentSnapshot<Object?>? documentSnapshot}) =
+      _$TransactionModelImpl;
   const _TransactionModel._() : super._();
 
   @override
@@ -339,6 +361,8 @@ abstract class _TransactionModel extends TransactionModel {
   int get createAt;
   @override
   int get lastUpdate;
+  @override
+  DocumentSnapshot<Object?>? get documentSnapshot;
   @override
   @JsonKey(ignore: true)
   _$$TransactionModelImplCopyWith<_$TransactionModelImpl> get copyWith =>

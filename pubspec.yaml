@@ -50,6 +50,9 @@ dependencies:
   crypto: ^3.0.3
   flutter_facebook_auth: ^6.0.3
   local_auth: ^2.1.7
+  local_auth_android: ^1.0.36
+  local_auth_ios: ^1.1.5
+  flutter_locker: ^2.1.2
 
 dev_dependencies:
   flutter_test:

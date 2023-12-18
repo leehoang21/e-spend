@@ -27,11 +27,10 @@ class _VerifyOtpScreenState extends State<VerifyOtpScreen> {
             context.router.pushAndPopUntil(const MainRoute(),
                 predicate: (route) => false);
           } else {
-            context.router.pushAndPopUntil(
+            context.router.replace(
               RegisterRoute(
                 phoneNumber: context.read<VerifyCubit>().phoneNumber,
               ),
-              predicate: (route) => false,
             );
           }
         } else if (state is VerifyFailure) {

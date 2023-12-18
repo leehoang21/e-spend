@@ -44,9 +44,14 @@ abstract class _$AppRouter extends RootStackRouter {
       );
     },
     CreateTransactionRoute.name: (routeData) {
+      final args = routeData.argsAs<CreateTransactionRouteArgs>(
+          orElse: () => const CreateTransactionRouteArgs());
       return AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const CreateTransactionScreenProvider(),
+        child: CreateTransactionScreenProvider(
+          key: args.key,
+          transaction: args.transaction,
+        ),
       );
     },
     CreateWalletRoute.name: (routeData) {
@@ -87,6 +92,12 @@ abstract class _$AppRouter extends RootStackRouter {
         child: const PlanningScreenProvider(),
       );
     },
+    ProfileRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const ProfileScreenProvider(),
+      );
+    },
     RegisterAccountRoute.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
@@ -103,10 +114,22 @@ abstract class _$AppRouter extends RootStackRouter {
         ),
       );
     },
+    SettingsRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const SettingsScreenProvider(),
+      );
+    },
     StatisticRoute.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
         child: const StatisticScreenProvider(),
+      );
+    },
+    TransactionListRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const TransactionListScreenProvider(),
       );
     },
     VerifyOtpRoute.name: (routeData) {
@@ -212,16 +235,40 @@ class CategoryRouteArgs {
 
 /// generated route for
 /// [CreateTransactionScreenProvider]
-class CreateTransactionRoute extends PageRouteInfo<void> {
-  const CreateTransactionRoute({List<PageRouteInfo>? children})
-      : super(
+class CreateTransactionRoute extends PageRouteInfo<CreateTransactionRouteArgs> {
+  CreateTransactionRoute({
+    Key? key,
+    TransactionModel? transaction,
+    List<PageRouteInfo>? children,
+  }) : super(
           CreateTransactionRoute.name,
+          args: CreateTransactionRouteArgs(
+            key: key,
+            transaction: transaction,
+          ),
           initialChildren: children,
         );
 
   static const String name = 'CreateTransactionRoute';
 
-  static const PageInfo<void> page = PageInfo<void>(name);
+  static const PageInfo<CreateTransactionRouteArgs> page =
+      PageInfo<CreateTransactionRouteArgs>(name);
+}
+
+class CreateTransactionRouteArgs {
+  const CreateTransactionRouteArgs({
+    this.key,
+    this.transaction,
+  });
+
+  final Key? key;
+
+  final TransactionModel? transaction;
+
+  @override
+  String toString() {
+    return 'CreateTransactionRouteArgs{key: $key, transaction: $transaction}';
+  }
 }
 
 /// generated route for
@@ -324,6 +371,20 @@ class PlanningRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
+/// [ProfileScreenProvider]
+class ProfileRoute extends PageRouteInfo<void> {
+  const ProfileRoute({List<PageRouteInfo>? children})
+      : super(
+          ProfileRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'ProfileRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
 /// [RegisterAccountScreenProvider]
 class RegisterAccountRoute extends PageRouteInfo<void> {
   const RegisterAccountRoute({List<PageRouteInfo>? children})
@@ -376,6 +437,20 @@ class RegisterRouteArgs {
 }
 
 /// generated route for
+/// [SettingsScreenProvider]
+class SettingsRoute extends PageRouteInfo<void> {
+  const SettingsRoute({List<PageRouteInfo>? children})
+      : super(
+          SettingsRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'SettingsRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
 /// [StatisticScreenProvider]
 class StatisticRoute extends PageRouteInfo<void> {
   const StatisticRoute({List<PageRouteInfo>? children})
@@ -385,6 +460,20 @@ class StatisticRoute extends PageRouteInfo<void> {
         );
 
   static const String name = 'StatisticRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
+/// [TransactionListScreenProvider]
+class TransactionListRoute extends PageRouteInfo<void> {
+  const TransactionListRoute({List<PageRouteInfo>? children})
+      : super(
+          TransactionListRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'TransactionListRoute';
 
   static const PageInfo<void> page = PageInfo<void>(name);
 }

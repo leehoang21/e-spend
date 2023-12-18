@@ -1,17 +1,26 @@
 import 'dart:io';
-import 'dart:typed_data';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 
 class Compress {
   static Future<File> compressAndGetFile(File file, int quality) async {
     final String filePath = file.absolute.path;
-    final Uint8List? result = await FlutterImageCompress.compressWithFile(
-      filePath,
-      quality: quality,
-    );
-    if (result != null) {
-      return File.fromRawPath(result);
-    } else {
+    final String fileExtension = filePath.split('.').last;
+    final targetPath = '${filePath.substring(
+      0,
+      filePath.length - fileExtension.length - 1,
+    )}-compressed.$fileExtension';
+
+    try {
+      final result = await FlutterImageCompress.compressAndGetFile(
+        filePath,
+        targetPath,
+        quality: quality,
+      );
+      if (result == null) return file;
+      return File(
+        result.path,
+      );
+    } catch (e) {
       return file;
     }
   }

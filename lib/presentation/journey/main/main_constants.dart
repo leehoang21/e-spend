@@ -1,8 +1,6 @@
 import 'package:flutter_e_spend/common/assets/assets.gen.dart';
 import 'package:flutter_e_spend/presentation/journey/planning/planning_screen.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_translate/flutter_translate.dart';
-
 import '../account/account_screen.dart';
 import '../home/home_screen.dart';
 import '../statistics/statistic_screen_provider.dart';
@@ -19,11 +17,11 @@ class MainConstants {
     },
     {
       "iconPath": Assets.images.bottomBarStatistic.path,
-      "label": translate('report'),
+      "label": 'report',
     },
     {
       "iconPath": Assets.icons.bottomBarGoal.path,
-      "label": translate('planning'),
+      "label": 'planning',
     },
     {
       "iconPath": Assets.images.bottomBarMyPage.path,

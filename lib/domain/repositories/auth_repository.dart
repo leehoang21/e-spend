@@ -32,7 +32,11 @@ abstract class AuthRepository {
   });
   Future<Either<UserModel, AppError>> loginWithGoogle();
   Future<Either<UserModel, AppError>> loginWithFacebook();
+  Future<Either<UserModel, AppError>> loginWithBiometric();
+  Future<Either<UserModel, AppError>> registerWithBiometric({
+    required String verificationId,
+    required String smsCode,
+  });
+
   Future<(String, String)> getEmailAndPassword();
-  Future<bool> localAuth();
-  Future<bool> verifyEmail();
 }

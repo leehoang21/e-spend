@@ -65,6 +65,9 @@ class AuthUseCase {
       case LoginType.facebook:
         result = await repository.loginWithFacebook();
         break;
+      case LoginType.biometrics:
+        result = await repository.loginWithBiometric();
+        break;
       default:
         return Right(AppError(message: 'login_type_not_support'));
     }
@@ -91,7 +94,7 @@ class AuthUseCase {
     UserModel? user;
     switch (loginType) {
       case LoginType.phone:
-        (email, pass) = await genEmailAndPassword();
+        (email, pass) = await _genEmailAndPassword();
         final error = await repository.register(
           email: email,
           password: pass,
@@ -190,7 +193,34 @@ class AuthUseCase {
     return data;
   }
 
-  Future<(String, String)> genEmailAndPassword() async {
+  Future<Either<UserModel, AppError>> registerWithBiometric({
+    required String verificationId,
+    required String smsCode,
+  }) async {
+    final result = await repository.registerWithBiometric(
+      verificationId: verificationId,
+      smsCode: smsCode,
+    );
+    return result.fold(
+      (left) async {
+        final user = await userRepository.getUser();
+        if (user == null) return Right(AppError(message: 'error_message'));
+        final error = await userRepository
+            .updateUser(user.copyWith(isBiometricsAuth: true));
+        if (error != null) {
+          return Right(error);
+        }
+        return Left(left);
+      },
+      (right) => Right(right),
+    );
+  }
+
+  Future<Either<UserModel, AppError>> loginWithBiometric() async {
+    return repository.loginWithBiometric();
+  }
+
+  Future<(String, String)> _genEmailAndPassword() async {
     final rd = Random.secure().nextInt(1000000);
     final rdEmail = '${Random.secure().nextInt(1000000)}';
     final rdPass = '${Random.secure().nextInt(1000000)}';
@@ -204,9 +234,5 @@ class AuthUseCase {
     final pass =
         '${hmacSha256.convert(passBytes)}${timestamp.microsecondsSinceEpoch}';
     return (email, pass);
-  }
-
-  Future<bool> localAuth() {
-    return repository.localAuth();
   }
 }

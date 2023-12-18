@@ -14,6 +14,7 @@ import 'dart:developer' as developer;
 
 import '../../common/utils/app_utils.dart';
 import '../bloc/loading_bloc/loading_bloc.dart';
+import '../widgets/change_time/time/time_cubit.dart';
 import '../widgets/loading_widget/loading_container_widget.dart';
 
 class App extends StatefulWidget {
@@ -68,15 +69,16 @@ class _AppState extends State<App> with WidgetsBindingObserver {
         builder: (context, child) => GestureDetector(
               onTap: () {
                 final currentFocus = FocusScope.of(context);
-                if (!currentFocus.hasPrimaryFocus &&
-                    currentFocus.focusedChild != null) {
-                  FocusManager.instance.primaryFocus!.unfocus();
-                }
+                FocusManager.instance.primaryFocus?.unfocus();
+                currentFocus.unfocus();
               },
               child: MultiBlocProvider(
                 providers: [
                   BlocProvider(
                     create: (_) => getIt.get<LoadingBloc>(),
+                  ),
+                  BlocProvider(
+                    create: (_) => getIt.get<TimeCubit>(),
                   ),
                 ],
                 child: MaterialApp.router(

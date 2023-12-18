@@ -8,7 +8,7 @@ enum StatisticStateStatus {
 }
 
 class StatisticState extends Equatable {
-  final StatisticsListModel data;
+  final Map<CategoryType, num> data;
   final StatisticStateStatus status;
 
   const StatisticState({
@@ -17,17 +17,14 @@ class StatisticState extends Equatable {
   });
 
   factory StatisticState.initial() {
-    return StatisticState(
-      data: StatisticsListModel(
-        data: {},
-        subStatistics: {},
-      ),
+    return const StatisticState(
+      data: {},
       status: StatisticStateStatus.initial,
     );
   }
 
   StatisticState copyWith({
-    StatisticsListModel? data,
+    Map<CategoryType, num>? data,
     StatisticStateStatus? status,
   }) {
     return StatisticState(

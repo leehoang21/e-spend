@@ -36,6 +36,16 @@ extension BlocExtension on BaseBloc {
         .pushRoute(route, onFailure: onFailure);
   }
 
+  Future<T?> replace<T extends Object?>(PageRouteInfo<dynamic> route,
+      {void Function(NavigationFailure)? onFailure}) {
+    return getIt
+        .get<AppRouter>()
+        .navigatorKey
+        .currentContext!
+        .router
+        .replace(route, onFailure: onFailure);
+  }
+
   Future<T?> pushAndRemoveUntil<T extends Object?>(
     PageRouteInfo<dynamic> route, {
     required bool Function(Route<dynamic>) predicate,

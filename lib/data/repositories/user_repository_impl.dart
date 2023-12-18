@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:flutter_e_spend/common/exception/app_error.dart';
+import 'package:flutter_e_spend/domain/repositories/storage_repository.dart';
 import 'package:injectable/injectable.dart';
 import '../../common/configs/default_environment.dart';
 import '../../common/configs/firebase_config.dart';
@@ -12,9 +13,11 @@ import '../models/user_model.dart';
 class UserRepositoryImpl extends UserRepository {
   final FirebaseConfig config;
   final HiveConfig hiveConfig;
+  final StorageRepository storageRepository;
   UserRepositoryImpl(
     this.config,
     this.hiveConfig,
+    this.storageRepository,
   ) : super();
 
   DocumentReference<Map<String, dynamic>> get _doc => config.userDoc
@@ -33,9 +36,9 @@ class UserRepositoryImpl extends UserRepository {
         //set remote
         await _doc.set(data.toJson());
       }
-
+      final user = await getUser();
       // local
-      await hiveConfig.appBox.put(DefaultEnvironment.user, data);
+      await hiveConfig.appBox.put(DefaultEnvironment.user, user);
       return null;
     } catch (e) {
       return AppError(message: e.toString());
@@ -56,12 +59,30 @@ class UserRepositoryImpl extends UserRepository {
   Future<UserModel?> getUser() async {
     try {
       final result = await _doc.get();
-      return UserModel.fromDocument(
+      final user = UserModel.fromDocument(
         result,
         config.auth.currentUser?.uid ?? '',
       );
+      final avatar = await _getUrlAvatar();
+      return user.copyWith(
+        avatar: avatar,
+      );
     } catch (e) {
       return null;
+    }
+  }
+
+  Future<String> _getUrlAvatar() async {
+    try {
+      final url = await storageRepository.downloadUrl(
+        pathStorage: DefaultEnvironment.avatar,
+      );
+      if (url.isLeft) {
+        return url.left;
+      }
+      return '';
+    } catch (e) {
+      return '';
     }
   }
 

@@ -1,14 +1,16 @@
 import 'dart:io';
 import 'package:equatable/equatable.dart';
-import 'package:flutter_e_spend/common/constants/string_constants.dart';
+import 'package:flutter_e_spend/common/configs/default_environment.dart';
 import 'package:flutter_e_spend/common/extension/bloc_extension.dart';
 import 'package:flutter_e_spend/data/models/user_model.dart';
 import 'package:flutter_e_spend/domain/use_cases/auth_use_case.dart';
-import 'package:flutter_e_spend/domain/use_cases/pick_image_use_case.dart';
+import 'package:flutter_e_spend/domain/use_cases/storage_use_case.dart';
 import 'package:flutter_e_spend/presentation/bloc/base_bloc/base_bloc.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:injectable/injectable.dart';
-import '../../../../../common/utils/validator.dart';
+import '../../../../../common/utils/pick_image.dart';
 import '../../../../../domain/use_cases/user_use_case.dart';
+import '../../../../routers/app_router.dart';
 
 part 'register_state.dart';
 
@@ -42,10 +44,16 @@ class RegisterCubit extends BaseBloc<RegisterState> {
     );
   }
 
-  void addAvatar(File image) {
-    emit(
-      state.copyWith(avatar: image),
-    );
+  Future addAvatar(ImageSource source) async {
+    try {
+      final image = await PickImage().pickImage(source: source);
+      if (image == null) return;
+      emit(
+        state.copyWith(avatar: image),
+      );
+    } catch (e) {
+      showSnackbar(translationKey: e.toString());
+    }
   }
 
   Future<void> register({
@@ -56,10 +64,7 @@ class RegisterCubit extends BaseBloc<RegisterState> {
     //login
 
     File? avatar = state.avatar;
-    const String storagePath = StringConstants.avatarStoragePath;
-    emit(
-      state.copyWith(errorMessage: null),
-    );
+    const String storagePath = DefaultEnvironment.avatar;
     if (avatar != null) {
       final result = await pickImageUseCase.put(
         imageToUpload: avatar,
@@ -75,32 +80,11 @@ class RegisterCubit extends BaseBloc<RegisterState> {
         ),
       );
       if (result != null) {
-        emit(
-          state.copyWith(errorMessage: result.toString()),
-        );
+        showSnackbar(translationKey: result.toString());
+
         hideLoading();
         return;
       }
-    }
-
-    if (!AppValidator().isNullEmpty(email)) {
-      if (!AppValidator.expEmail.hasMatch(email)) {
-        emit(
-          state.copyWith(errorMessage: 'invalid_email'),
-        );
-        hideLoading();
-        return;
-      }
-    }
-
-    if (userName.isEmpty) {
-      emit(
-        state.copyWith(
-          errorMessage: 'user_empty',
-        ),
-      );
-      hideLoading();
-      return;
     }
     final result = await useCase.updateUser(
       state.userModel.copyWith(
@@ -110,12 +94,14 @@ class RegisterCubit extends BaseBloc<RegisterState> {
       ),
     );
     if (result != null) {
-      emit(
-        state.copyWith(errorMessage: result.toString()),
-      );
+      showSnackbar(translationKey: result.toString());
+
       hideLoading();
       return;
     }
     hideLoading();
+    replace(
+      const MainRoute(),
+    );
   }
 }

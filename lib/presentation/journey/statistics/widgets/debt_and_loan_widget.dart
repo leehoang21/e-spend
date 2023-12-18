@@ -41,7 +41,7 @@ class DebtsAndLoanWidget extends StatelessWidget {
             ],
           ),
           Text(
-            data.getTextAmount,
+            data.getTextCompactCurrencyAmount,
             style: ThemeText.body1.copyWith(
               color: type == CategoryType.loan ? AppColor.red : AppColor.blue,
             ),
