@@ -20,11 +20,8 @@ class InvoicePhotosWidget extends StatefulWidget {
 }
 
 class _InvoicePhotosWidgetState extends State<InvoicePhotosWidget> {
-  late AddPhotoBloc _addPhotoBloc;
-
   @override
   void initState() {
-    _addPhotoBloc = BlocProvider.of<AddPhotoBloc>(context);
     super.initState();
   }
 
@@ -48,51 +45,51 @@ class _InvoicePhotosWidgetState extends State<InvoicePhotosWidget> {
         SizedBox(
           height: AppDimens.height_8,
         ),
-        BlocBuilder<AddPhotoBloc, AddPhotoState>(
-            bloc: _addPhotoBloc,
-            builder: (context, state) {
-              final photos = state.photos;
-              final length = photos.length;
-              return GridView.count(
-                crossAxisCount: 3,
-                primary: false,
-                shrinkWrap: true,
-                crossAxisSpacing: 10,
-                mainAxisSpacing: 10,
-                children: List.generate(length + 1, (index) {
-                  if (index == length) {
-                    return AddPhotoButton(addPhoto: _addPhoto);
-                  } else {
-                    final photo = photos[index];
-                    return ClipRRect(
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(LayoutConstants.roundedRadius),
-                      ),
-                      child: AppImageWidget(
-                        path: photo.path,
-                        fit: BoxFit.fill,
-                        width: AppDimens.height_100,
-                        height: AppDimens.height_100,
-                      ),
-                    );
-                  }
-                }),
-              );
-            })
+        BlocBuilder<AddPhotoBloc, AddPhotoState>(builder: (context, state) {
+          final photos = state.photos;
+          final length = photos.length;
+          return GridView.count(
+            crossAxisCount: 3,
+            primary: false,
+            shrinkWrap: true,
+            crossAxisSpacing: 10,
+            mainAxisSpacing: 10,
+            children: List.generate(length + 1, (index) {
+              if (index == length) {
+                return AddPhotoButton(
+                  addPhoto: () {
+                    _addPhoto(context);
+                  },
+                );
+              } else {
+                final photo = photos[index];
+                return ClipRRect(
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(LayoutConstants.roundedRadius),
+                  ),
+                  child: AppImageWidget(
+                    path: photo.path,
+                    fit: BoxFit.fill,
+                    width: AppDimens.height_100,
+                    height: AppDimens.height_100,
+                  ),
+                );
+              }
+            }),
+          );
+        })
       ],
     );
   }
 
-  void _addPhoto() {
+  void _addPhoto(BuildContext context) {
     pickImageFuncion(
       context: context,
       camera: (_) {
-        _addPhotoBloc.openCamera();
-        Navigator.pop(context);
+        context.read<AddPhotoBloc>().openCamera();
       },
       gallery: (_) {
-        _addPhotoBloc.openGallery();
-        Navigator.pop(context);
+        context.read<AddPhotoBloc>().openGallery();
       },
     );
   }

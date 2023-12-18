@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_e_spend/common/utils/pick_image.dart';
 import 'package:image_picker/image_picker.dart';
@@ -29,5 +31,14 @@ class AddPhotoBloc extends Cubit<AddPhotoState> {
         ),
       );
     }
+  }
+
+  init(List<String> photos) {
+    emit(
+      state.copyWith(
+        photos: photos.map((e) => File(e)).toList(),
+        lastUpdate: DateTime.now(),
+      ),
+    );
   }
 }

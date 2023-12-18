@@ -165,7 +165,7 @@
   "EXPENSES": "Chi tiêu",
   "REVENUE": "Thu nhập",
   "DEBTS AND LOAN": "Nợ và vay",
-  "net_income": "Net income",
+  "net_income": "Thu thập ròng",
   "DEBT": "Nợ",
   "LOAN": "Cho vay",
   "Planning": "Lập kế hoạch",
@@ -250,5 +250,8 @@
   "CategoryType.debtCollection": "Thu tiền nợ",
   "CategoryType.borrow": "Tiền mượn",
   "CategoryType.loan": "Vay nợ",
-  "CategoryType.pay": "Khoản thanh toán"
+  "CategoryType.pay": "Khoản thanh toán",
+  "From": "Từ",
+  "To": "đến",
+  "old_password": "Mật khẩu cũ"
 }

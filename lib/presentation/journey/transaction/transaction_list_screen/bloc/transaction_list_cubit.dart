@@ -34,13 +34,39 @@ class TransactionListCubit extends BaseBloc<TransactionListState> {
   }
 
   void changeParams(
-    ParamsTransactionUsecase params,
+    ParamsTransactionUsecase? params,
     CategoryType? type,
   ) {
     emit(
       TransactionListState(
-        params: params,
+        params: params ?? ParamsTransactionUsecase.init(),
         categoryType: type,
+        status: TransactionListStateStatus.loading,
+      ),
+    );
+
+    _subscription?.cancel();
+    _subscription = useCase.stream(params: state.params).listen(listen);
+  }
+
+  void clearDate() {
+    emit(
+      TransactionListState(
+        params: ParamsTransactionUsecase.init(),
+        categoryType: state.categoryType,
+        status: TransactionListStateStatus.loading,
+      ),
+    );
+
+    _subscription?.cancel();
+    _subscription = useCase.stream(params: state.params).listen(listen);
+  }
+
+  void clearCategory() {
+    emit(
+      TransactionListState(
+        params: state.params,
+        categoryType: null,
         status: TransactionListStateStatus.loading,
       ),
     );

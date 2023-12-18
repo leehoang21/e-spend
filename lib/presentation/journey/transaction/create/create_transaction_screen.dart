@@ -47,7 +47,9 @@ class _CreateTransactionScreenState extends State<CreateTransactionScreen> {
       _walletCtrl.text = _transaction!.category.category.title;
       _dateCtl.text = _transaction!.spendTime.toDate().getTextDate;
       _noteCtl.text = _transaction?.note ?? '';
+
       context.read<CreateTransactionBloc>().initial(_transaction!);
+      context.read<AddPhotoBloc>().init(_transaction!.photos ?? []);
     }
     super.initState();
   }
@@ -135,12 +137,16 @@ class _CreateTransactionScreenState extends State<CreateTransactionScreen> {
 
   void _onCreate(BuildContext context) {
     context.read<CreateTransactionBloc>().onCreate(
-        note: _noteCtl.text, photos: context.read<AddPhotoBloc>().state.photos);
+          note: _noteCtl.text,
+          photos: context.read<AddPhotoBloc>().state.photos,
+        );
   }
 
   void _onEdit(BuildContext context) {
-    context
-        .read<CreateTransactionBloc>()
-        .onEdit(id: _transaction!.id!, note: _noteCtl.text);
+    context.read<CreateTransactionBloc>().onEdit(
+          id: _transaction!.id!,
+          note: _noteCtl.text,
+          photos: context.read<AddPhotoBloc>().state.photos,
+        );
   }
 }

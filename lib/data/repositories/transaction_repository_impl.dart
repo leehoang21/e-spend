@@ -41,13 +41,29 @@ class TransactionRepositoryImpl extends TransactionRepository {
 
   @override
   Future<AppError?> update(
-    TransactionModel transaction,
-  ) async {
+    TransactionModel transaction, {
+    required TransactionModel transactionOld,
+  }) async {
     try {
       await _doc.doc(transaction.id).update(
             transaction.toJson(),
           );
-      await _changeWallet(transaction);
+      await _changeWallet(
+        transaction.copyWith(
+          amount: transaction.amount - transactionOld.amount,
+        ),
+      );
+      return null;
+    } catch (e) {
+      return AppError(message: e.toString());
+    }
+  }
+
+  @override
+  Future<AppError?> delete(TransactionModel transaction) async {
+    try {
+      await _doc.doc(transaction.id).delete();
+      await _changeWallet(transaction.copyWith(amount: -transaction.amount));
       return null;
     } catch (e) {
       return AppError(message: e.toString());

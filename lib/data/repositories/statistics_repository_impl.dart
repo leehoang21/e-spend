@@ -149,6 +149,34 @@ class StatisticsRepositoryImpl implements StatisticsRepository {
           statistics = statistics.copyWith(
             subStatistics: subStatisticsMonth,
           );
+          //remove all data ==0
+          final statisticsData = statistics.data
+              .map((key, value) => MapEntry(key, value))
+              .entries
+              .where((element) => element.value.toDouble() != 0.toDouble());
+          statistics = statistics.copyWith(
+            data: Map.fromEntries(statisticsData),
+          );
+          //remove all data day ==0 and month ==0
+          final statisticsDay = statistics.subStatistics
+              ?.map((key, value) => MapEntry(key, value))
+              .entries
+              .where(
+                (element) =>
+                    element.value.data.isNotEmpty &&
+                    element.value.data.entries.any(
+                        (element) => element.value.toDouble() != 0.toDouble()),
+              )
+              .where((element) =>
+                  element.value.subStatistics?.entries.any((element) =>
+                      element.value.data.isNotEmpty &&
+                      element.value.data.entries.any((element) =>
+                          element.value.toDouble() != 0.toDouble())) ??
+                  false);
+          statistics = statistics.copyWith(
+            subStatistics: Map.fromEntries(statisticsDay ?? []),
+          );
+
           //update remote
           await _doc.doc(dateItem.year.toString()).set(statistics.toJson());
 

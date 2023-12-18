@@ -6,7 +6,11 @@ import '../../data/models/transaction_model.dart';
 
 abstract class TransactionRepository {
   Future<Either<String, AppError>> create(TransactionModel transaction);
-  Future<AppError?> update(TransactionModel transaction);
+  Future<AppError?> update(
+    TransactionModel transaction, {
+    required TransactionModel transactionOld,
+  });
+  Future<AppError?> delete(TransactionModel transaction);
   Future<Either<List<TransactionModel>, AppError>> get({
     required Timestamp toTime,
     required Timestamp fromTime,

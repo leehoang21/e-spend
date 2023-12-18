@@ -34,6 +34,7 @@ extension NumExtension on num {
           ? 'vi_VN'
           : ('${getIt<HiveConfig>().locale.countryCode ?? ''}_${getIt<HiveConfig>().locale.languageCode}'),
     );
-    return formatter.format(this);
+    final result = formatter.format(this);
+    return result;
   }
 }

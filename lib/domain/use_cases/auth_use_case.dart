@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:crypto/crypto.dart';
 import 'package:either_dart/either.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_e_spend/common/configs/hive/hive_config.dart';
 import 'package:flutter_e_spend/data/models/user_model.dart';
 import 'package:flutter_e_spend/domain/repositories/auth_repository.dart';
 import 'package:flutter_e_spend/domain/repositories/user_repository.dart';
@@ -17,7 +18,9 @@ import '../../common/exception/app_error.dart';
 class AuthUseCase {
   final AuthRepository repository;
   final UserRepository userRepository;
-  AuthUseCase({
+  final HiveConfig hiveConfig;
+  AuthUseCase(
+    this.hiveConfig, {
     required this.repository,
     required this.userRepository,
   });
@@ -107,13 +110,13 @@ class AuthUseCase {
         if (result.isRight) {
           return Right(result.right);
         }
-        return repository.login();
+        return result;
+
       case LoginType.password:
         final result =
             await repository.loginPhoneNumber(verificationId, smsCode);
-
+        (email, pass) = await repository.getEmailAndPassword();
         if (result.isLeft) {
-          (email, pass) = await repository.getEmailAndPassword();
           if (emailAndPassword == null) {
             return Right(AppError(message: 'error_message'));
           }
@@ -121,14 +124,17 @@ class AuthUseCase {
             email: emailAndPassword.$1,
             password: emailAndPassword.$2,
           );
-
-          if (results2.isLeft) {
-            break;
-          } else {
+          if (results2.isRight) {
             return Right(results2.right);
           }
+          //update user info
+          final u = hiveConfig.user;
+          if (u != null) {
+            user = u.copyWith(
+              isPassword: true,
+            );
+          }
         }
-        return Right(result.right);
 
       case LoginType.google:
         final result =
@@ -139,7 +145,7 @@ class AuthUseCase {
           final results2 = await repository.loginWithGoogle();
           if (results2.isLeft) {
             //update user info
-            final u = await userRepository.getUser();
+            final u = hiveConfig.user;
             if (u != null) {
               user = u.copyWith(
                 googleLink: results2.left,
@@ -162,7 +168,7 @@ class AuthUseCase {
           if (results2.isLeft) {
             //update user info
             //update user info
-            final u = await userRepository.getUser();
+            final u = hiveConfig.user;
             if (u != null) {
               user = u.copyWith(
                 facebookLink: results2.left,
@@ -217,7 +223,15 @@ class AuthUseCase {
   }
 
   Future<Either<UserModel, AppError>> loginWithBiometric() async {
-    return repository.loginWithBiometric();
+    final result = await repository.loginWithBiometric();
+    return result.fold(
+      (left) async {
+        final user = await userRepository.getUser();
+        if (user == null) return Right(AppError(message: 'error_message'));
+        return Left(user);
+      },
+      (right) => Right(right),
+    );
   }
 
   Future<(String, String)> _genEmailAndPassword() async {
@@ -234,5 +248,21 @@ class AuthUseCase {
     final pass =
         '${hmacSha256.convert(passBytes)}${timestamp.microsecondsSinceEpoch}';
     return (email, pass);
+  }
+
+  Future<Either<UserModel, AppError>> updatePassword({
+    required String newPass,
+    required String oldPass,
+  }) async {
+    final result = await repository.updatePassword(
+      newPass: newPass,
+      oldPass: oldPass,
+    );
+    return result.fold(
+      (left) async {
+        return repository.login();
+      },
+      (right) => Right(right),
+    );
   }
 }

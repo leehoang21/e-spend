@@ -60,6 +60,16 @@ abstract class _$AppRouter extends RootStackRouter {
         child: const CreateWalletScreenProvider(),
       );
     },
+    DetailTransactionRoute.name: (routeData) {
+      final args = routeData.argsAs<DetailTransactionRouteArgs>();
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: DetailTransactionScreenProvider(
+          key: args.key,
+          data: args.data,
+        ),
+      );
+    },
     HomeRoute.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
@@ -70,14 +80,6 @@ abstract class _$AppRouter extends RootStackRouter {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
         child: const LoginScreenProvider(),
-      );
-    },
-    LoginWithPasswordRoute.name: (routeData) {
-      final args = routeData.argsAs<LoginWithPasswordRouteArgs>(
-          orElse: () => const LoginWithPasswordRouteArgs());
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: LoginWithPasswordScreenProvider(key: args.key),
       );
     },
     MainRoute.name: (routeData) {
@@ -102,6 +104,16 @@ abstract class _$AppRouter extends RootStackRouter {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
         child: const RegisterAccountScreenProvider(),
+      );
+    },
+    RegisterLoginWithPasswordRoute.name: (routeData) {
+      final args = routeData.argsAs<RegisterLoginWithPasswordRouteArgs>();
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: RegisterLoginWithPasswordScreenProvider(
+          key: args.key,
+          enabled: args.enabled,
+        ),
       );
     },
     RegisterRoute.name: (routeData) {
@@ -286,6 +298,44 @@ class CreateWalletRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
+/// [DetailTransactionScreenProvider]
+class DetailTransactionRoute extends PageRouteInfo<DetailTransactionRouteArgs> {
+  DetailTransactionRoute({
+    Key? key,
+    required TransactionModel data,
+    List<PageRouteInfo>? children,
+  }) : super(
+          DetailTransactionRoute.name,
+          args: DetailTransactionRouteArgs(
+            key: key,
+            data: data,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'DetailTransactionRoute';
+
+  static const PageInfo<DetailTransactionRouteArgs> page =
+      PageInfo<DetailTransactionRouteArgs>(name);
+}
+
+class DetailTransactionRouteArgs {
+  const DetailTransactionRouteArgs({
+    this.key,
+    required this.data,
+  });
+
+  final Key? key;
+
+  final TransactionModel data;
+
+  @override
+  String toString() {
+    return 'DetailTransactionRouteArgs{key: $key, data: $data}';
+  }
+}
+
+/// generated route for
 /// [HomeScreenProvider]
 class HomeRoute extends PageRouteInfo<void> {
   const HomeRoute({List<PageRouteInfo>? children})
@@ -311,35 +361,6 @@ class LoginRoute extends PageRouteInfo<void> {
   static const String name = 'LoginRoute';
 
   static const PageInfo<void> page = PageInfo<void>(name);
-}
-
-/// generated route for
-/// [LoginWithPasswordScreenProvider]
-class LoginWithPasswordRoute extends PageRouteInfo<LoginWithPasswordRouteArgs> {
-  LoginWithPasswordRoute({
-    Key? key,
-    List<PageRouteInfo>? children,
-  }) : super(
-          LoginWithPasswordRoute.name,
-          args: LoginWithPasswordRouteArgs(key: key),
-          initialChildren: children,
-        );
-
-  static const String name = 'LoginWithPasswordRoute';
-
-  static const PageInfo<LoginWithPasswordRouteArgs> page =
-      PageInfo<LoginWithPasswordRouteArgs>(name);
-}
-
-class LoginWithPasswordRouteArgs {
-  const LoginWithPasswordRouteArgs({this.key});
-
-  final Key? key;
-
-  @override
-  String toString() {
-    return 'LoginWithPasswordRouteArgs{key: $key}';
-  }
 }
 
 /// generated route for
@@ -396,6 +417,45 @@ class RegisterAccountRoute extends PageRouteInfo<void> {
   static const String name = 'RegisterAccountRoute';
 
   static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
+/// [RegisterLoginWithPasswordScreenProvider]
+class RegisterLoginWithPasswordRoute
+    extends PageRouteInfo<RegisterLoginWithPasswordRouteArgs> {
+  RegisterLoginWithPasswordRoute({
+    Key? key,
+    required bool enabled,
+    List<PageRouteInfo>? children,
+  }) : super(
+          RegisterLoginWithPasswordRoute.name,
+          args: RegisterLoginWithPasswordRouteArgs(
+            key: key,
+            enabled: enabled,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'RegisterLoginWithPasswordRoute';
+
+  static const PageInfo<RegisterLoginWithPasswordRouteArgs> page =
+      PageInfo<RegisterLoginWithPasswordRouteArgs>(name);
+}
+
+class RegisterLoginWithPasswordRouteArgs {
+  const RegisterLoginWithPasswordRouteArgs({
+    this.key,
+    required this.enabled,
+  });
+
+  final Key? key;
+
+  final bool enabled;
+
+  @override
+  String toString() {
+    return 'RegisterLoginWithPasswordRouteArgs{key: $key, enabled: $enabled}';
+  }
 }
 
 /// generated route for

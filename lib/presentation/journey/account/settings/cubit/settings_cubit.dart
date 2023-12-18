@@ -36,8 +36,4 @@ class SettingsCubit extends BaseBloc<SettingsState> {
       return;
     }
   }
-
-  Future<void> loginWithPassword() async {
-    await push(LoginWithPasswordRoute());
-  }
 }

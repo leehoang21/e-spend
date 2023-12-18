@@ -10,11 +10,13 @@ import 'package:flutter_e_spend/common/enums/category.dart';
 import 'package:flutter_e_spend/common/extension/date_time_extension.dart';
 import 'package:flutter_e_spend/common/extension/string_extension.dart';
 import 'package:flutter_e_spend/common/utils/app_utils.dart';
+import 'package:flutter_e_spend/domain/use_cases/transaction_use_case.dart';
 import 'package:flutter_e_spend/presentation/journey/transaction/transaction_list_screen/bloc/transaction_list_cubit.dart';
 import 'package:flutter_e_spend/presentation/themes/themes.dart';
 import 'package:flutter_e_spend/presentation/widgets/button_widget/text_button_widget.dart';
 import 'package:flutter_e_spend/presentation/widgets/text_field_widget/text_field_widget.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_translate/flutter_translate.dart';
 
 import '../../../../widgets/drop_down_select/drop_down_select.dart';
 
@@ -42,10 +44,14 @@ class _FilterTransactionWidgetState extends State<FilterTransactionWidget> {
     fromController = TextEditingController();
     toController = TextEditingController();
     final state = widget.parentContext.read<TransactionListCubit>().state;
-    _fromDate = state.params.fromTime.toDate();
-    fromController.text = _fromDate!.formatDMY;
-    _toDate = state.params.toTime.toDate();
-    toController.text = _toDate!.formatDMY;
+    if (state.params.fromTime != ParamsTransactionUsecase.init().fromTime) {
+      _fromDate = state.params.fromTime.toDate();
+      fromController.text = _fromDate!.formatDMY;
+    }
+    if (state.params.toTime != ParamsTransactionUsecase.init().toTime) {
+      _toDate = state.params.toTime.toDate();
+      toController.text = _toDate!.formatDMY;
+    }
     _categoryType = state.categoryType;
 
     super.initState();
@@ -96,16 +102,11 @@ class _FilterTransactionWidgetState extends State<FilterTransactionWidget> {
           Row(
             children: [
               Expanded(
-                child: TextFieldWidget(
-                  hintText: 'From'.tr,
-                  controller: fromController,
-                  prefixIcon: Assets.images.calendar.image(
-                    height: LayoutConstants.iconMediumSize,
-                    width: LayoutConstants.iconMediumSize,
-                  ),
+                child: GestureDetector(
                   onTap: () {
                     showDatePicker(
-                      initialDate: DateTime.now(),
+                      locale: LocalizedApp.of(context).delegate.currentLocale,
+                      initialDate: _fromDate ?? DateTime.now(),
                       firstDate: DateTime(2000),
                       lastDate: DateTime(2025),
                       context: context,
@@ -116,23 +117,26 @@ class _FilterTransactionWidgetState extends State<FilterTransactionWidget> {
                       }
                     });
                   },
-                  onChanged: (value) {},
+                  child: TextFieldWidget(
+                    enabled: false,
+                    hintText: 'From'.tr,
+                    controller: fromController,
+                    prefixIcon: Assets.images.calendar.image(
+                      height: LayoutConstants.iconMediumSize,
+                      width: LayoutConstants.iconMediumSize,
+                    ),
+                  ),
                 ),
               ),
               SizedBox(
                 width: AppDimens.width_8,
               ),
               Expanded(
-                child: TextFieldWidget(
-                  hintText: 'To'.tr,
-                  controller: toController,
-                  prefixIcon: Assets.images.calendar.image(
-                    height: LayoutConstants.iconMediumSize,
-                    width: LayoutConstants.iconMediumSize,
-                  ),
+                child: GestureDetector(
                   onTap: () {
                     showDatePicker(
-                      initialDate: DateTime.now(),
+                      locale: LocalizedApp.of(context).delegate.currentLocale,
+                      initialDate: _toDate ?? DateTime.now(),
                       firstDate: DateTime(2000),
                       lastDate: DateTime(2025),
                       context: context,
@@ -143,6 +147,15 @@ class _FilterTransactionWidgetState extends State<FilterTransactionWidget> {
                       }
                     });
                   },
+                  child: TextFieldWidget(
+                    enabled: false,
+                    hintText: 'To'.tr,
+                    controller: toController,
+                    prefixIcon: Assets.images.calendar.image(
+                      height: LayoutConstants.iconMediumSize,
+                      width: LayoutConstants.iconMediumSize,
+                    ),
+                  ),
                 ),
               ),
             ],

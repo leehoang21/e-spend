@@ -253,5 +253,8 @@
   "CayegoryType.debtCollection": "Debt Collection",
   "CayegoryType.borrow": "Borrow",
   "CayegoryType.loan": "Loan",
-  "CayegoryType.pay": "Pay"
+  "CayegoryType.pay": "Pay",
+  "From": "From",
+  "To": "to",
+  "old_password": "Old password"
 }

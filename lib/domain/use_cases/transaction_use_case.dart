@@ -22,17 +22,33 @@ class TransactionUseCase {
   );
 
   Future<Either<String, AppError>> create(TransactionModel transaction) async {
-    return await _remoteRepository.create(transaction);
+    return _remoteRepository.create(transaction);
   }
 
   Future<AppError?> update(
     TransactionModel transaction, {
-    TransactionModel? transactionOld,
+    required TransactionModel transactionOld,
   }) async {
-    final result = await _remoteRepository.update(transaction);
+    final result = await _remoteRepository.update(
+      transaction,
+      transactionOld: transactionOld,
+    );
     if (result == null) {
       final result2 = await _statisticsRepository.update(transaction,
           transactionOld: transactionOld);
+      return result2.fold((l) => null, (r) => r);
+    }
+    return result;
+  }
+
+  Future<AppError?> delete(TransactionModel transaction) async {
+    final result = await _remoteRepository.delete(transaction);
+    if (result == null) {
+      final result2 = await _statisticsRepository.update(
+          transaction.copyWith(
+            amount: 0,
+          ),
+          transactionOld: transaction);
       return result2.fold((l) => null, (r) => r);
     }
     return result;

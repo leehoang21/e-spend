@@ -1,9 +1,7 @@
-import 'dart:developer';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter_e_spend/common/di/injector.dart';
-import 'package:flutter_e_spend/common/extension/show_extension.dart';
+import 'package:flutter_e_spend/common/extension/bloc_extension.dart';
 import 'package:flutter_e_spend/domain/use_cases/storage_use_case.dart';
 import 'package:injectable/injectable.dart';
 
@@ -21,6 +19,7 @@ import 'create_transaction_state.dart';
 class CreateTransactionBloc extends BaseBloc<CreateTransactionState> {
   final TransactionUseCase _transactionUseCase;
   final StorageUseCase storageUseCase;
+  TransactionModel? _transaction;
   CreateTransactionBloc(
     this._transactionUseCase,
     this.storageUseCase,
@@ -29,6 +28,7 @@ class CreateTransactionBloc extends BaseBloc<CreateTransactionState> {
         );
 
   Future<void> initial(TransactionModel transaction) async {
+    _transaction = transaction;
     emit(
       state.copyWith(
         amount: transaction.amount,
@@ -92,7 +92,7 @@ class CreateTransactionBloc extends BaseBloc<CreateTransactionState> {
   }
 
   Future<void> onCreate({String? note, List<File> photos = const []}) async {
-    Injector.showLoading();
+    showLoading();
     if (await InternetChecker.hasConnection()) {
       try {
         TransactionModel transaction = TransactionModel(
@@ -103,21 +103,24 @@ class CreateTransactionBloc extends BaseBloc<CreateTransactionState> {
             note: note,
             createAt: DateTime.now().millisecondsSinceEpoch,
             lastUpdate: DateTime.now().millisecondsSinceEpoch);
-        final transactionId = await _transactionUseCase.create(transaction);
-        log('transaction id : $transactionId');
-        final List<String> imagePaths = [];
-        for (int i = 0; i < photos.length; i++) {
-          final String storagePath =
-              '${DefaultEnvironment.transaction}/$transactionId/$i.jpeg';
-          await storageUseCase.put(
-              imageToUpload: photos[i], imagePathStorage: storagePath);
-          imagePaths.add(storagePath);
-        }
-        transactionId.fold(
-          (l) {
+        final transactionResult = await _transactionUseCase.create(transaction);
+
+        transactionResult.fold(
+          (l) async {
+            final List<String> imagePaths = [];
+            for (int i = 0; i < photos.length; i++) {
+              final String storagePath =
+                  '${DefaultEnvironment.transaction}/$l/$i.jpeg';
+              await storageUseCase.put(
+                  imageToUpload: photos[i], imagePathStorage: storagePath);
+              imagePaths.add(storagePath);
+            }
             transaction = transaction.copyWith(id: l, photos: imagePaths);
-            _transactionUseCase.update(transaction);
-            Injector.hideLoading();
+            _transactionUseCase.update(
+              transaction,
+              transactionOld: transaction.copyWith(amount: 0),
+            );
+            hideLoading();
             emit(
               state.copyWith(
                 status: CreateTransactionStatus.succes,
@@ -125,7 +128,11 @@ class CreateTransactionBloc extends BaseBloc<CreateTransactionState> {
               ),
             );
           },
-          (r) {},
+          (r) {
+            showSnackbar(
+              translationKey: r.message,
+            );
+          },
         );
       } on FirebaseException catch (e) {
         emit(
@@ -134,40 +141,69 @@ class CreateTransactionBloc extends BaseBloc<CreateTransactionState> {
             lastUpdate: DateTime.now(),
           ),
         );
-        Injector.hideLoading();
-        Injector.context.showSnackbar(
+        hideLoading();
+        showSnackbar(
           translationKey: e.message ?? '',
         );
       }
     } else {
-      Injector.hideLoading();
+      hideLoading();
       state.copyWith(
         status: CreateTransactionStatus.noInternet,
         lastUpdate: DateTime.now(),
       );
-      Injector.context.showSnackbar(
+      showSnackbar(
         translationKey: 'no_internet_connection',
       );
     }
   }
 
-  Future<void> onEdit({required String id, String? note}) async {
-    Injector.showLoading();
+  bool _checkRemote(String path) {
+    if (path.toString().contains('http://') ||
+        path.toString().contains('https://')) {
+      return true;
+    }
+    return false;
+  }
+
+  Future<void> onEdit({
+    required String id,
+    String? note,
+    required List<File> photos,
+  }) async {
+    showLoading();
     if (await InternetChecker.hasConnection()) {
       try {
+        TransactionModel transaction = TransactionModel(
+            id: id,
+            amount: state.amount!,
+            category: state.category!,
+            spendTime: state.spendTime,
+            wallet: state.wallet!,
+            photos: state.photo,
+            note: note,
+            createAt: DateTime.now().millisecondsSinceEpoch,
+            lastUpdate: DateTime.now().millisecondsSinceEpoch);
+        //update photos
+
+        final List<String> imagePaths = [];
+        for (int i = 0; i < photos.length; i++) {
+          final String storagePath =
+              '${DefaultEnvironment.transaction}/${_transaction?.id}/$i.jpeg';
+          if (!_checkRemote(photos[i].path)) {
+            await storageUseCase.put(
+                imageToUpload: photos[i], imagePathStorage: storagePath);
+          }
+          imagePaths.add(storagePath);
+        }
+        //update transaction
+        transaction = transaction.copyWith(photos: imagePaths);
         _transactionUseCase.update(
-          TransactionModel(
-              id: id,
-              amount: state.amount!,
-              category: state.category!,
-              spendTime: state.spendTime,
-              wallet: state.wallet!,
-              photos: state.photo,
-              note: note,
-              createAt: DateTime.now().millisecondsSinceEpoch,
-              lastUpdate: DateTime.now().millisecondsSinceEpoch),
+          transaction,
+          transactionOld: _transaction!,
         );
-        Injector.hideLoading();
+        hideLoading();
+        await pop(null);
         emit(
           state.copyWith(
             status: CreateTransactionStatus.succes,
@@ -175,18 +211,18 @@ class CreateTransactionBloc extends BaseBloc<CreateTransactionState> {
           ),
         );
       } on FirebaseException catch (e) {
-        Injector.hideLoading();
+        hideLoading();
         emit(
           state.copyWith(status: CreateTransactionStatus.failed),
         );
-        Injector.context.showSnackbar(
+        showSnackbar(
           translationKey: e.message ?? '',
         );
       }
     } else {
-      Injector.hideLoading();
+      hideLoading();
       state.copyWith(status: CreateTransactionStatus.noInternet);
-      Injector.context.showSnackbar(
+      showSnackbar(
         translationKey: 'no_internet_connection',
       );
     }

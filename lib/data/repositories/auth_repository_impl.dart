@@ -58,6 +58,8 @@ class AuthRepositoryImpl extends AuthRepository {
       );
 
       return Left(AuthMapper.convertUserCredentialToUserModel(userCredential));
+    } on FirebaseException catch (e) {
+      return Right(AppError(message: e.message ?? e.code));
     } catch (e) {
       return Right(AppError(message: e.toString()));
     }
@@ -93,6 +95,8 @@ class AuthRepositoryImpl extends AuthRepository {
         'password': password,
       });
       return null;
+    } on FirebaseException catch (e) {
+      return AppError(message: e.message ?? e.code);
     } catch (e) {
       return AppError(message: e.toString());
     }
@@ -111,6 +115,8 @@ class AuthRepositoryImpl extends AuthRepository {
       );
 
       return Left(AuthMapper.convertUserCredentialToUserModel(userCredential));
+    } on FirebaseException catch (e) {
+      return Right(AppError(message: e.message ?? e.code));
     } catch (e) {
       return Right(AppError(message: e.toString()));
     }
@@ -142,6 +148,8 @@ class AuthRepositoryImpl extends AuthRepository {
         );
       }
       return Right(AppError(message: StringConstants.accountNotExits));
+    } on FirebaseException catch (e) {
+      return Right(AppError(message: e.message ?? e.code));
     } catch (e) {
       return Right(AppError(message: e.toString()));
     }
@@ -159,8 +167,30 @@ class AuthRepositoryImpl extends AuthRepository {
         password: pass,
       );
       return Left(AuthMapper.convertUserCredentialToUserModel(userCredential));
+    } on FirebaseException catch (e) {
+      return Right(AppError(message: e.message ?? e.code));
     } catch (e) {
       return Right(AppError(message: 'password_or_email_incorrect'));
+    }
+  }
+
+  @override
+  Future<Either<UserModel, AppError>> updatePassword({
+    required String newPass,
+    required String oldPass,
+  }) async {
+    try {
+      final userCredential = await config.auth.signInWithEmailAndPassword(
+        email: (hiveConfig.user?.phoneNumber ?? '').formatPhoneToEmail,
+        password: oldPass,
+      );
+      final user = userCredential.user;
+      await user?.updatePassword(newPass);
+      return Left(AuthMapper.convertUserCredentialToUserModel(userCredential));
+    } on FirebaseException catch (e) {
+      return Right(AppError(message: e.message ?? e.code));
+    } catch (e) {
+      return Right(AppError(message: e.toString()));
     }
   }
 
@@ -182,6 +212,8 @@ class AuthRepositoryImpl extends AuthRepository {
       final user = await config.facebookAuth.getUserData();
 
       return Left(UserModel.fromJson(user));
+    } on FirebaseException catch (e) {
+      return Right(AppError(message: e.message ?? e.code));
     } catch (e) {
       return Right(AppError(message: e.toString()));
     }
@@ -206,6 +238,8 @@ class AuthRepositoryImpl extends AuthRepository {
       // Once signed in, return the UserCredential
       final user = await FirebaseAuth.instance.signInWithCredential(credential);
       return Left(AuthMapper.convertUserCredentialToUserModel(user));
+    } on FirebaseException catch (e) {
+      return Right(AppError(message: e.message ?? e.code));
     } catch (e) {
       return Right(AppError(message: e.toString()));
     }
@@ -233,6 +267,8 @@ class AuthRepositoryImpl extends AuthRepository {
         },
         (right) => Right(right),
       );
+    } on FirebaseException catch (e) {
+      return Right(AppError(message: e.message ?? e.code));
     } catch (e) {
       return Right(AppError(message: e.toString()));
     }
@@ -254,6 +290,8 @@ class AuthRepositoryImpl extends AuthRepository {
         }
       }
       return Right(AppError(message: 'biometrics_auth_fail'.tr));
+    } on FirebaseException catch (e) {
+      return Right(AppError(message: e.message ?? e.code));
     } catch (e) {
       return Right(AppError(message: e.toString()));
     }

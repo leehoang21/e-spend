@@ -29,7 +29,7 @@ class AppValidator {
     if (password == null ||
         password.isEmpty ||
         !expPassword.hasMatch(password)) {
-      return 'invalid_password';
+      return 'invalid_password'.tr;
     }
     return null;
   }

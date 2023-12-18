@@ -77,7 +77,7 @@ class _DetailTransactionFormState extends State<DetailTransactionForm> {
                 .state
                 .data
                 .amount
-                .getTextCompactCurrencyAmount),
+                .getTextAmount),
         SizedBox(
           height: AppDimens.height_12,
         ),
@@ -109,6 +109,7 @@ class _DetailTransactionFormState extends State<DetailTransactionForm> {
                     .watch<DetailTransactionBloc>()
                     .state
                     .data
+                    .category
                     .category
                     .toString()
                     .tr)

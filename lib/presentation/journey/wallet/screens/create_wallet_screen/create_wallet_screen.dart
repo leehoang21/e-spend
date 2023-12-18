@@ -223,6 +223,7 @@ class _CreateWalletScreenState extends State<CreateWalletScreen> {
   void showBottomSheet(BuildContext context) => showModalBottomSheet<void>(
       isDismissible: false,
       context: context,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       builder: (BuildContext bottomContext) {
         return BlocProvider.value(
           value: BlocProvider.of<CreateWalletCubit>(context),
@@ -232,15 +233,21 @@ class _CreateWalletScreenState extends State<CreateWalletScreen> {
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
                       AppBarWidget(
+                        leading: const SizedBox(),
                         centerWidget: Text(
                           translate(('wallet_type')),
                           textAlign: TextAlign.center,
-                          style: ThemeText.style18Bold
-                              .copyWith(fontWeight: FontWeight.w500),
+                          style: ThemeText.style18Bold.copyWith(
+                            fontWeight: FontWeight.w500,
+                            color: AppColor.white,
+                          ),
                         ),
                         action: IconButton(
                             onPressed: () => Navigator.pop(context),
-                            icon: const Icon(Icons.close)),
+                            icon: const Icon(
+                              Icons.close,
+                              color: AppColor.white,
+                            )),
                       ),
                       Padding(
                         padding: EdgeInsets.symmetric(
@@ -252,8 +259,9 @@ class _CreateWalletScreenState extends State<CreateWalletScreen> {
                                   walletTypeList.first),
                           dense: true,
                           leading: Assets.images.icPaperMoney.image(
-                              height: AppDimens.space_26,
-                              width: AppDimens.space_26),
+                            height: AppDimens.space_26,
+                            width: AppDimens.space_26,
+                          ),
                           title: Text(
                             translate('cash'),
                             style: ThemeText.style14Medium,

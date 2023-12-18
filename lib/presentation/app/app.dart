@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_e_spend/common/configs/hive/hive_config.dart';
 import 'package:flutter_e_spend/common/constants/layout_constants.dart';
 import 'package:flutter_e_spend/common/constants/string_constants.dart';
 import 'package:flutter_e_spend/presentation/routers/app_router.dart';
@@ -52,6 +53,7 @@ class _AppState extends State<App> with WidgetsBindingObserver {
   void dispose() {
     try {
       getIt.get<FirebaseConfig>().auth.signOut();
+      getIt.get<HiveConfig>().clear();
     } catch (e) {
       logger(e.toString());
     }

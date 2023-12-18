@@ -20,9 +20,7 @@ extension StringExtension on String {
   String get formatPhoneToEmail {
     String phone = this;
     phone = phone.replaceAll(' ', '');
-    if (phone.startsWith('+')) {
-      phone = phone.substring(1);
-    }
+
     return '${StringConstants.espend}$phone@${StringConstants.espend}.com';
   }
 }

@@ -33,7 +33,7 @@ class AuthSettingsScreen extends StatelessWidget {
                 iconDefault: Assets.icons.icGoogle.path,
                 title: AuthSettingsConstants.google.tr,
                 subtitle: user.googleLink != null
-                    ? user.googleLink?.email ?? ' '
+                    ? user.googleLink?.userName ?? ' '
                     : AuthSettingsConstants.notLinked.tr,
                 onTap: () {
                   context
@@ -46,7 +46,7 @@ class AuthSettingsScreen extends StatelessWidget {
                 iconDefault: Assets.icons.icFacebook.path,
                 title: AuthSettingsConstants.facebook.tr,
                 subtitle: user.facebookLink != null
-                    ? user.facebookLink?.email ?? ' '
+                    ? user.facebookLink?.userName ?? ' '
                     : AuthSettingsConstants.notLinked.tr,
                 onTap: () {
                   context
@@ -59,9 +59,9 @@ class AuthSettingsScreen extends StatelessWidget {
                   icons: Assets.icons.biometrics.path,
                   iconDefault: Assets.icons.biometrics.path,
                   title: AuthSettingsConstants.biometrics.tr,
-                  subtitle: user.isBiometricsAuth == true
-                      ? AuthSettingsConstants.on.tr
-                      : AuthSettingsConstants.off.tr,
+                  // subtitle: user.isBiometricsAuth == true
+                  //     ? AuthSettingsConstants.on.tr
+                  //     : AuthSettingsConstants.off.tr,
                   onTap: () {
                     context.read<AuthSettingsCubit>().authBiometric();
                   },
@@ -70,9 +70,13 @@ class AuthSettingsScreen extends StatelessWidget {
                 icons: Assets.icons.password.path,
                 iconDefault: Assets.icons.password.path,
                 title: AuthSettingsConstants.loginWithPassword.tr,
-                subtitle: AuthSettingsConstants.off.tr,
+                subtitle: user.isPassword == true
+                    ? AuthSettingsConstants.on.tr
+                    : AuthSettingsConstants.off.tr,
                 onTap: () {
-                  context.read<AuthSettingsCubit>().loginWithPassword();
+                  context
+                      .read<AuthSettingsCubit>()
+                      .loginWithPassword(user.isPassword == true);
                 },
               ),
             ],

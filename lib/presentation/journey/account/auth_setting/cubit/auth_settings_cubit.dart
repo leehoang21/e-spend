@@ -62,7 +62,16 @@ class AuthSettingsCubit extends BaseBloc<AuthSettingsState> {
     emit(state.copyWith(isLocalAuth: result));
   }
 
-  Future<void> loginWithPassword() async {
-    await push(LoginWithPasswordRoute());
+  Future<void> loginWithPassword(bool enabled) async {
+    await push(RegisterLoginWithPasswordRoute(
+      enabled: enabled,
+    ));
+  }
+
+  updatePassword({
+    required String newPass,
+    required String oldPass,
+  }) async {
+    await authUseCase.updatePassword(newPass: newPass, oldPass: oldPass);
   }
 }

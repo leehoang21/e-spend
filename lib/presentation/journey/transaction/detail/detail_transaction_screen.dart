@@ -1,5 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_e_spend/presentation/journey/transaction/detail/bloc/detail_transaction_bloc.dart';
 import 'package:flutter_e_spend/presentation/routers/app_router.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../common/constants/app_dimens.dart';
@@ -53,8 +55,13 @@ class _DetailTransactionScreenState extends State<DetailTransactionScreen> {
                         Expanded(
                           child: TextButtonWidget(
                               onPressed: () {
-                                context.popRoute(
-                                   CreateTransactionRoute(),
+                                context.pushRoute(
+                                  CreateTransactionRoute(
+                                    transaction: context
+                                        .read<DetailTransactionBloc>()
+                                        .state
+                                        .data,
+                                  ),
                                 );
                               },
                               title: DetailTransactionConstants.update),
@@ -65,7 +72,9 @@ class _DetailTransactionScreenState extends State<DetailTransactionScreen> {
                         Expanded(
                           child: TextButtonWidget(
                               buttonColor: AppColor.red,
-                              onPressed: () {},
+                              onPressed: () {
+                                context.read<DetailTransactionBloc>().delete();
+                              },
                               title: DetailTransactionConstants.delete),
                         ),
                       ],

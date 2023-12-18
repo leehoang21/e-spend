@@ -27,4 +27,8 @@ class HiveConfig {
           : ThemeData.light();
   Locale get locale =>
       Locale(appBox.get(DefaultEnvironment.lang) as String? ?? 'en');
+
+  void clear() {
+    appBox.clear();
+  }
 }

@@ -1,5 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_e_spend/common/configs/biometric/biometric_config.dart';
+import 'package:flutter_e_spend/common/configs/default_environment.dart';
+import 'package:flutter_e_spend/common/configs/hive/hive_config.dart';
 import 'package:flutter_e_spend/common/enums/login_type.dart';
 import 'package:flutter_e_spend/common/extension/bloc_extension.dart';
 import 'package:flutter_e_spend/common/extension/string_extension.dart';
@@ -14,9 +16,11 @@ class LoginCubit extends BaseBloc<LoginState> {
   LoginCubit(
     this.authUseCase,
     this.biometricConfig,
+    this.hivec,
   ) : super(const LoginState());
   final AuthUseCase authUseCase;
   final BiometricConfig biometricConfig;
+  final HiveConfig hivec;
 
   loginWithPhone(String phone) {
     push(VerifyOtpRoute(phoneNumber: phone, loginType: LoginType.phone));
@@ -38,6 +42,7 @@ class LoginCubit extends BaseBloc<LoginState> {
     final result = await authUseCase.loginWithBiometric();
     result.fold(
       (user) async {
+        hivec.appBox.put(DefaultEnvironment.user, user);
         pushAndRemoveUntil(
           const MainRoute(),
           predicate: (route) => false,

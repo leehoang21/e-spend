@@ -30,6 +30,11 @@ abstract class AuthRepository {
     required String userName,
     required String pass,
   });
+  Future<Either<UserModel, AppError>> updatePassword({
+    required String newPass,
+    required String oldPass,
+  });
+
   Future<Either<UserModel, AppError>> loginWithGoogle();
   Future<Either<UserModel, AppError>> loginWithFacebook();
   Future<Either<UserModel, AppError>> loginWithBiometric();

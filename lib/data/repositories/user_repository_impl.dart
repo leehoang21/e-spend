@@ -36,9 +36,8 @@ class UserRepositoryImpl extends UserRepository {
         //set remote
         await _doc.set(data.toJson());
       }
-      final user = await getUser();
       // local
-      await hiveConfig.appBox.put(DefaultEnvironment.user, user);
+      await hiveConfig.appBox.put(DefaultEnvironment.user, data);
       return null;
     } catch (e) {
       return AppError(message: e.toString());
