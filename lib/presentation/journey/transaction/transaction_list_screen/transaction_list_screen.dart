@@ -106,7 +106,7 @@ class TransactionListScreen extends StatelessWidget {
 }
 
 class _FilterWidget extends StatelessWidget {
-  const _FilterWidget({super.key});
+  const _FilterWidget();
 
   @override
   Widget build(BuildContext context) {

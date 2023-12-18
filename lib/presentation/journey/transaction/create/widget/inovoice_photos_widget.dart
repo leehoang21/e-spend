@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_e_spend/common/assets/assets.gen.dart';
+import 'package:flutter_e_spend/common/extension/string_extension.dart';
 import 'package:flutter_e_spend/presentation/widgets/image_app_widget/image_app.dart';
 
 import '../../../../../common/constants/app_dimens.dart';
@@ -36,7 +37,7 @@ class _InvoicePhotosWidgetState extends State<InvoicePhotosWidget> {
               width: AppDimens.width_20,
             ),
             Text(
-              CreateTransactionConstants.invoicePhotos,
+              CreateTransactionConstants.invoicePhotos.tr,
               style: ThemeText.caption
                   .copyWith(color: AppColor.tuna, fontWeight: FontWeight.w400),
             )

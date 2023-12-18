@@ -9,6 +9,7 @@ class WalletModel with _$WalletModel {
     String? walletImage,
     String? walletName,
     int? balance,
+    int? firstBalance,
     int? walletType,
     int? createAt,
     int? lastUpdate,
@@ -26,6 +27,7 @@ class WalletModel with _$WalletModel {
         walletType: data['walletType'] as int?,
         createAt: data['createAt'] as int?,
         lastUpdate: data['lastUpdate'] as int?,
+        firstBalance: data['firstBalance'] as int?,
       );
 
   Map<String, dynamic> toJson() => {
@@ -35,5 +37,6 @@ class WalletModel with _$WalletModel {
         'walletType': walletType,
         'createAt': createAt,
         'lastUpdate': lastUpdate,
+        'firstBalance': firstBalance,
       };
 }

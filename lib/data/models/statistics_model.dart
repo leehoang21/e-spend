@@ -35,11 +35,15 @@ class StatisticsListModel with _$StatisticsListModel {
     );
   }
 
-  Map<String, dynamic> toJson() => <String, dynamic>{
-        'subStatistics':
-            subStatistics?.map((k, e) => MapEntry(k.toString(), e.toJson())),
-        'data': data.map((k, e) => MapEntry(_$CategoryTypeEnumMap[k]!, e)),
-      };
+  Map<String, dynamic> toJson() {
+    final _data = data.map((k, e) => MapEntry(_$CategoryTypeEnumMap[k], e));
+    _data.removeWhere((key, value) => key == null);
+    return <String, dynamic>{
+      'subStatistics':
+          subStatistics?.map((k, e) => MapEntry(k.toString(), e.toJson())),
+      'data': _data,
+    };
+  }
 
   static final _$CategoryTypeEnumMap = {
     CategoryType.expense: 'expense',
@@ -95,5 +99,6 @@ class StatisticsListModel with _$StatisticsListModel {
     CategoryType.borrow: 'borrow',
     CategoryType.loan: 'loan',
     CategoryType.pay: 'pay',
+    CategoryType.debt: 'debt',
   };
 }

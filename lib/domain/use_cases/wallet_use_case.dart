@@ -20,4 +20,8 @@ class WalletUseCase {
   Future<AppError?> put({required WalletModel walletModel}) {
     return repository.put(walletModel: walletModel);
   }
+
+  Future<AppError?> delete({required String id}) {
+    return repository.delete(id: id);
+  }
 }

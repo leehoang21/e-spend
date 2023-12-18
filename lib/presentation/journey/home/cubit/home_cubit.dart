@@ -71,12 +71,14 @@ class HomeCubit extends BaseBloc<HomeState> {
 
   changeStatistic() {
     final result = _timeCubit.changeStatistic(_statistic);
+    final revenue = (result[CategoryType.revenue] ?? 0.0) +
+        (result[CategoryType.debt] ?? 0.0);
+    final expense = (result[CategoryType.expense] ?? 0.0) +
+        (result[CategoryType.loan] ?? 0.0);
     emit(state.copyWith(
       statistic: (
-        (result[CategoryType.revenue] ?? 0.0) +
-            (result[CategoryType.debt] ?? 0.0),
-        (result[CategoryType.expense] ?? 0.0) +
-            (result[CategoryType.loan] ?? 0.0),
+        revenue,
+        expense,
       ),
     ));
   }

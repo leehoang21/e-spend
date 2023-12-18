@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../common/enums/login_type.dart';
 import '../../data/models/category_model.dart';
 import '../../data/models/transaction_model.dart';
+import '../../data/models/wallet_model.dart';
 import '../journey/account/account_screen_provider.dart';
 import '../journey/account/auth_setting/auth_setting_screen_provider.dart';
 import '../journey/account/profile/profile_screen_provider.dart';
@@ -22,6 +23,7 @@ import '../journey/transaction/create/create_transaction_screen_provider.dart';
 import '../journey/transaction/detail/detail_transaction_screen_provider.dart';
 import '../journey/transaction/transaction_list_screen/transaction_list_screen_provider.dart';
 import '../journey/wallet/screens/create_wallet_screen/create_wallet_screen_provider.dart';
+import '../journey/wallet/screens/detail_wallet_screen/detail_wallet_screen_provider.dart';
 import '../journey/wallet/screens/wallet_list_screen/wallet_list_screen_provider.dart';
 part 'app_router.gr.dart';
 //flutter pub run build_runner build --delete-conflicting-outputs
@@ -60,6 +62,9 @@ class AppRouter extends _$AppRouter {
         ),
         AutoRoute(
           page: WalletListRoute.page,
+        ),
+        AutoRoute(
+          page: DetailWalletRoute.page,
         ),
         //main
         AutoRoute(

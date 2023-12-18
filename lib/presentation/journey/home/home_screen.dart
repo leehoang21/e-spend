@@ -10,7 +10,6 @@ import 'package:flutter_e_spend/common/extension/show_extension.dart';
 import 'package:flutter_e_spend/common/extension/string_extension.dart';
 import 'package:flutter_e_spend/presentation/widgets/change_time/change_time_bottom_sheet_widget.dart';
 import 'package:flutter_e_spend/presentation/widgets/loading_widget/loader_widget.dart';
-import 'package:flutter_e_spend/presentation/widgets/refresh_widget.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 import '../../themes/themes.dart';
@@ -44,7 +43,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     statusBarColor:
                         Theme.of(context).appBarTheme.backgroundColor),
                 child: Scaffold(
-                  body: RefreshWidget(
+                  body: RefreshIndicator(
                     onRefresh: () async {
                       context.read<HomeCubit>().onInit();
                     },

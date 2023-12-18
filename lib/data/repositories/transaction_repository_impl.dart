@@ -72,7 +72,8 @@ class TransactionRepositoryImpl extends TransactionRepository {
 
   Future<TransactionModel> _changeWallet(TransactionModel transaction) async {
     TransactionModel model = transaction;
-    if (model.category.category.type == 'REVENUE') {
+    if (model.category.category.categoryType == CategoryType.revenue ||
+        model.category.category.categoryType == CategoryType.debt) {
       model = model.copyWith(
         wallet: model.wallet.copyWith(
           balance: (model.wallet.balance ?? 0) + transaction.amount,

@@ -174,11 +174,13 @@ class StatisticsRepositoryImpl implements StatisticsRepository {
                           element.value.toDouble() != 0.toDouble())) ??
                   false);
           statistics = statistics.copyWith(
-            subStatistics: Map.fromEntries(statisticsDay ?? []),
+            subStatistics: Map.fromEntries((statisticsDay?.toList() ?? [])),
           );
+          //remove null
 
           //update remote
-          await _doc.doc(dateItem.year.toString()).set(statistics.toJson());
+          final json = statistics.toJson();
+          await _doc.doc(dateItem.year.toString()).set(json);
 
           return Left(statistics);
         },

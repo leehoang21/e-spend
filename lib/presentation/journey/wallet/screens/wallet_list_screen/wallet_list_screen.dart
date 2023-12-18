@@ -18,7 +18,8 @@ import '../../../../widgets/refresh_widget.dart';
 import 'bloc/wallet_list_cubit.dart';
 
 class WalletListScreen extends StatelessWidget {
-  WalletListScreen({Key? key}) : super(key: key);
+  WalletListScreen({Key? key, required this.isDetail}) : super(key: key);
+  final bool isDetail;
 
   final refreshController = RefreshController(initialRefresh: false);
 
@@ -82,8 +83,13 @@ class WalletListScreen extends StatelessWidget {
 
   Widget _buildWalletItem(BuildContext context, WalletModel wallet) {
     return InkWell(
-      onTap: () {
-        Navigator.pop(context, wallet);
+      onTap: () async {
+        if (isDetail) {
+          await context.pushRoute(DetailWalletRoute(wallet: wallet));
+          await context.read<WalletListCubit>().getWalletList();
+        } else {
+          Navigator.pop(context, wallet);
+        }
       },
       child: Container(
         margin: EdgeInsets.only(

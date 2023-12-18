@@ -38,7 +38,7 @@ class CategoriesWidget extends StatelessWidget {
             ),
             title: AccountConstants.wallets.tr,
             onTap: () {
-              context.pushRoute(const WalletListRoute());
+              context.pushRoute(WalletListRoute(isDetail: true));
             }),
         SettingsItem(
           icons: Assets.icons.logIn.path,

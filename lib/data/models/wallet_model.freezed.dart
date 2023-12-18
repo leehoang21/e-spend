@@ -20,6 +20,7 @@ mixin _$WalletModel {
   String? get walletImage => throw _privateConstructorUsedError;
   String? get walletName => throw _privateConstructorUsedError;
   int? get balance => throw _privateConstructorUsedError;
+  int? get firstBalance => throw _privateConstructorUsedError;
   int? get walletType => throw _privateConstructorUsedError;
   int? get createAt => throw _privateConstructorUsedError;
   int? get lastUpdate => throw _privateConstructorUsedError;
@@ -40,6 +41,7 @@ abstract class $WalletModelCopyWith<$Res> {
       String? walletImage,
       String? walletName,
       int? balance,
+      int? firstBalance,
       int? walletType,
       int? createAt,
       int? lastUpdate});
@@ -62,6 +64,7 @@ class _$WalletModelCopyWithImpl<$Res, $Val extends WalletModel>
     Object? walletImage = freezed,
     Object? walletName = freezed,
     Object? balance = freezed,
+    Object? firstBalance = freezed,
     Object? walletType = freezed,
     Object? createAt = freezed,
     Object? lastUpdate = freezed,
@@ -82,6 +85,10 @@ class _$WalletModelCopyWithImpl<$Res, $Val extends WalletModel>
       balance: freezed == balance
           ? _value.balance
           : balance // ignore: cast_nullable_to_non_nullable
+              as int?,
+      firstBalance: freezed == firstBalance
+          ? _value.firstBalance
+          : firstBalance // ignore: cast_nullable_to_non_nullable
               as int?,
       walletType: freezed == walletType
           ? _value.walletType
@@ -112,6 +119,7 @@ abstract class _$$WalletModelImplCopyWith<$Res>
       String? walletImage,
       String? walletName,
       int? balance,
+      int? firstBalance,
       int? walletType,
       int? createAt,
       int? lastUpdate});
@@ -132,6 +140,7 @@ class __$$WalletModelImplCopyWithImpl<$Res>
     Object? walletImage = freezed,
     Object? walletName = freezed,
     Object? balance = freezed,
+    Object? firstBalance = freezed,
     Object? walletType = freezed,
     Object? createAt = freezed,
     Object? lastUpdate = freezed,
@@ -152,6 +161,10 @@ class __$$WalletModelImplCopyWithImpl<$Res>
       balance: freezed == balance
           ? _value.balance
           : balance // ignore: cast_nullable_to_non_nullable
+              as int?,
+      firstBalance: freezed == firstBalance
+          ? _value.firstBalance
+          : firstBalance // ignore: cast_nullable_to_non_nullable
               as int?,
       walletType: freezed == walletType
           ? _value.walletType
@@ -177,6 +190,7 @@ class _$WalletModelImpl extends _WalletModel {
       this.walletImage,
       this.walletName,
       this.balance,
+      this.firstBalance,
       this.walletType,
       this.createAt,
       this.lastUpdate})
@@ -191,6 +205,8 @@ class _$WalletModelImpl extends _WalletModel {
   @override
   final int? balance;
   @override
+  final int? firstBalance;
+  @override
   final int? walletType;
   @override
   final int? createAt;
@@ -199,7 +215,7 @@ class _$WalletModelImpl extends _WalletModel {
 
   @override
   String toString() {
-    return 'WalletModel(id: $id, walletImage: $walletImage, walletName: $walletName, balance: $balance, walletType: $walletType, createAt: $createAt, lastUpdate: $lastUpdate)';
+    return 'WalletModel(id: $id, walletImage: $walletImage, walletName: $walletName, balance: $balance, firstBalance: $firstBalance, walletType: $walletType, createAt: $createAt, lastUpdate: $lastUpdate)';
   }
 
   @override
@@ -213,6 +229,8 @@ class _$WalletModelImpl extends _WalletModel {
             (identical(other.walletName, walletName) ||
                 other.walletName == walletName) &&
             (identical(other.balance, balance) || other.balance == balance) &&
+            (identical(other.firstBalance, firstBalance) ||
+                other.firstBalance == firstBalance) &&
             (identical(other.walletType, walletType) ||
                 other.walletType == walletType) &&
             (identical(other.createAt, createAt) ||
@@ -223,7 +241,7 @@ class _$WalletModelImpl extends _WalletModel {
 
   @override
   int get hashCode => Object.hash(runtimeType, id, walletImage, walletName,
-      balance, walletType, createAt, lastUpdate);
+      balance, firstBalance, walletType, createAt, lastUpdate);
 
   @JsonKey(ignore: true)
   @override
@@ -238,6 +256,7 @@ abstract class _WalletModel extends WalletModel {
       final String? walletImage,
       final String? walletName,
       final int? balance,
+      final int? firstBalance,
       final int? walletType,
       final int? createAt,
       final int? lastUpdate}) = _$WalletModelImpl;
@@ -251,6 +270,8 @@ abstract class _WalletModel extends WalletModel {
   String? get walletName;
   @override
   int? get balance;
+  @override
+  int? get firstBalance;
   @override
   int? get walletType;
   @override

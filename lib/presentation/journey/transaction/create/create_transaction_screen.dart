@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_e_spend/common/enums/category.dart';
 import 'package:flutter_e_spend/common/extension/date_time_extension.dart';
 import 'package:flutter_e_spend/common/extension/num_extension.dart';
+import 'package:flutter_e_spend/common/extension/string_extension.dart';
 
 import '../../../../common/constants/app_dimens.dart';
 import '../../../../data/models/transaction_model.dart';
@@ -69,8 +70,8 @@ class _CreateTransactionScreenState extends State<CreateTransactionScreen> {
     return ScaffoldWidget(
       appbar: AppBarWidget(
         title: widget.transaction == null
-            ? CreateTransactionConstants.addTransaction
-            : CreateTransactionConstants.updateTransaction,
+            ? CreateTransactionConstants.addTransaction.tr
+            : CreateTransactionConstants.updateTransaction.tr,
       ),
       body: BlocListener<CreateTransactionBloc, CreateTransactionState>(
         listener: (context, state) {
@@ -122,8 +123,8 @@ class _CreateTransactionScreenState extends State<CreateTransactionScreen> {
                             }
                           },
                           title: widget.transaction == null
-                              ? CreateTransactionConstants.create
-                              : CreateTransactionConstants.update);
+                              ? CreateTransactionConstants.create.tr
+                              : CreateTransactionConstants.update.tr);
                     },
                   ),
                 ],

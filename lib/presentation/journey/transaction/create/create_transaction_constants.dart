@@ -1,8 +1,8 @@
+import 'package:flutter_e_spend/common/extension/string_extension.dart';
 import 'package:flutter_translate/flutter_translate.dart';
 
 class CreateTransactionConstants {
-  static final String addTransaction =
-      translate('transaction.create.add_transaction');
+  static final String addTransaction = 'transaction.create.add_transaction'.tr;
   static final String updateTransaction = translate('transaction.update');
 
   static final String note = translate('transaction.create.note');

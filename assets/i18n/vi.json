@@ -253,5 +253,7 @@
   "CategoryType.pay": "Khoản thanh toán",
   "From": "Từ",
   "To": "đến",
-  "old_password": "Mật khẩu cũ"
+  "old_password": "Mật khẩu cũ",
+  "update": "Cập nhật",
+  "detail_wallet": "Chi tiết ví"
 }

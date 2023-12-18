@@ -53,7 +53,7 @@ class UserModel {
       userName: userName ?? this.userName,
       email: email ?? this.email,
       avatar: avatar ?? this.avatar,
-      uId: uId,
+      uId: uId ?? this.uId,
       facebookLink: facebookLink ?? this.facebookLink,
       googleLink: googleLink ?? this.googleLink,
       isPassword: isPassword ?? this.isPassword,
@@ -66,19 +66,20 @@ class UserModel {
       throw Exception;
     }
     final data = snapshot.data() as Map<String, dynamic>;
-
+    final facebookLink = data['facebookLink'] != null
+        ? UserModel.fromJson(data['facebookLink'] as Map<String, dynamic>)
+        : null;
+    final googleLink = data['googleLink'] != null
+        ? UserModel.fromJson(data['googleLink'] as Map<String, dynamic>)
+        : null;
     return UserModel(
       userName: data['userName'] as String,
       email: data['email'] as String?,
       avatar: data['avatar'] as String?,
       phoneNumber: data['phoneNumber'] as String,
       uId: uid,
-      facebookLink: data['facebookLink'] != null
-          ? UserModel.fromJson(data['facebookLink'] as Map<String, dynamic>)
-          : null,
-      googleLink: data['googleLink'] != null
-          ? UserModel.fromJson(data['googleLink'] as Map<String, dynamic>)
-          : null,
+      facebookLink: facebookLink,
+      googleLink: googleLink,
       isBiometricsAuth: data['isBiometricsAuth'] as bool? ?? false,
       isPassword: data['isPassword'] as bool? ?? false,
     );
@@ -100,11 +101,19 @@ class UserModel {
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
     return UserModel(
-      phoneNumber: '',
-      userName: (json['name'] as String?) ?? '',
-      avatar: '',
+      phoneNumber: json['phoneNumber'] as String,
+      userName: json['userName'] as String,
+      avatar: json['avatar'] as String?,
       email: json['email'] as String?,
-      uId: json['id'] as String?,
+      uId: json['uId'] as String?,
+      facebookLink: json['facebookLink'] != null
+          ? UserModel.fromJson(json['facebookLink'] as Map<String, dynamic>)
+          : null,
+      googleLink: json['googleLink'] != null
+          ? UserModel.fromJson(json['googleLink'] as Map<String, dynamic>)
+          : null,
+      isBiometricsAuth: json['isBiometricsAuth'] as bool? ?? false,
+      isPassword: json['isPassword'] as bool? ?? false,
     );
   }
 }

@@ -15,46 +15,46 @@ import 'package:injectable/injectable.dart' as _i2;
 import '../../data/repositories/auth_repository_impl.dart' as _i30;
 import '../../data/repositories/statistics_repository_impl.dart' as _i14;
 import '../../data/repositories/storage_repository_impl.dart' as _i16;
-import '../../data/repositories/transaction_repository_impl.dart' as _i42;
+import '../../data/repositories/transaction_repository_impl.dart' as _i43;
 import '../../data/repositories/user_repository_impl.dart' as _i21;
 import '../../data/repositories/vn_bank_repository.dart' as _i24;
 import '../../data/repositories/wallet_repository.dart' as _i27;
 import '../../domain/repositories/auth_repository.dart' as _i29;
 import '../../domain/repositories/statistics_repository.dart' as _i13;
 import '../../domain/repositories/storage_repository.dart' as _i15;
-import '../../domain/repositories/transaction_repository.dart' as _i41;
+import '../../domain/repositories/transaction_repository.dart' as _i42;
 import '../../domain/repositories/user_repository.dart' as _i20;
 import '../../domain/repositories/vn_bank_repository.dart' as _i23;
 import '../../domain/repositories/wallet_repository.dart' as _i26;
 import '../../domain/use_cases/auth_use_case.dart' as _i31;
-import '../../domain/use_cases/statistic_use_case.dart' as _i40;
+import '../../domain/use_cases/statistic_use_case.dart' as _i41;
 import '../../domain/use_cases/storage_use_case.dart' as _i17;
-import '../../domain/use_cases/transaction_use_case.dart' as _i43;
+import '../../domain/use_cases/transaction_use_case.dart' as _i44;
 import '../../domain/use_cases/user_use_case.dart' as _i22;
 import '../../domain/use_cases/vn_bank_use_case.dart' as _i25;
 import '../../domain/use_cases/wallet_use_case.dart' as _i28;
 import '../../presentation/bloc/loading_bloc/loading_bloc.dart' as _i10;
 import '../../presentation/journey/account/auth_setting/cubit/auth_settings_cubit.dart'
-    as _i47;
-import '../../presentation/journey/account/cubit/account_cubit.dart' as _i46;
+    as _i48;
+import '../../presentation/journey/account/cubit/account_cubit.dart' as _i47;
 import '../../presentation/journey/account/profile/cubit/profile_cubit.dart'
-    as _i35;
-import '../../presentation/journey/account/register_login_with_password/cubit/register_login_with_password_cubit.dart'
-    as _i38;
-import '../../presentation/journey/account/settings/cubit/settings_cubit.dart'
-    as _i39;
-import '../../presentation/journey/auth/login/cubit/login_cubit.dart' as _i34;
-import '../../presentation/journey/auth/register/cubit/register_cubit.dart'
-    as _i37;
-import '../../presentation/journey/auth/register_account/cubit/register_account_cubit.dart'
     as _i36;
+import '../../presentation/journey/account/register_login_with_password/cubit/register_login_with_password_cubit.dart'
+    as _i39;
+import '../../presentation/journey/account/settings/cubit/settings_cubit.dart'
+    as _i40;
+import '../../presentation/journey/auth/login/cubit/login_cubit.dart' as _i35;
+import '../../presentation/journey/auth/register/cubit/register_cubit.dart'
+    as _i38;
+import '../../presentation/journey/auth/register_account/cubit/register_account_cubit.dart'
+    as _i37;
 import '../../presentation/journey/auth/verify_otp/cubit/verify_cubit.dart'
-    as _i44;
-import '../../presentation/journey/home/cubit/home_cubit.dart' as _i50;
+    as _i45;
+import '../../presentation/journey/home/cubit/home_cubit.dart' as _i51;
 import '../../presentation/journey/main/bloc/tab_manger_cubit.dart' as _i18;
 import '../../presentation/journey/planning/cubit/planning_cubit.dart' as _i12;
 import '../../presentation/journey/statistics/cubit/statistic_cubit.dart'
-    as _i51;
+    as _i52;
 import '../../presentation/journey/transaction/bank_list_screen/bloc/bank_search_cubit.dart'
     as _i32;
 import '../../presentation/journey/transaction/category_screen/bloc/category_select_cubit.dart'
@@ -62,15 +62,17 @@ import '../../presentation/journey/transaction/category_screen/bloc/category_sel
 import '../../presentation/journey/transaction/create/bloc/add_photo/add_photo_bloc.dart'
     as _i3;
 import '../../presentation/journey/transaction/create/bloc/create/create_transaction_bloc.dart'
-    as _i48;
-import '../../presentation/journey/transaction/detail/bloc/detail_transaction_bloc.dart'
     as _i49;
+import '../../presentation/journey/transaction/detail/bloc/detail_transaction_bloc.dart'
+    as _i50;
 import '../../presentation/journey/transaction/transaction_list_screen/bloc/transaction_list_cubit.dart'
-    as _i52;
+    as _i53;
 import '../../presentation/journey/wallet/screens/create_wallet_screen/bloc/create_wallet_cubit.dart'
     as _i33;
+import '../../presentation/journey/wallet/screens/detail_wallet_screen/bloc/detail_wallet_cubit.dart'
+    as _i34;
 import '../../presentation/journey/wallet/screens/wallet_list_screen/bloc/wallet_list_cubit.dart'
-    as _i45;
+    as _i46;
 import '../../presentation/widgets/change_time/time/time_cubit.dart' as _i19;
 import '../../presentation/widgets/pick_image/cubit/pick_image_cubit.dart'
     as _i11;
@@ -137,79 +139,81 @@ extension GetItInjectableX on _i1.GetIt {
         () => _i32.BankSearchCubit(gh<_i25.VnBankUseCase>()));
     gh.factory<_i33.CreateWalletCubit>(
         () => _i33.CreateWalletCubit(walletUseCase: gh<_i28.WalletUseCase>()));
-    gh.factory<_i34.LoginCubit>(() => _i34.LoginCubit(
+    gh.factory<_i34.DetailWalletCubit>(
+        () => _i34.DetailWalletCubit(walletUseCase: gh<_i28.WalletUseCase>()));
+    gh.factory<_i35.LoginCubit>(() => _i35.LoginCubit(
           gh<_i31.AuthUseCase>(),
           gh<_i4.BiometricConfig>(),
           gh<_i9.HiveConfig>(),
         ));
-    gh.factory<_i35.ProfileCubit>(() => _i35.ProfileCubit(
+    gh.factory<_i36.ProfileCubit>(() => _i36.ProfileCubit(
           useCase: gh<_i22.UserUseCase>(),
           pickImageUseCase: gh<_i17.StorageUseCase>(),
           hiveConfig: gh<_i9.HiveConfig>(),
         ));
-    gh.factory<_i36.RegisterAccountCubit>(
-        () => _i36.RegisterAccountCubit(gh<_i31.AuthUseCase>()));
-    gh.factory<_i37.RegisterCubit>(() => _i37.RegisterCubit(
+    gh.factory<_i37.RegisterAccountCubit>(
+        () => _i37.RegisterAccountCubit(gh<_i31.AuthUseCase>()));
+    gh.factory<_i38.RegisterCubit>(() => _i38.RegisterCubit(
           useCase: gh<_i22.UserUseCase>(),
           pickImageUseCase: gh<_i17.StorageUseCase>(),
           authUseCase: gh<_i31.AuthUseCase>(),
         ));
-    gh.factory<_i38.RegisterLoginWithPasswordCubit>(
-        () => _i38.RegisterLoginWithPasswordCubit(
+    gh.factory<_i39.RegisterLoginWithPasswordCubit>(
+        () => _i39.RegisterLoginWithPasswordCubit(
               gh<_i31.AuthUseCase>(),
               gh<_i9.HiveConfig>(),
             ));
-    gh.factory<_i39.SettingsCubit>(() => _i39.SettingsCubit(
+    gh.factory<_i40.SettingsCubit>(() => _i40.SettingsCubit(
           gh<_i9.HiveConfig>(),
           gh<_i31.AuthUseCase>(),
         ));
-    gh.factory<_i40.StatisticUseCase>(
-        () => _i40.StatisticUseCase(gh<_i13.StatisticsRepository>()));
-    gh.factory<_i41.TransactionRepository>(() => _i42.TransactionRepositoryImpl(
+    gh.factory<_i41.StatisticUseCase>(
+        () => _i41.StatisticUseCase(gh<_i13.StatisticsRepository>()));
+    gh.factory<_i42.TransactionRepository>(() => _i43.TransactionRepositoryImpl(
           gh<_i8.FirebaseConfig>(),
           gh<_i26.WalletRepository>(),
           gh<_i15.StorageRepository>(),
         ));
-    gh.factory<_i43.TransactionUseCase>(() => _i43.TransactionUseCase(
-          gh<_i41.TransactionRepository>(),
+    gh.factory<_i44.TransactionUseCase>(() => _i44.TransactionUseCase(
+          gh<_i42.TransactionRepository>(),
           gh<_i13.StatisticsRepository>(),
           gh<_i15.StorageRepository>(),
         ));
-    gh.factory<_i44.VerifyCubit>(() => _i44.VerifyCubit(
+    gh.factory<_i45.VerifyCubit>(() => _i45.VerifyCubit(
           gh<_i31.AuthUseCase>(),
           gh<_i22.UserUseCase>(),
           gh<_i9.HiveConfig>(),
         ));
-    gh.factory<_i45.WalletListCubit>(
-        () => _i45.WalletListCubit(gh<_i28.WalletUseCase>()));
-    gh.factory<_i46.AccountCubit>(() => _i46.AccountCubit(
+    gh.factory<_i46.WalletListCubit>(
+        () => _i46.WalletListCubit(gh<_i28.WalletUseCase>()));
+    gh.factory<_i47.AccountCubit>(() => _i47.AccountCubit(
           gh<_i9.HiveConfig>(),
           gh<_i31.AuthUseCase>(),
         ));
-    gh.factory<_i47.AuthSettingsCubit>(() => _i47.AuthSettingsCubit(
+    gh.factory<_i48.AuthSettingsCubit>(() => _i48.AuthSettingsCubit(
           gh<_i9.HiveConfig>(),
           gh<_i31.AuthUseCase>(),
           gh<_i4.BiometricConfig>(),
         ));
-    gh.factory<_i48.CreateTransactionBloc>(() => _i48.CreateTransactionBloc(
-          gh<_i43.TransactionUseCase>(),
+    gh.factory<_i49.CreateTransactionBloc>(() => _i49.CreateTransactionBloc(
+          gh<_i44.TransactionUseCase>(),
           gh<_i17.StorageUseCase>(),
         ));
-    gh.factory<_i49.DetailTransactionBloc>(
-        () => _i49.DetailTransactionBloc(gh<_i43.TransactionUseCase>()));
-    gh.factory<_i50.HomeCubit>(() => _i50.HomeCubit(
-          gh<_i43.TransactionUseCase>(),
+    gh.factory<_i50.DetailTransactionBloc>(
+        () => _i50.DetailTransactionBloc(gh<_i44.TransactionUseCase>()));
+    gh.factory<_i51.HomeCubit>(() => _i51.HomeCubit(
+          gh<_i44.TransactionUseCase>(),
           gh<_i22.UserUseCase>(),
-          gh<_i40.StatisticUseCase>(),
+          gh<_i41.StatisticUseCase>(),
           gh<_i19.TimeCubit>(),
         ));
-    gh.factory<_i51.StatisticCubit>(() => _i51.StatisticCubit(
-          gh<_i40.StatisticUseCase>(),
+    gh.factory<_i52.StatisticCubit>(() => _i52.StatisticCubit(
+          gh<_i41.StatisticUseCase>(),
           gh<_i22.UserUseCase>(),
           gh<_i19.TimeCubit>(),
         ));
-    gh.factory<_i52.TransactionListCubit>(
-        () => _i52.TransactionListCubit(gh<_i43.TransactionUseCase>()));
+    gh.factory<_i53.TransactionListCubit>(
+        () => _i53.TransactionListCubit(gh<_i44.TransactionUseCase>()));
     return this;
   }
 }

@@ -4,29 +4,31 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_e_spend/common/assets/assets.gen.dart';
 import 'package:flutter_e_spend/common/constants/app_dimens.dart';
+import 'package:flutter_e_spend/common/extension/num_extension.dart';
+import 'package:flutter_e_spend/common/extension/string_extension.dart';
 
 import 'package:flutter_e_spend/common/utils/app_utils.dart';
-
-import 'package:flutter_e_spend/presentation/journey/wallet/screens/create_wallet_screen/bloc/create_wallet_cubit.dart';
 import 'package:flutter_e_spend/presentation/routers/app_router.dart';
 
 import 'package:flutter_e_spend/presentation/widgets/appbar_widget/appbar_widget.dart';
 import 'package:flutter_e_spend/presentation/widgets/button_widget/text_button_widget.dart';
 import 'package:flutter_e_spend/presentation/widgets/text_field_widget/text_field_widget.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_translate/flutter_translate.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../../data/models/bank_info_model.dart';
 import '../../../../themes/themes.dart';
+import 'bloc/detail_wallet_cubit.dart';
 
-class CreateWalletScreen extends StatefulWidget {
-  const CreateWalletScreen({Key? key}) : super(key: key);
+class DetailWalletScreen extends StatefulWidget {
+  const DetailWalletScreen({Key? key}) : super(key: key);
 
   @override
-  State<CreateWalletScreen> createState() => _CreateWalletScreenState();
+  State<DetailWalletScreen> createState() => _DetailWalletScreenState();
 }
 
-class _CreateWalletScreenState extends State<CreateWalletScreen> {
+class _DetailWalletScreenState extends State<DetailWalletScreen> {
   late final TextEditingController walletTypeController;
 
   late final TextEditingController balanceController;
@@ -36,9 +38,16 @@ class _CreateWalletScreenState extends State<CreateWalletScreen> {
 
   @override
   void initState() {
-    walletTypeController = TextEditingController();
-    balanceController = TextEditingController();
-    walletNameController = TextEditingController();
+    final state = context.read<DetailWalletCubit>().state;
+    walletTypeController = TextEditingController(
+      text: state.walletTypeModel.name,
+    );
+    balanceController = TextEditingController(
+      text: state.balance.getTextAmount,
+    );
+    walletNameController = TextEditingController(
+      text: state.walletName,
+    );
     _locale = const Locale('en');
     super.initState();
   }
@@ -54,17 +63,17 @@ class _CreateWalletScreenState extends State<CreateWalletScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<CreateWalletCubit, CreateWalletState>(
-        builder: (context, createWalletState) {
+    return BlocBuilder<DetailWalletCubit, DetailWalletState>(
+        builder: (context, state) {
       walletTypeController.text = translate(
-          context.watch<CreateWalletCubit>().state.walletTypeModel.id! == 1
+          context.watch<DetailWalletCubit>().state.walletTypeModel.id! == 1
               ? 'cash'
               : 'bank_account');
       return Scaffold(
         backgroundColor: AppColor.ebonyClay,
         appBar: AppBarWidget(
           centerWidget: Text(
-            translate('add_wallet'),
+            translate('detail_wallet'),
             textAlign: TextAlign.center,
             style: ThemeText.style18Bold.copyWith(color: AppColor.white),
           ),
@@ -108,6 +117,7 @@ class _CreateWalletScreenState extends State<CreateWalletScreen> {
                         height: AppDimens.space_26,
                         width: AppDimens.space_26,
                       ),
+                      enabled: context.watch<DetailWalletCubit>().state.isEdit,
                       readOnly: true,
                       controller: walletTypeController,
                       textStyle: ThemeText.style14Medium
@@ -123,33 +133,26 @@ class _CreateWalletScreenState extends State<CreateWalletScreen> {
                     ),
                     SizedBox(height: AppDimens.space_12),
                     TextFieldWidget(
+                      enabled: context.watch<DetailWalletCubit>().state.isEdit,
                       prefixIcon: Assets.images.icCoins.image(
                         height: AppDimens.space_26,
                         width: AppDimens.space_26,
                       ),
-                      controller: balanceController,
-                      onChanged: (string) {
-                        if (string.length > 1) {
-                          String str = _formatNumber(string
-                              .substring(0, string.length - 1)
-                              .replaceAll(',', ''));
-                          log('str$string');
-                          log('balanceController${balanceController.text}');
-                          balanceController.value = TextEditingValue(
-                            text: str + _currency,
-                            selection:
-                                TextSelection.collapsed(offset: str.length),
-                          );
-                          context
-                              .read<CreateWalletCubit>()
-                              .onChangedButtonState(
-                                  walletNameController.text.isNotEmpty);
-                        } else {
-                          context
-                              .read<CreateWalletCubit>()
-                              .onChangedButtonState(false);
-                        }
-                      },
+                      controller: balanceController
+                        ..addListener(() {
+                          if (balanceController.text.length > 1) {
+                            String str = _formatNumber(balanceController.text
+                                .substring(0, balanceController.text.length - 1)
+                                .replaceAll(',', ''));
+                            log(str);
+                            balanceController.value = TextEditingValue(
+                              text: str + _currency,
+                              selection:
+                                  TextSelection.collapsed(offset: str.length),
+                            );
+                          }
+                        }),
+                      onChanged: (string) {},
                       hintText: '0$_currency',
                       keyboardType: TextInputType.number,
                       textStyle: ThemeText.style14Medium
@@ -157,24 +160,19 @@ class _CreateWalletScreenState extends State<CreateWalletScreen> {
                     ),
                     SizedBox(height: AppDimens.space_12),
                     TextFieldWidget(
+                      enabled: context.watch<DetailWalletCubit>().state.isEdit,
                       prefixIcon: Assets.images.icWallet.image(
                           height: AppDimens.space_26,
                           width: AppDimens.space_26),
-                      controller: walletNameController
-                        ..addListener(() {
-                          context
-                              .read<CreateWalletCubit>()
-                              .onChangedButtonState(
-                                  walletNameController.text.isNotEmpty);
-                        }),
+                      controller: walletNameController..addListener(() {}),
                       readOnly: context
-                              .read<CreateWalletCubit>()
+                              .read<DetailWalletCubit>()
                               .state
                               .walletTypeModel ==
                           walletTypeList.last,
                       onTap: () async {
                         if (context
-                                .read<CreateWalletCubit>()
+                                .read<DetailWalletCubit>()
                                 .state
                                 .walletTypeModel ==
                             walletTypeList.last) {
@@ -196,24 +194,40 @@ class _CreateWalletScreenState extends State<CreateWalletScreen> {
                 ),
               ),
             ),
-            Positioned(
+            if (context.watch<DetailWalletCubit>().state.isEdit)
+              Positioned(
                 left: AppDimens.space_16,
                 right: AppDimens.space_16,
-                bottom: AppDimens.space_16,
-                child: TextButtonWidget(
-                  onPressed: () {
-                    context.read<CreateWalletCubit>().onCreateWallet(context,
-                        name: walletNameController.text,
-                        balance: balanceController.text,
-                        imagePath: imagePath);
-                    walletNameController.text = '';
-                    balanceController.text = '';
-                    FocusScope.of(context).unfocus();
-                  },
-                  buttonState:
-                      context.watch<CreateWalletCubit>().state.buttonState,
-                  title: translate('create'),
-                )),
+                bottom: AppDimens.height_24,
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: TextButtonWidget(
+                        onPressed: () {
+                          context.read<DetailWalletCubit>().update(
+                                context,
+                                name: walletNameController.text,
+                                balance: balanceController.text,
+                                imagePath: imagePath,
+                              );
+                        },
+                        title: 'update'.tr,
+                      ),
+                    ),
+                    SizedBox(
+                      width: 20.w,
+                    ),
+                    Expanded(
+                      child: TextButtonWidget(
+                          buttonColor: AppColor.red,
+                          onPressed: () {
+                            context.read<DetailWalletCubit>().delete();
+                          },
+                          title: 'delete'.tr),
+                    ),
+                  ],
+                ),
+              ),
           ],
         ),
       );
@@ -226,9 +240,9 @@ class _CreateWalletScreenState extends State<CreateWalletScreen> {
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       builder: (BuildContext bottomContext) {
         return BlocProvider.value(
-          value: BlocProvider.of<CreateWalletCubit>(context),
-          child: BlocBuilder<CreateWalletCubit, CreateWalletState>(
-              builder: (context, createWalletState) => Column(
+          value: BlocProvider.of<DetailWalletCubit>(context),
+          child: BlocBuilder<DetailWalletCubit, DetailWalletState>(
+              builder: (context, state) => Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
@@ -254,7 +268,7 @@ class _CreateWalletScreenState extends State<CreateWalletScreen> {
                             horizontal: AppDimens.space_16),
                         child: ListTile(
                           onTap: () => context
-                              .read<CreateWalletCubit>()
+                              .read<DetailWalletCubit>()
                               .onChangedWalletTypeSelecting(
                                   walletTypeList.first),
                           dense: true,
@@ -268,7 +282,7 @@ class _CreateWalletScreenState extends State<CreateWalletScreen> {
                           ),
                           trailing: Visibility(
                               visible: context
-                                      .watch<CreateWalletCubit>()
+                                      .watch<DetailWalletCubit>()
                                       .state
                                       .walletTypeSelecting ==
                                   walletTypeList.first,
@@ -281,7 +295,7 @@ class _CreateWalletScreenState extends State<CreateWalletScreen> {
                             horizontal: AppDimens.space_16),
                         child: ListTile(
                           onTap: () => context
-                              .read<CreateWalletCubit>()
+                              .read<DetailWalletCubit>()
                               .onChangedWalletTypeSelecting(
                                   walletTypeList.last),
                           dense: true,
@@ -294,7 +308,7 @@ class _CreateWalletScreenState extends State<CreateWalletScreen> {
                           ),
                           trailing: Visibility(
                               visible: context
-                                      .watch<CreateWalletCubit>()
+                                      .watch<DetailWalletCubit>()
                                       .state
                                       .walletTypeSelecting ==
                                   walletTypeList.last,
@@ -312,7 +326,7 @@ class _CreateWalletScreenState extends State<CreateWalletScreen> {
                             title: translate('confirm'),
                             onPressed: () {
                               context
-                                  .read<CreateWalletCubit>()
+                                  .read<DetailWalletCubit>()
                                   .onChangedWalletTypeSelected();
                               walletNameController.text = '';
                               Navigator.pop(context);

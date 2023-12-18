@@ -56,4 +56,14 @@ class WalletRepositoryImpl extends WalletRepository {
       return AppError(message: e.toString());
     }
   }
+
+  @override
+  Future<AppError?> delete({required String id}) async {
+    try {
+      await _doc.doc(id).delete();
+      return null;
+    } catch (e) {
+      return AppError(message: e.toString());
+    }
+  }
 }

@@ -70,6 +70,16 @@ abstract class _$AppRouter extends RootStackRouter {
         ),
       );
     },
+    DetailWalletRoute.name: (routeData) {
+      final args = routeData.argsAs<DetailWalletRouteArgs>();
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: DetailWalletScreenProvider(
+          key: args.key,
+          wallet: args.wallet,
+        ),
+      );
+    },
     HomeRoute.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
@@ -157,9 +167,13 @@ abstract class _$AppRouter extends RootStackRouter {
       );
     },
     WalletListRoute.name: (routeData) {
+      final args = routeData.argsAs<WalletListRouteArgs>();
       return AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const WalletListScreenProvider(),
+        child: WalletListScreenProvider(
+          key: args.key,
+          isDetail: args.isDetail,
+        ),
       );
     },
   };
@@ -332,6 +346,44 @@ class DetailTransactionRouteArgs {
   @override
   String toString() {
     return 'DetailTransactionRouteArgs{key: $key, data: $data}';
+  }
+}
+
+/// generated route for
+/// [DetailWalletScreenProvider]
+class DetailWalletRoute extends PageRouteInfo<DetailWalletRouteArgs> {
+  DetailWalletRoute({
+    Key? key,
+    required WalletModel wallet,
+    List<PageRouteInfo>? children,
+  }) : super(
+          DetailWalletRoute.name,
+          args: DetailWalletRouteArgs(
+            key: key,
+            wallet: wallet,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'DetailWalletRoute';
+
+  static const PageInfo<DetailWalletRouteArgs> page =
+      PageInfo<DetailWalletRouteArgs>(name);
+}
+
+class DetailWalletRouteArgs {
+  const DetailWalletRouteArgs({
+    this.key,
+    required this.wallet,
+  });
+
+  final Key? key;
+
+  final WalletModel wallet;
+
+  @override
+  String toString() {
+    return 'DetailWalletRouteArgs{key: $key, wallet: $wallet}';
   }
 }
 
@@ -588,14 +640,38 @@ class VerifyOtpRouteArgs {
 
 /// generated route for
 /// [WalletListScreenProvider]
-class WalletListRoute extends PageRouteInfo<void> {
-  const WalletListRoute({List<PageRouteInfo>? children})
-      : super(
+class WalletListRoute extends PageRouteInfo<WalletListRouteArgs> {
+  WalletListRoute({
+    Key? key,
+    required bool isDetail,
+    List<PageRouteInfo>? children,
+  }) : super(
           WalletListRoute.name,
+          args: WalletListRouteArgs(
+            key: key,
+            isDetail: isDetail,
+          ),
           initialChildren: children,
         );
 
   static const String name = 'WalletListRoute';
 
-  static const PageInfo<void> page = PageInfo<void>(name);
+  static const PageInfo<WalletListRouteArgs> page =
+      PageInfo<WalletListRouteArgs>(name);
+}
+
+class WalletListRouteArgs {
+  const WalletListRouteArgs({
+    this.key,
+    required this.isDetail,
+  });
+
+  final Key? key;
+
+  final bool isDetail;
+
+  @override
+  String toString() {
+    return 'WalletListRouteArgs{key: $key, isDetail: $isDetail}';
+  }
 }

@@ -78,7 +78,7 @@ class _CreateTransactionFormState extends State<CreateTransactionForm> {
         TextFieldWidget(
           controller: widget.walletCtrl,
           prefixIcon: Assets.images.icWallet.image(),
-          hintText: CreateTransactionConstants.chooseAWallet,
+          hintText: CreateTransactionConstants.chooseAWallet.tr,
           readOnly: true,
           onTap: _chooseWallet,
         ),
@@ -97,7 +97,7 @@ class _CreateTransactionFormState extends State<CreateTransactionForm> {
                       ? "${StringConstants.imagePath}${state.category!.category.title.toLowerCase()}.png"
                       : Assets.images.category.path,
                 ),
-                hintText: CreateTransactionConstants.category,
+                hintText: CreateTransactionConstants.category.tr,
                 readOnly: true,
                 onTap: () => _chooseCategory(state.category),
               );
@@ -118,7 +118,7 @@ class _CreateTransactionFormState extends State<CreateTransactionForm> {
         TextFieldWidget(
           controller: widget.noteCtl,
           prefixIcon: Assets.images.note.image(),
-          hintText: CreateTransactionConstants.note,
+          hintText: CreateTransactionConstants.note.tr,
         ),
       ],
     );
@@ -136,7 +136,7 @@ class _CreateTransactionFormState extends State<CreateTransactionForm> {
   }
 
   Future<void> _chooseWallet() async {
-    final wallet = await context.pushRoute(const WalletListRoute());
+    final wallet = await context.pushRoute(WalletListRoute(isDetail: false));
 
     if (wallet != null) {
       _createTransactionBloc.chooseWallet(wallet as WalletModel);

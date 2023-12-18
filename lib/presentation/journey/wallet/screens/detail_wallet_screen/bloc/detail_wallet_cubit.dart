@@ -5,60 +5,77 @@ import 'package:flutter_e_spend/common/extension/bloc_extension.dart';
 import 'package:flutter_e_spend/common/utils/app_utils.dart';
 import 'package:flutter_e_spend/common/utils/internet_checker.dart';
 import 'package:flutter_e_spend/presentation/bloc/base_bloc/base_bloc.dart';
-import 'package:flutter_e_spend/presentation/widgets/button_widget/text_button_widget.dart';
 import 'package:injectable/injectable.dart';
 import '../../../../../../data/models/wallet_model.dart';
 import '../../../../../../data/models/wallet_type_model.dart';
 import '../../../../../../domain/use_cases/wallet_use_case.dart';
 import '../../../../../widgets/snackbar_widget/snackbar_widget.dart';
 
-class CreateWalletState extends Equatable {
+class DetailWalletState extends Equatable {
   final WalletTypeModel walletTypeModel;
   final int balance;
   final String walletName;
   final WalletTypeModel walletTypeSelecting;
-  final ButtonState buttonState;
+  final bool isEdit;
   final String? walletImage;
 
-  const CreateWalletState(
+  const DetailWalletState(
       {required this.walletTypeModel,
       required this.balance,
       required this.walletName,
       required this.walletTypeSelecting,
       this.walletImage,
-      required this.buttonState});
+      required this.isEdit});
 
-  CreateWalletState update(
+  DetailWalletState update(
           {WalletTypeModel? walletTypeModel,
           int? balance,
           String? walletName,
           WalletTypeModel? walletTypeSelecting,
-          ButtonState? buttonState,
+          bool? isEdit,
           String? walletImage}) =>
-      CreateWalletState(
+      DetailWalletState(
           walletTypeModel: walletTypeModel ?? this.walletTypeModel,
           balance: balance ?? this.balance,
           walletName: walletName ?? this.walletName,
           walletTypeSelecting: walletTypeSelecting ?? this.walletTypeSelecting,
-          buttonState: buttonState ?? this.buttonState,
+          isEdit: isEdit ?? this.isEdit,
           walletImage: walletImage ?? this.walletImage);
 
   @override
   List<Object?> get props =>
-      [walletTypeModel, balance, walletName, walletTypeSelecting, buttonState];
+      [walletTypeModel, balance, walletName, walletTypeSelecting, isEdit];
 }
 
 @injectable
-class CreateWalletCubit extends BaseBloc<CreateWalletState> {
+class DetailWalletCubit extends BaseBloc<DetailWalletState> {
   final WalletUseCase walletUseCase;
+  WalletModel? _wallet;
 
-  CreateWalletCubit({required this.walletUseCase})
-      : super(CreateWalletState(
-            walletTypeModel: walletTypeList.first,
-            walletTypeSelecting: walletTypeList.first,
-            balance: 0,
-            walletName: '',
-            buttonState: ButtonState.inactive));
+  DetailWalletCubit({required this.walletUseCase})
+      : super(DetailWalletState(
+          walletTypeModel: walletTypeList.first,
+          walletTypeSelecting: walletTypeList.first,
+          balance: 0,
+          walletName: '',
+          isEdit: false,
+        ));
+
+  init(WalletModel wallet) {
+    _wallet = wallet;
+    emit(
+      state.update(
+        walletTypeModel: walletTypeList
+            .firstWhere((element) => element.id == wallet.walletType),
+        walletTypeSelecting: walletTypeList
+            .firstWhere((element) => element.id == wallet.walletType),
+        balance: wallet.balance,
+        walletName: wallet.walletName,
+        isEdit: wallet.balance == wallet.firstBalance,
+        walletImage: wallet.walletImage,
+      ),
+    );
+  }
 
   void onChangedWalletTypeSelecting(WalletTypeModel walletTypeModel) {
     emit(state.update(walletTypeSelecting: walletTypeModel));
@@ -76,12 +93,7 @@ class CreateWalletCubit extends BaseBloc<CreateWalletState> {
     emit(state.update(walletImage: image));
   }
 
-  void onChangedButtonState(bool active) {
-    emit(state.update(
-        buttonState: active ? ButtonState.active : ButtonState.inactive));
-  }
-
-  Future<void> onCreateWallet(BuildContext context,
+  Future<void> update(BuildContext context,
       {required String name,
       required String balance,
       required imagePath}) async {
@@ -101,21 +113,24 @@ class CreateWalletCubit extends BaseBloc<CreateWalletState> {
 
         WalletModel newWallet = WalletModel(
           walletName: name,
-          balance: (num.tryParse(balance) ?? 0).toInt(),
+          id: _wallet?.id,
+          balance: int.tryParse(balance) ?? 0,
           walletImage: imagePath,
           walletType: state.walletTypeModel.id,
           createAt: DateTime.now().millisecondsSinceEpoch,
           lastUpdate: DateTime.now().millisecondsSinceEpoch,
-          firstBalance: (num.tryParse(balance) ?? 0).toInt(),
+          firstBalance: int.tryParse(balance) ?? 0,
         );
         final result = await walletUseCase.put(walletModel: newWallet);
         if (result == null) {
-          emit(state.update(
+          emit(
+            state.update(
               walletTypeModel: walletTypeList.first,
               walletTypeSelecting: walletTypeList.first,
               balance: 0,
               walletName: '',
-              buttonState: ButtonState.inactive));
+            ),
+          );
           await context.popRoute(true);
           showSnackbar(
             translationKey: 'success',
@@ -128,6 +143,15 @@ class CreateWalletCubit extends BaseBloc<CreateWalletState> {
       } catch (e) {
         showSnackbar(translationKey: 'error_message', type: SnackBarType.error);
       }
+    } else {
+      showSnackbar(translationKey: 'error_message', type: SnackBarType.error);
+    }
+  }
+
+  delete() async {
+    final result = await walletUseCase.delete(id: _wallet?.id ?? '');
+    if (result == null) {
+      await pop(null);
     } else {
       showSnackbar(translationKey: 'error_message', type: SnackBarType.error);
     }

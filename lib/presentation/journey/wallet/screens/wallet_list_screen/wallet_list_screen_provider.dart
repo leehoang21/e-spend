@@ -8,7 +8,8 @@ import 'bloc/wallet_list_cubit.dart';
 
 @RoutePage()
 class WalletListScreenProvider extends StatefulWidget {
-  const WalletListScreenProvider({super.key});
+  const WalletListScreenProvider({super.key, required this.isDetail});
+  final bool isDetail;
 
   @override
   State<WalletListScreenProvider> createState() =>
@@ -20,7 +21,7 @@ class _WalletListScreenProviderState extends State<WalletListScreenProvider> {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => getIt.get<WalletListCubit>(),
-      child: WalletListScreen(),
+      child: WalletListScreen(isDetail: widget.isDetail),
     );
   }
 }

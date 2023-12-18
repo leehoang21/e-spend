@@ -256,5 +256,7 @@
   "CayegoryType.pay": "Pay",
   "From": "From",
   "To": "to",
-  "old_password": "Old password"
+  "old_password": "Old password",
+  "update": "Update",
+  "detail_wallet": "Detail Wallet"
 }
