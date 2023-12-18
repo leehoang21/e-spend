@@ -1,10 +1,8 @@
 
-![Screenshot_20231216-171916](https://github.com/leehoang21/e-spend/assets/88425870/e5a18509-da56-45ea-87d4-aeb72117d267)
-![Screenshot_20231216-171922](https://github.com/leehoang21/e-spend/assets/88425870/29da3415-70dd-4c33-bdb9-0e637c0c4a97)
+![Screenshot_20231216-171916](https://github.com/leehoang21/e-spend/assets/88425870/e5a18509-da56-45ea-87d4-aeb72117d267) ![Screenshot_20231216-171922](https://github.com/leehoang21/e-spend/assets/88425870/29da3415-70dd-4c33-bdb9-0e637c0c4a97)
 ![Screenshot_20231216-171945](https://github.com/leehoang21/e-spend/assets/88425870/9a731d8e-1d79-4c4c-a21e-d94689948005)
 ![Screenshot_20231216-172030](https://github.com/leehoang21/e-spend/assets/88425870/77cd0e31-2d21-4b9e-afe9-900998960049)
 ![Screenshot_20231216-172043](https://github.com/leehoang21/e-spend/assets/88425870/479d87d6-c68f-430e-92b9-947d2dd0cb20)
-![Screenshot_20231216-171916](https://github.com/leehoang21/e-spend/assets/88425870/ee94adc5-c87e-4cff-902c-13c3f58fb44a)
 ![Screenshot_20231216-172059](https://github.com/leehoang21/e-spend/assets/88425870/f1d65465-13c0-4590-90c9-b58e57cb76ab)
 ![Screenshot_20231217-202351](https://github.com/leehoang21/e-spend/assets/88425870/2f2e846b-d2d1-4e2d-9811-d2d2b87521ef)
 ![Screenshot_20231217-120200](https://github.com/leehoang21/e-spend/assets/88425870/0a8d1e05-7511-476b-8e93-577159563883)
