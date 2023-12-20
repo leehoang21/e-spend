@@ -4,6 +4,7 @@ import 'package:flutter_e_spend/common/constants/app_dimens.dart';
 import 'package:flutter_e_spend/common/extension/num_extension.dart';
 import 'package:flutter_e_spend/common/extension/string_extension.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_translate/flutter_translate.dart';
 
 import '../../../../common/enums/category.dart';
 import '../../../themes/themes.dart';
@@ -191,7 +192,9 @@ class _LineChartState extends State<_LineChart> {
                 data.copyWith(
                   x: 3,
                 ),
-                data,
+                data.copyWith(
+                  x: data.x > 3 ? data.x : 3,
+                ),
               ],
       );
 }
@@ -222,7 +225,7 @@ class LineChartWidgetState extends State<LineChartWidget> {
   @override
   Widget build(BuildContext context) {
     return AspectRatio(
-      aspectRatio: 1,
+      aspectRatio: 0.85,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
@@ -286,8 +289,51 @@ class LineChartWidgetState extends State<LineChartWidget> {
           SizedBox(
             height: AppDimens.height_12,
           ),
+          Wrap(
+            children: (synbolMoney[LocalizedApp.of(context)
+                            .delegate
+                            .currentLocale
+                            .languageCode]
+                        ?.entries ??
+                    [])
+                .map((e) => Row(
+                      children: [
+                        Text(
+                          '${e.key.length > 1 ? '${e.key} ' : '${e.key}  '}:',
+                          style: ThemeText.caption.copyWith(
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        SizedBox(
+                          width: AppDimens.width_8,
+                        ),
+                        Text(
+                          e.value,
+                          style: ThemeText.caption,
+                        ),
+                      ],
+                    ))
+                .toList(),
+          ),
         ],
       ),
     );
   }
+
+  Map<String, String> get symbolMoneyVN => {
+        'N': 'Nghìn',
+        'Tr': 'Triệu',
+        'T': 'Tỷ',
+      };
+
+  Map<String, String> get symbolMoneyEN => {
+        'N': 'Thousand',
+        'Tr': 'Million',
+        'T': 'Billion',
+      };
+
+  Map<String, Map<String, String>> get synbolMoney => {
+        'vi': symbolMoneyVN,
+        'en': symbolMoneyEN,
+      };
 }

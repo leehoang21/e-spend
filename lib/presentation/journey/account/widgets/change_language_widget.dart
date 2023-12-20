@@ -30,8 +30,9 @@ class _ChangeLanguegeWidgetState extends State<ChangeLanguegeWidget> {
           if (newValue != null) {
             changeLocale(context, newValue);
           }
-          context.router.replace(
+          context.router.pushAndPopUntil(
             const MainRoute(),
+            predicate: (route) => false,
           );
         },
         items: const [

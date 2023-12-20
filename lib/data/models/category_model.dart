@@ -9,7 +9,7 @@ part 'category_model.g.dart';
 class CategoryModel with _$CategoryModel {
   const factory CategoryModel({
     required CategoryType category,
-    List<CategoryModel>? subCategories,
+    // List<CategoryModel>? subCategories,
   }) = _CategoryModel;
 
   factory CategoryModel.fromJson(Map<String, dynamic> json) =>

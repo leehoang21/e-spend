@@ -30,14 +30,14 @@ class TransactionListScreen extends StatelessWidget {
         title: TransactionListScreenConstants.title.tr,
         action: Row(
           children: [
-            IconButton(
-              onPressed: () {},
-              icon: Icon(
-                Icons.search,
-                size: LayoutConstants.iconMediumSize,
-                color: AppColor.primaryColor,
-              ),
-            ),
+            // IconButton(
+            //   onPressed: () {},
+            //   icon: Icon(
+            //     Icons.search,
+            //     size: LayoutConstants.iconMediumSize,
+            //     color: AppColor.primaryColor,
+            //   ),
+            // ),
             IconButton(
               onPressed: () {
                 context.showBottomSheet(

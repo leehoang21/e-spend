@@ -258,5 +258,6 @@
   "To": "to",
   "old_password": "Old password",
   "update": "Update",
-  "detail_wallet": "Detail Wallet"
+  "detail_wallet": "Detail Wallet",
+  "invalid phone number": "Invalid phone number"
 }

@@ -37,9 +37,9 @@ class $AssetsIconsGen {
   AssetGenImage get avataDefault =>
       const AssetGenImage('assets/icons/avata_default.png');
 
-  /// File path: assets/icons/biometrics.png
-  AssetGenImage get biometrics =>
-      const AssetGenImage('assets/icons/biometrics.png');
+  /// File path: assets/icons/biometrics.svg
+  SvgGenImage get biometrics =>
+      const SvgGenImage('assets/icons/biometrics.svg');
 
   /// File path: assets/icons/bottom_bar_goal.svg
   SvgGenImage get bottomBarGoal =>

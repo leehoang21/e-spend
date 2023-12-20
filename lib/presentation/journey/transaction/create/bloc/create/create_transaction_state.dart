@@ -30,7 +30,7 @@ class CreateTransactionState extends Equatable {
         photo: const [],
         category: const CategoryModel(
           category: CategoryType.other,
-          subCategories: [],
+          //subCategories: [],
         ),
         lastUpdate: DateTime.now(),
         spendTime: Timestamp.now(),

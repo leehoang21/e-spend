@@ -34,7 +34,7 @@
   "transaction_category_screen_expenses": "Chi tiêu",
   "transaction_category_screen_drinking": "Đồ uống",
   "transaction_category_screen_revenue": "Thu nhập",
-  "transaction_category_screen_debts_and_loan": "Nợ và cho vay",
+  "transaction_category_screen_debts_and_loan": "Nợ và vay",
   "transaction_category_screen_eating": "Ăn uống",
   "transaction_category_screen_coffee": "Cà phê",
   "transaction_category_screen_restaurant": "Nhà hàng",
@@ -255,5 +255,6 @@
   "To": "đến",
   "old_password": "Mật khẩu cũ",
   "update": "Cập nhật",
-  "detail_wallet": "Chi tiết ví"
+  "detail_wallet": "Chi tiết ví",
+  "invalid phone number": "Số điện thoại không hợp lệ"
 }

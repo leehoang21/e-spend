@@ -72,49 +72,58 @@ class _CategoryScreenState extends State<CategoryScreen> {
                           return ListView.builder(
                             itemBuilder: (context, index) {
                               final category = categories[index];
-                              if (category.subCategories == null ||
-                                  category.subCategories!.isEmpty) {
-                                return CategoryTile(
-                                    categoryModel: category,
-                                    isSubCategory: false,
-                                    isSelected: category.category.title ==
-                                        state?.category.title,
-                                    onTap: (category) {
-                                      select(context, category);
-                                      Navigator.pop(context, category);
-                                    });
-                              }
-                              final subCategories = category.subCategories!;
-                              return Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  CategoryTile(
-                                    categoryModel: category,
-                                    isSubCategory: false,
-                                    isSelected: category.category.title ==
-                                        state?.category.title,
-                                    onTap: (category) {
-                                      select(context, category);
-                                      Navigator.pop(context, category);
-                                    },
-                                  ),
-                                  ...subCategories
-                                      .map(
-                                        (subCategory) => CategoryTile(
-                                          categoryModel: subCategory,
-                                          isSubCategory: true,
-                                          onTap: (category) {
-                                            select(context, category);
-                                            Navigator.pop(context, category);
-                                          },
-                                          isSelected:
-                                              subCategory.category.title ==
-                                                  state?.category.title,
-                                        ),
-                                      )
-                                      .toList(),
-                                ],
-                              );
+                              return CategoryTile(
+                                  categoryModel: category,
+                                  isSubCategory: false,
+                                  isSelected: category.category.title ==
+                                      state?.category.title,
+                                  onTap: (category) {
+                                    select(context, category);
+                                    Navigator.pop(context, category);
+                                  });
+                              // if (category.subCategories == null ||
+                              //     category.subCategories!.isEmpty) {
+                              //   return CategoryTile(
+                              //       categoryModel: category,
+                              //       isSubCategory: false,
+                              //       isSelected: category.category.title ==
+                              //           state?.category.title,
+                              //       onTap: (category) {
+                              //         select(context, category);
+                              //         Navigator.pop(context, category);
+                              //       });
+                              // }
+                              // final subCategories = category.subCategories!;
+                              // return Column(
+                              //   mainAxisSize: MainAxisSize.min,
+                              //   children: [
+                              //     CategoryTile(
+                              //       categoryModel: category,
+                              //       isSubCategory: false,
+                              //       isSelected: category.category.title ==
+                              //           state?.category.title,
+                              //       onTap: (category) {
+                              //         select(context, category);
+                              //         Navigator.pop(context, category);
+                              //       },
+                              //     ),
+                              //     ...subCategories
+                              //         .map(
+                              //           (subCategory) => CategoryTile(
+                              //             categoryModel: subCategory,
+                              //             isSubCategory: true,
+                              //             onTap: (category) {
+                              //               select(context, category);
+                              //               Navigator.pop(context, category);
+                              //             },
+                              //             isSelected:
+                              //                 subCategory.category.title ==
+                              //                     state?.category.title,
+                              //           ),
+                              //         )
+                              //         .toList(),
+                              //   ],
+                              // );
                             },
                             itemCount: categories.length,
                           );

@@ -21,7 +21,6 @@ CategoryModel _$CategoryModelFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$CategoryModel {
   CategoryType get category => throw _privateConstructorUsedError;
-  List<CategoryModel>? get subCategories => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -35,7 +34,7 @@ abstract class $CategoryModelCopyWith<$Res> {
           CategoryModel value, $Res Function(CategoryModel) then) =
       _$CategoryModelCopyWithImpl<$Res, CategoryModel>;
   @useResult
-  $Res call({CategoryType category, List<CategoryModel>? subCategories});
+  $Res call({CategoryType category});
 }
 
 /// @nodoc
@@ -52,17 +51,12 @@ class _$CategoryModelCopyWithImpl<$Res, $Val extends CategoryModel>
   @override
   $Res call({
     Object? category = null,
-    Object? subCategories = freezed,
   }) {
     return _then(_value.copyWith(
       category: null == category
           ? _value.category
           : category // ignore: cast_nullable_to_non_nullable
               as CategoryType,
-      subCategories: freezed == subCategories
-          ? _value.subCategories
-          : subCategories // ignore: cast_nullable_to_non_nullable
-              as List<CategoryModel>?,
     ) as $Val);
   }
 }
@@ -75,7 +69,7 @@ abstract class _$$CategoryModelImplCopyWith<$Res>
       __$$CategoryModelImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({CategoryType category, List<CategoryModel>? subCategories});
+  $Res call({CategoryType category});
 }
 
 /// @nodoc
@@ -90,17 +84,12 @@ class __$$CategoryModelImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? category = null,
-    Object? subCategories = freezed,
   }) {
     return _then(_$CategoryModelImpl(
       category: null == category
           ? _value.category
           : category // ignore: cast_nullable_to_non_nullable
               as CategoryType,
-      subCategories: freezed == subCategories
-          ? _value._subCategories
-          : subCategories // ignore: cast_nullable_to_non_nullable
-              as List<CategoryModel>?,
     ));
   }
 }
@@ -108,28 +97,17 @@ class __$$CategoryModelImplCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$CategoryModelImpl implements _CategoryModel {
-  const _$CategoryModelImpl(
-      {required this.category, final List<CategoryModel>? subCategories})
-      : _subCategories = subCategories;
+  const _$CategoryModelImpl({required this.category});
 
   factory _$CategoryModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$CategoryModelImplFromJson(json);
 
   @override
   final CategoryType category;
-  final List<CategoryModel>? _subCategories;
-  @override
-  List<CategoryModel>? get subCategories {
-    final value = _subCategories;
-    if (value == null) return null;
-    if (_subCategories is EqualUnmodifiableListView) return _subCategories;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(value);
-  }
 
   @override
   String toString() {
-    return 'CategoryModel(category: $category, subCategories: $subCategories)';
+    return 'CategoryModel(category: $category)';
   }
 
   @override
@@ -138,15 +116,12 @@ class _$CategoryModelImpl implements _CategoryModel {
         (other.runtimeType == runtimeType &&
             other is _$CategoryModelImpl &&
             (identical(other.category, category) ||
-                other.category == category) &&
-            const DeepCollectionEquality()
-                .equals(other._subCategories, _subCategories));
+                other.category == category));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, category,
-      const DeepCollectionEquality().hash(_subCategories));
+  int get hashCode => Object.hash(runtimeType, category);
 
   @JsonKey(ignore: true)
   @override
@@ -163,17 +138,14 @@ class _$CategoryModelImpl implements _CategoryModel {
 }
 
 abstract class _CategoryModel implements CategoryModel {
-  const factory _CategoryModel(
-      {required final CategoryType category,
-      final List<CategoryModel>? subCategories}) = _$CategoryModelImpl;
+  const factory _CategoryModel({required final CategoryType category}) =
+      _$CategoryModelImpl;
 
   factory _CategoryModel.fromJson(Map<String, dynamic> json) =
       _$CategoryModelImpl.fromJson;
 
   @override
   CategoryType get category;
-  @override
-  List<CategoryModel>? get subCategories;
   @override
   @JsonKey(ignore: true)
   _$$CategoryModelImplCopyWith<_$CategoryModelImpl> get copyWith =>

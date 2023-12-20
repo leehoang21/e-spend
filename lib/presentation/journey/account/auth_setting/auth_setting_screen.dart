@@ -33,7 +33,9 @@ class AuthSettingsScreen extends StatelessWidget {
                 iconDefault: Assets.icons.icGoogle.path,
                 title: AuthSettingsConstants.google.tr,
                 subtitle: user.googleLink != null
-                    ? user.googleLink?.userName ?? ' '
+                    ? (user.googleLink?.email ??
+                        user.googleLink?.userName ??
+                        '')
                     : AuthSettingsConstants.notLinked.tr,
                 onTap: () {
                   context
@@ -46,7 +48,9 @@ class AuthSettingsScreen extends StatelessWidget {
                 iconDefault: Assets.icons.icFacebook.path,
                 title: AuthSettingsConstants.facebook.tr,
                 subtitle: user.facebookLink != null
-                    ? user.facebookLink?.userName ?? ' '
+                    ? (user.facebookLink?.email ??
+                        user.facebookLink?.userName ??
+                        '')
                     : AuthSettingsConstants.notLinked.tr,
                 onTap: () {
                   context

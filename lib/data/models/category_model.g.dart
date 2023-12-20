@@ -9,15 +9,11 @@ part of 'category_model.dart';
 _$CategoryModelImpl _$$CategoryModelImplFromJson(Map<String, dynamic> json) =>
     _$CategoryModelImpl(
       category: $enumDecode(_$CategoryTypeEnumMap, json['category']),
-      subCategories: (json['subCategories'] as List<dynamic>?)
-          ?.map((e) => CategoryModel.fromJson(e as Map<String, dynamic>))
-          .toList(),
     );
 
 Map<String, dynamic> _$$CategoryModelImplToJson(_$CategoryModelImpl instance) =>
     <String, dynamic>{
       'category': _$CategoryTypeEnumMap[instance.category]!,
-      'subCategories': instance.subCategories,
     };
 
 const _$CategoryTypeEnumMap = {

@@ -9,7 +9,6 @@ import 'package:flutter_e_spend/common/constants/layout_constants.dart';
 import 'package:flutter_e_spend/common/enums/category.dart';
 import 'package:flutter_e_spend/common/extension/date_time_extension.dart';
 import 'package:flutter_e_spend/common/extension/string_extension.dart';
-import 'package:flutter_e_spend/common/utils/app_utils.dart';
 import 'package:flutter_e_spend/domain/use_cases/transaction_use_case.dart';
 import 'package:flutter_e_spend/presentation/journey/transaction/transaction_list_screen/bloc/transaction_list_cubit.dart';
 import 'package:flutter_e_spend/presentation/themes/themes.dart';
@@ -194,11 +193,12 @@ class _FilterTransactionWidgetState extends State<FilterTransactionWidget> {
   List<CategoryType> get categories {
     List<CategoryType> data = [];
     for (final item in MockData.categoriesData) {
-      if (!isNullEmptyList(item.subCategories)) {
-        data.addAll(item.subCategories!.map((e) => e.category));
-      } else {
-        data.add(item.category);
-      }
+      data.add(item.category);
+      // if (!isNullEmptyList(item.subCategories)) {
+      //   data.addAll(item.subCategories!.map((e) => e.category));
+      // } else {
+      //   data.add(item.category);
+      // }
     }
     return data;
   }

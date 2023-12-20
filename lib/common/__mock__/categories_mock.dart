@@ -5,105 +5,105 @@ class MockData {
   static List<CategoryModel> categoriesData = [
     const CategoryModel(
       category: CategoryType.eating,
-      subCategories: [
-        CategoryModel(
-          category: CategoryType.coffee,
-        ),
-        CategoryModel(
-          category: CategoryType.drinking,
-        ),
-        CategoryModel(
-          category: CategoryType.restaurant,
-        ),
-      ],
+      // subCategories: [
+      //   CategoryModel(
+      //     category: CategoryType.coffee,
+      //   ),
+      //   CategoryModel(
+      //     category: CategoryType.drinking,
+      //   ),
+      //   CategoryModel(
+      //     category: CategoryType.restaurant,
+      //   ),
+      // ],
     ),
     const CategoryModel(
       category: CategoryType.friendAndLover,
     ),
     const CategoryModel(
       category: CategoryType.move,
-      subCategories: [
-        CategoryModel(
-          category: CategoryType.maintenance,
-        ),
-        CategoryModel(
-          category: CategoryType.parking,
-        ),
-        CategoryModel(
-          category: CategoryType.taxi,
-        ),
-        CategoryModel(
-          category: CategoryType.oil,
-        ),
-      ],
+      // subCategories: [
+      //   CategoryModel(
+      //     category: CategoryType.maintenance,
+      //   ),
+      //   CategoryModel(
+      //     category: CategoryType.parking,
+      //   ),
+      //   CategoryModel(
+      //     category: CategoryType.taxi,
+      //   ),
+      //   CategoryModel(
+      //     category: CategoryType.oil,
+      //   ),
+      // ],
     ),
     const CategoryModel(
       category: CategoryType.family,
-      subCategories: [
-        CategoryModel(
-          category: CategoryType.children,
-        ),
-        CategoryModel(
-          category: CategoryType.homeRepair,
-        ),
-        CategoryModel(
-          category: CategoryType.homeService,
-        ),
-        CategoryModel(
-          category: CategoryType.pets,
-        ),
-      ],
+      // subCategories: [
+      //   CategoryModel(
+      //     category: CategoryType.children,
+      //   ),
+      //   CategoryModel(
+      //     category: CategoryType.homeRepair,
+      //   ),
+      //   CategoryModel(
+      //     category: CategoryType.homeService,
+      //   ),
+      //   CategoryModel(
+      //     category: CategoryType.pets,
+      //   ),
+      // ],
     ),
     const CategoryModel(
       category: CategoryType.traveling,
     ),
     const CategoryModel(
       category: CategoryType.shopping,
-      subCategories: [
-        CategoryModel(
-          category: CategoryType.clothes,
-        ),
-        CategoryModel(
-          category: CategoryType.accessory,
-        ),
-        CategoryModel(
-          category: CategoryType.electronicDevice,
-        ),
-      ],
+      // subCategories: [
+      //   CategoryModel(
+      //     category: CategoryType.clothes,
+      //   ),
+      //   CategoryModel(
+      //     category: CategoryType.accessory,
+      //   ),
+      //   CategoryModel(
+      //     category: CategoryType.electronicDevice,
+      //   ),
+      // ],
     ),
     const CategoryModel(
       category: CategoryType.donate,
-      subCategories: [
-        CategoryModel(
-          category: CategoryType.wedding,
-        ),
-        CategoryModel(
-          category: CategoryType.funeral,
-        ),
-        CategoryModel(
-          category: CategoryType.charity,
-        ),
-      ],
+      // subCategories: [
+      //   CategoryModel(
+      //     category: CategoryType.wedding,
+      //   ),
+      //   CategoryModel(
+      //     category: CategoryType.funeral,
+      //   ),
+      //   CategoryModel(
+      //     category: CategoryType.charity,
+      //   ),
+      // ],
     ),
     const CategoryModel(
       category: CategoryType.billsAndUtilities,
-      subCategories: [
-        CategoryModel(
-          category: CategoryType.electricBill,
-        ),
-        CategoryModel(
-          category: CategoryType.rentHouse,
-        ),
-        CategoryModel(
-          category: CategoryType.tvBill,
-        ),
-        CategoryModel(
-          category: CategoryType.gasBill,
-        ),
-        CategoryModel(
-          category: CategoryType.waterBill,
-        ),
-      ],
+      // subCategories: [
+      //   CategoryModel(
+      //     category: CategoryType.electricBill,
+      //   ),
+      //   CategoryModel(
+      //     category: CategoryType.rentHouse,
+      //   ),
+      //   CategoryModel(
+      //     category: CategoryType.tvBill,
+      //   ),
+      //   CategoryModel(
+      //     category: CategoryType.gasBill,
+      //   ),
+      //   CategoryModel(
+      //     category: CategoryType.waterBill,
+      //   ),
+      // ],
     ),
     const CategoryModel(
       category: CategoryType.investment,
@@ -113,28 +113,28 @@ class MockData {
     ),
     const CategoryModel(
       category: CategoryType.education,
-      subCategories: [
-        CategoryModel(
-          category: CategoryType.book,
-        ),
-        CategoryModel(
-          category: CategoryType.course,
-        ),
-      ],
+      // subCategories: [
+      //   CategoryModel(
+      //     category: CategoryType.book,
+      //   ),
+      //   CategoryModel(
+      //     category: CategoryType.course,
+      //   ),
+      // ],
     ),
     const CategoryModel(
       category: CategoryType.heath,
-      subCategories: [
-        CategoryModel(
-          category: CategoryType.personalHygiene,
-        ),
-        CategoryModel(
-          category: CategoryType.healthcare,
-        ),
-        CategoryModel(
-          category: CategoryType.medicine,
-        ),
-      ],
+      // subCategories: [
+      //   CategoryModel(
+      //     category: CategoryType.personalHygiene,
+      //   ),
+      //   CategoryModel(
+      //     category: CategoryType.healthcare,
+      //   ),
+      //   CategoryModel(
+      //     category: CategoryType.medicine,
+      //   ),
+      // ],
     ),
     const CategoryModel(
       category: CategoryType.business,

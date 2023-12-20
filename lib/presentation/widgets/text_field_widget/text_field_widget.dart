@@ -247,11 +247,17 @@ class _SecurityTextFieldWidgetState extends State<SecurityTextFieldWidget> {
               obscureText = !obscureText;
             });
           },
-          child: widget.suffixIcon ??
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            mainAxisSize: MainAxisSize.min,
+            children: [
               Icon(
                 obscureText ? Icons.visibility : Icons.visibility_off,
                 color: AppColor.tuna,
               ),
+              widget.suffixIcon ?? const SizedBox(),
+            ],
+          ),
         ),
         fillColor: AppColor.fieldColor,
         filled: true,

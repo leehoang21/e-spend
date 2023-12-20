@@ -31,7 +31,8 @@ class TransactionRepositoryImpl extends TransactionRepository {
   @override
   Future<Either<String, AppError>> create(TransactionModel transaction) async {
     try {
-      final result = await _doc.add(transaction.toJson());
+      final param = transaction.toJson();
+      final result = await _doc.add(param);
       await _changeWallet(transaction);
       return Left(result.id);
     } catch (e) {
