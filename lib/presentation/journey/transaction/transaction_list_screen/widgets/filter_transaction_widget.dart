@@ -17,7 +17,9 @@ import 'package:flutter_e_spend/presentation/widgets/text_field_widget/text_fiel
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_translate/flutter_translate.dart';
 
+import '../../../../../common/constants/string_constants.dart';
 import '../../../../widgets/drop_down_select/drop_down_select.dart';
+import '../../../../widgets/image_app_widget/image_app.dart';
 
 class FilterTransactionWidget extends StatefulWidget {
   const FilterTransactionWidget({
@@ -89,7 +91,8 @@ class _FilterTransactionWidgetState extends State<FilterTransactionWidget> {
               hintText: _categoryType == null
                   ? 'Category'.tr
                   : _categoryType.toString().tr,
-              items: categories,
+              items: const [],
+              childBuilder: categories,
               onChanged: (value) {
                 _categoryType = value;
               },
@@ -190,16 +193,48 @@ class _FilterTransactionWidgetState extends State<FilterTransactionWidget> {
     );
   }
 
-  List<CategoryType> get categories {
-    List<CategoryType> data = [];
+  List<DropdownMenuItem<CategoryType>> get categories {
+    List<DropdownMenuItem<CategoryType>> data = [];
     for (final item in MockData.categoriesData) {
-      data.add(item.category);
+      if (!item.category.title.contains('other'.toUpperCase())) {
+        final imagePath =
+            "${StringConstants.imagePath}${item.category.title.toLowerCase()}.png";
+        data.add(
+          DropdownMenuItem(
+            value: item.category,
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                SizedBox.square(
+                  dimension: AppDimens.space_36,
+                  child: AppImageWidget(
+                    path: imagePath,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+                SizedBox(
+                  width: AppDimens.width_8,
+                ),
+                Text(
+                  translate(
+                      "transaction_category_screen_${item.category.title.toLowerCase()}"),
+                  style: TextStyle(
+                      fontSize: AppDimens.space_14,
+                      fontWeight: FontWeight.bold,
+                      color: AppColor.ebonyClay),
+                ),
+              ],
+            ),
+          ),
+        );
+      }
       // if (!isNullEmptyList(item.subCategories)) {
       //   data.addAll(item.subCategories!.map((e) => e.category));
       // } else {
       //   data.add(item.category);
       // }
     }
+
     return data;
   }
 }

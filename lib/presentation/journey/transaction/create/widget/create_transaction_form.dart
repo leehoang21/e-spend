@@ -8,6 +8,7 @@ import 'package:flutter_e_spend/common/assets/assets.gen.dart';
 import 'package:flutter_e_spend/common/enums/category.dart';
 import 'package:flutter_e_spend/common/extension/date_time_extension.dart';
 import 'package:flutter_e_spend/common/extension/string_extension.dart';
+
 import 'package:flutter_e_spend/presentation/routers/app_router.dart';
 import 'package:flutter_translate/flutter_translate.dart';
 
@@ -28,6 +29,7 @@ class CreateTransactionForm extends StatefulWidget {
   final TextEditingController categoryCtl;
   final TextEditingController dateCtl;
   final TextEditingController noteCtl;
+  final String walletImage;
 
   const CreateTransactionForm({
     Key? key,
@@ -36,6 +38,7 @@ class CreateTransactionForm extends StatefulWidget {
     required this.categoryCtl,
     required this.dateCtl,
     required this.noteCtl,
+    required this.walletImage,
   }) : super(key: key);
 
   @override
@@ -44,10 +47,12 @@ class CreateTransactionForm extends StatefulWidget {
 
 class _CreateTransactionFormState extends State<CreateTransactionForm> {
   late CreateTransactionBloc _createTransactionBloc;
+  String _walletImage = '';
 
   @override
   void initState() {
     _createTransactionBloc = BlocProvider.of(context);
+    _walletImage = widget.walletImage;
     super.initState();
   }
 
@@ -77,7 +82,12 @@ class _CreateTransactionFormState extends State<CreateTransactionForm> {
         ),
         TextFieldWidget(
           controller: widget.walletCtrl,
-          prefixIcon: Assets.images.icWallet.image(),
+          prefixIcon: AppImageWidget(
+            path: _walletImage,
+            defultImage: Assets.images.icWallet.image(),
+            height: AppDimens.space_36,
+            width: AppDimens.space_36,
+          ),
           hintText: CreateTransactionConstants.chooseAWallet.tr,
           readOnly: true,
           onTap: _chooseWallet,
@@ -141,6 +151,8 @@ class _CreateTransactionFormState extends State<CreateTransactionForm> {
     if (wallet != null) {
       _createTransactionBloc.chooseWallet(wallet as WalletModel);
       widget.walletCtrl.text = wallet.walletName ?? '';
+      _walletImage = wallet.walletImage ?? '';
+      setState(() {});
     }
   }
 

@@ -12,6 +12,7 @@ import 'package:flutter_e_spend/presentation/routers/app_router.dart';
 
 import 'package:flutter_e_spend/presentation/widgets/appbar_widget/appbar_widget.dart';
 import 'package:flutter_e_spend/presentation/widgets/button_widget/text_button_widget.dart';
+import 'package:flutter_e_spend/presentation/widgets/image_app_widget/image_app.dart';
 import 'package:flutter_e_spend/presentation/widgets/text_field_widget/text_field_widget.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_translate/flutter_translate.dart';
@@ -34,6 +35,7 @@ class _DetailWalletScreenState extends State<DetailWalletScreen> {
   late final TextEditingController balanceController;
 
   late final TextEditingController walletNameController;
+
   late final Locale _locale;
 
   @override
@@ -49,6 +51,7 @@ class _DetailWalletScreenState extends State<DetailWalletScreen> {
       text: state.walletName,
     );
     _locale = const Locale('en');
+
     super.initState();
   }
 
@@ -161,9 +164,15 @@ class _DetailWalletScreenState extends State<DetailWalletScreen> {
                     SizedBox(height: AppDimens.space_12),
                     TextFieldWidget(
                       enabled: context.watch<DetailWalletCubit>().state.isEdit,
-                      prefixIcon: Assets.images.icWallet.image(
-                          height: AppDimens.space_26,
-                          width: AppDimens.space_26),
+                      prefixIcon: AppImageWidget(
+                        path: context
+                            .watch<DetailWalletCubit>()
+                            .state
+                            .walletImage,
+                        height: AppDimens.space_26,
+                        width: AppDimens.space_26,
+                        defultImage: Assets.images.icWallet.image(),
+                      ),
                       controller: walletNameController..addListener(() {}),
                       readOnly: context
                               .read<DetailWalletCubit>()
