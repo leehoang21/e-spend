@@ -126,7 +126,7 @@ class TransactionRepositoryImpl extends TransactionRepository {
 
   Future<TransactionModel> _get(
       QueryDocumentSnapshot<Map<String, dynamic>> element) async {
-    final transaction = TransactionModel.fromJson(element);
+    final transaction = TransactionModel.fromDocument(element);
     //get image
     final photos = await Future.wait(
       (transaction.photos ?? []).map((e) async => await _getUrlImage(e)),

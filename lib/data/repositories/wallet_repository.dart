@@ -35,7 +35,7 @@ class WalletRepositoryImpl extends WalletRepository {
         Map data = {};
         return Left(response.docs.map((e) {
           data.addAll({e.id: e.data()});
-          return WalletModel.fromJson(e.data(), e.id);
+          return WalletModel.fromDocument(e.data(), e.id);
         }).toList());
       }
     } catch (e) {

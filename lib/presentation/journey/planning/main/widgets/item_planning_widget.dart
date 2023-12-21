@@ -4,7 +4,7 @@ import 'package:flutter_e_spend/common/constants/layout_constants.dart';
 import 'package:flutter_e_spend/presentation/themes/themes.dart';
 import 'package:flutter_e_spend/presentation/widgets/image_app_widget/image_app.dart';
 
-import '../../../widgets/card_widget/card_custom.dart';
+import '../../../../widgets/card_widget/card_custom.dart';
 
 class ItemPlanningWidget extends StatelessWidget {
   const ItemPlanningWidget(

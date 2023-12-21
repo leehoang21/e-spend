@@ -33,6 +33,12 @@ abstract class _$AppRouter extends RootStackRouter {
         child: const BankListScreenProvider(),
       );
     },
+    BugetRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const BugetScreenProvider(),
+      );
+    },
     CategoryRoute.name: (routeData) {
       final args = routeData.argsAs<CategoryRouteArgs>();
       return AutoRoutePage<dynamic>(
@@ -40,6 +46,17 @@ abstract class _$AppRouter extends RootStackRouter {
         child: CategoryScreenProvider(
           key: args.key,
           category: args.category,
+        ),
+      );
+    },
+    CreateBugetRoute.name: (routeData) {
+      final args = routeData.argsAs<CreateBugetRouteArgs>(
+          orElse: () => const CreateBugetRouteArgs());
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: CreateBugetScreenProvider(
+          key: args.key,
+          data: args.data,
         ),
       );
     },
@@ -222,6 +239,20 @@ class BankListRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
+/// [BugetScreenProvider]
+class BugetRoute extends PageRouteInfo<void> {
+  const BugetRoute({List<PageRouteInfo>? children})
+      : super(
+          BugetRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'BugetRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
 /// [CategoryScreenProvider]
 class CategoryRoute extends PageRouteInfo<CategoryRouteArgs> {
   CategoryRoute({
@@ -256,6 +287,44 @@ class CategoryRouteArgs {
   @override
   String toString() {
     return 'CategoryRouteArgs{key: $key, category: $category}';
+  }
+}
+
+/// generated route for
+/// [CreateBugetScreenProvider]
+class CreateBugetRoute extends PageRouteInfo<CreateBugetRouteArgs> {
+  CreateBugetRoute({
+    Key? key,
+    BugetModel? data,
+    List<PageRouteInfo>? children,
+  }) : super(
+          CreateBugetRoute.name,
+          args: CreateBugetRouteArgs(
+            key: key,
+            data: data,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'CreateBugetRoute';
+
+  static const PageInfo<CreateBugetRouteArgs> page =
+      PageInfo<CreateBugetRouteArgs>(name);
+}
+
+class CreateBugetRouteArgs {
+  const CreateBugetRouteArgs({
+    this.key,
+    this.data,
+  });
+
+  final Key? key;
+
+  final BugetModel? data;
+
+  @override
+  String toString() {
+    return 'CreateBugetRouteArgs{key: $key, data: $data}';
   }
 }
 

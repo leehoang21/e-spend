@@ -1,9 +1,5 @@
 import 'package:flutter_e_spend/common/assets/assets.gen.dart';
-import 'package:flutter_e_spend/presentation/journey/planning/planning_screen.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../account/account_screen.dart';
-import '../home/home_screen.dart';
-import '../statistics/statistic_screen_provider.dart';
 
 class MainConstants {
   static final floatingActionButtonIconSize = 52.sp;
@@ -27,12 +23,5 @@ class MainConstants {
       "iconPath": Assets.images.bottomBarMyPage.path,
       "label": 'my_page',
     },
-  ];
-
-  static final screens = [
-    const HomeScreen(),
-    const StatisticScreenProvider(),
-    const PlanningScreen(),
-    const AccountScreen(),
   ];
 }

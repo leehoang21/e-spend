@@ -1,6 +1,11 @@
 part of 'register_login_with_password_cubit.dart';
 
-@freezed
-class RegisterLoginWithPasswordState with _$RegisterLoginWithPasswordState {
-  const factory RegisterLoginWithPasswordState.initial() = _Initial;
+class RegisterLoginWithPasswordState extends Equatable {
+  const RegisterLoginWithPasswordState();
+
+  @override
+  List<Object?> get props => [];
+  factory RegisterLoginWithPasswordState.initial() {
+    return const RegisterLoginWithPasswordState();
+  }
 }

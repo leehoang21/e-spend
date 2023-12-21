@@ -2,8 +2,9 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_e_spend/common/di/di.dart';
-import 'package:flutter_e_spend/presentation/journey/planning/cubit/planning_cubit.dart';
-import 'package:flutter_e_spend/presentation/journey/planning/planning_screen.dart';
+
+import 'cubit/planning_cubit.dart';
+import 'planning_screen.dart';
 
 @RoutePage()
 class PlanningScreenProvider extends StatefulWidget {
