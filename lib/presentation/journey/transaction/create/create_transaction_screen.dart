@@ -38,6 +38,7 @@ class _CreateTransactionScreenState extends State<CreateTransactionScreen> {
   final TextEditingController _noteCtl = TextEditingController();
 
   TransactionModel? _transaction;
+  String _walletImage = '';
 
   @override
   void initState() {
@@ -45,10 +46,11 @@ class _CreateTransactionScreenState extends State<CreateTransactionScreen> {
 
     if (_transaction != null) {
       _amountCtrl.text = _transaction!.amount.getTextAmount;
-      _walletCtrl.text = _transaction!.category.category.title;
+      _walletCtrl.text = _transaction!.wallet.walletName ?? '';
+      _categoryCtl.text = _transaction!.category.category.title;
       _dateCtl.text = _transaction!.spendTime.toDate().getTextDate;
       _noteCtl.text = _transaction?.note ?? '';
-
+      _walletImage = _transaction!.wallet.walletImage ?? '';
       context.read<CreateTransactionBloc>().initial(_transaction!);
       context.read<AddPhotoBloc>().init(_transaction!.photos ?? []);
     }
@@ -93,6 +95,7 @@ class _CreateTransactionScreenState extends State<CreateTransactionScreen> {
                         height: AppDimens.height_24,
                       ),
                       CreateTransactionForm(
+                        walletImage: _walletImage,
                         amountCtrl: _amountCtrl,
                         walletCtrl: _walletCtrl,
                         categoryCtl: _categoryCtl,

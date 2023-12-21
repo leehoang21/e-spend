@@ -71,7 +71,7 @@ class _DetailTransactionFormState extends State<DetailTransactionForm> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         ItemDetailTransactionWidget(
-            image: Assets.images.icCoin.path,
+            image: Assets.images.icCoins.path,
             title: context
                 .watch<DetailTransactionBloc>()
                 .state
@@ -82,7 +82,13 @@ class _DetailTransactionFormState extends State<DetailTransactionForm> {
           height: AppDimens.height_12,
         ),
         ItemDetailTransactionWidget(
-            image: Assets.icons.icWallet.path,
+            image: context
+                    .watch<DetailTransactionBloc>()
+                    .state
+                    .data
+                    .wallet
+                    .walletImage ??
+                Assets.images.icWallet.path,
             title: (context
                         .watch<DetailTransactionBloc>()
                         .state
