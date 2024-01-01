@@ -45,7 +45,7 @@ class PieChartWidgetState extends State<PieChartWidget> {
           style: ThemeText.caption,
         ),
         Text(
-          total.getTextCompactCurrencyAmount,
+          (total < 0 ? -total : total).getTextCompactCurrencyAmount,
           style: ThemeText.body1.copyWith(
             color: widget.categoryType.type == CategoryType.expense.type ||
                     widget.categoryType.type == CategoryType.loan.type

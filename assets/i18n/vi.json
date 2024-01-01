@@ -256,5 +256,12 @@
   "old_password": "Mật khẩu cũ",
   "update": "Cập nhật",
   "detail_wallet": "Chi tiết ví",
-  "invalid phone number": "Số điện thoại không hợp lệ"
+  "invalid phone number": "Số điện thoại không hợp lệ",
+  "confirm_password": "Xác nhận mật khẩu",
+  "password_not_match": "Mật khẩu không khớp",
+  "password": "Mật khẩu",
+  "phone": "Số điện thoại",
+  "your_email": "Email của bạn",
+  "haveAccount": "Bạn đã có tài khoản?",
+  "please_pass": "Vui lòng nhập mật khẩu"
 }

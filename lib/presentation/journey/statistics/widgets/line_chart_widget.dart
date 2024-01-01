@@ -35,7 +35,7 @@ class _LineChartState extends State<_LineChart> {
       }
     }
     widget.data.clear();
-    widget.data.add(MapEntry(CategoryType.expense, expense));
+    widget.data.add(MapEntry(CategoryType.expense, -expense));
     widget.data.add(MapEntry(CategoryType.revenue, revenue));
   }
 
@@ -214,12 +214,7 @@ class LineChartWidgetState extends State<LineChartWidget> {
   }
 
   num get _netIncome => widget.data.fold<num>(0, (previousValue, element) {
-        if (element.key.categoryType == CategoryType.expense.categoryType ||
-            element.key.categoryType == CategoryType.loan.categoryType) {
-          return previousValue - element.value;
-        } else {
-          return previousValue + element.value;
-        }
+        return previousValue + element.value;
       });
 
   @override
@@ -234,11 +229,9 @@ class LineChartWidgetState extends State<LineChartWidget> {
             style: ThemeText.caption,
           ),
           Text(
-            _netIncome > 0
-                ? '+${_netIncome.getTextCompactCurrencyAmount}'
-                : _netIncome.getTextCompactCurrencyAmount,
+            _netIncome.getTextCompactCurrencyAmount,
             style: ThemeText.body1.copyWith(
-              color: _netIncome > 0 ? AppColor.blue : AppColor.red,
+              color: _netIncome >= 0 ? AppColor.blue : AppColor.red,
             ),
           ),
           SizedBox(

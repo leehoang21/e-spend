@@ -37,7 +37,7 @@ class UserRepositoryImpl extends UserRepository {
         await _doc.set(data.toJson());
       }
       // local
-      await hiveConfig.appBox.put(DefaultEnvironment.user, data);
+      hiveConfig.setUser = data;
       return null;
     } catch (e) {
       return AppError(message: e.toString());
@@ -61,6 +61,8 @@ class UserRepositoryImpl extends UserRepository {
       final user = UserModel.fromDocument(
         result,
         config.auth.currentUser?.uid ?? '',
+        (await config.auth.currentUser?.getIdToken()) ?? "",
+        hiveConfig.localAuthId == config.auth.currentUser?.uid,
       );
       final avatar = await _getUrlAvatar();
       return user.copyWith(
@@ -82,16 +84,6 @@ class UserRepositoryImpl extends UserRepository {
       return '';
     } catch (e) {
       return '';
-    }
-  }
-
-  @override
-  Future<AppError?> updateUserLocal(UserModel data) async {
-    try {
-      await hiveConfig.appBox.put(DefaultEnvironment.user, data);
-      return null;
-    } catch (e) {
-      return AppError(message: e.toString());
     }
   }
 }

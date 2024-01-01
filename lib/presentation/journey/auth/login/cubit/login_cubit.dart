@@ -1,10 +1,9 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_e_spend/common/configs/biometric/biometric_config.dart';
-import 'package:flutter_e_spend/common/configs/default_environment.dart';
+import 'package:flutter_e_spend/common/configs/firebase_config.dart';
 import 'package:flutter_e_spend/common/configs/hive/hive_config.dart';
 import 'package:flutter_e_spend/common/enums/login_type.dart';
 import 'package:flutter_e_spend/common/extension/bloc_extension.dart';
-import 'package:flutter_e_spend/common/extension/string_extension.dart';
 import 'package:flutter_e_spend/domain/use_cases/auth_use_case.dart';
 import 'package:flutter_e_spend/presentation/routers/app_router.dart';
 import 'package:flutter_e_spend/presentation/bloc/base_bloc/base_bloc.dart';
@@ -17,86 +16,74 @@ class LoginCubit extends BaseBloc<LoginState> {
     this.authUseCase,
     this.biometricConfig,
     this.hivec,
+    this.firebaseConfig,
   ) : super(const LoginState());
   final AuthUseCase authUseCase;
   final BiometricConfig biometricConfig;
   final HiveConfig hivec;
-
-  loginWithPhone(String phone) {
-    push(VerifyOtpRoute(phoneNumber: phone, loginType: LoginType.phone));
-  }
+  final FirebaseConfig firebaseConfig;
 
   @override
-  onInit() {
+  onInit() async {
+    showLoading();
     super.onInit();
-    canAuthBiometric();
+    await canAuthBiometric();
+    await _checkLogin();
+    hideLoading();
   }
 
-  void canAuthBiometric() async {
+  Future _checkLogin() async {
+    final result = await firebaseConfig.singIn();
+    if (result) {
+      pushAndRemoveUntil(
+        const MainRoute(),
+        predicate: (route) => false,
+      );
+    }
+  }
+
+  Future canAuthBiometric() async {
     final result = await biometricConfig.canAuthenticateBiometric;
     emit(state.copyWith(canAuthBiometric: result));
   }
 
-  loginWithBiometric() async {
-    showLoading();
-    final result = await authUseCase.loginWithBiometric();
-    result.fold(
-      (user) async {
-        hivec.appBox.put(DefaultEnvironment.user, user);
-        pushAndRemoveUntil(
-          const MainRoute(),
-          predicate: (route) => false,
-        );
-      },
-      (error) {
-        showSnackbar(translationKey: error.message);
-      },
-    );
-    hideLoading();
-  }
-
-  checkLoginPassword() {
-    emit(state.copyWith(isObscurePassword: !state.isObscurePassword));
-  }
-
-  loginWithSocial(
+  loginWithOther(
     LoginType loginType,
   ) async {
     showLoading();
-    final result = await authUseCase.login(loginType: loginType);
-    result.fold(
-      (user) async {
-        pushAndRemoveUntil(
-          const MainRoute(),
-          predicate: (route) => false,
-        );
-      },
-      (error) {
-        showSnackbar(translationKey: error.message);
-      },
+    final result = await authUseCase.login(
+      loginType: loginType,
     );
+    if (result != null) {
+      showSnackbar(translationKey: result.message);
+    } else {
+      pushAndRemoveUntil(
+        const MainRoute(),
+        predicate: (route) => false,
+      );
+    }
     hideLoading();
   }
 
-  loginWithPassword(String phone, String password) async {
-    final email = phone.formatPhoneToEmail;
+  login(
+    String email,
+    String password,
+  ) async {
     showLoading();
     final result = await authUseCase.login(
       loginType: LoginType.password,
       userName: email,
       password: password,
     );
-    result.fold(
-      (user) {
-        pushAndRemoveUntil(
-          const MainRoute(),
-          predicate: (route) => false,
-        );
-      },
-      (error) {
-        showSnackbar(translationKey: error.message);
-      },
-    );
+    if (result == null) {
+      pushAndRemoveUntil(
+        const MainRoute(),
+        predicate: (route) => false,
+      );
+    } else {
+      showSnackbar(translationKey: result.message);
+    }
+
     hideLoading();
   }
 }

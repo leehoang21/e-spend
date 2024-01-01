@@ -17,7 +17,7 @@ class AppValidator {
 
   static RegExp expEmail = RegExp(_validateEmail);
 
-  static bool validateCreateTransactionButton(int? amount,
+  static bool validateCreateTransactionButton(num? amount,
           CategoryModel? category, Timestamp? spendTime, WalletModel? wallet) =>
       amount != null &&
       amount != 0 &&

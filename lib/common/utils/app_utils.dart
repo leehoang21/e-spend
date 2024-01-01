@@ -1,4 +1,6 @@
+import 'dart:convert';
 import 'dart:developer';
+import 'package:crypto/crypto.dart';
 import 'package:intl/intl.dart';
 
 import '../../data/models/wallet_type_model.dart';
@@ -53,4 +55,12 @@ String formatPhoneNumber(String phoneNumber) {
   }
 
   return newPhoneNumber.trim();
+}
+
+String hash(String value) {
+  // final rd = math.Random.secure().nextInt(1000000);
+  final key = utf8.encode(value.toString());
+  final value0 = utf8.encode(value);
+  final hmacSha256 = Hmac(sha512256, key); // HMAC-SHA256
+  return '${hmacSha256.convert(value0)}';
 }

@@ -14,17 +14,22 @@ T _$identity<T>(T value) => value;
 final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
+WalletModel _$WalletModelFromJson(Map<String, dynamic> json) {
+  return _WalletModel.fromJson(json);
+}
+
 /// @nodoc
 mixin _$WalletModel {
   String? get id => throw _privateConstructorUsedError;
   String? get walletImage => throw _privateConstructorUsedError;
   String? get walletName => throw _privateConstructorUsedError;
-  int? get balance => throw _privateConstructorUsedError;
-  int? get firstBalance => throw _privateConstructorUsedError;
+  num? get balance => throw _privateConstructorUsedError;
+  num? get firstBalance => throw _privateConstructorUsedError;
   int? get walletType => throw _privateConstructorUsedError;
   int? get createAt => throw _privateConstructorUsedError;
   int? get lastUpdate => throw _privateConstructorUsedError;
 
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
   $WalletModelCopyWith<WalletModel> get copyWith =>
       throw _privateConstructorUsedError;
@@ -40,8 +45,8 @@ abstract class $WalletModelCopyWith<$Res> {
       {String? id,
       String? walletImage,
       String? walletName,
-      int? balance,
-      int? firstBalance,
+      num? balance,
+      num? firstBalance,
       int? walletType,
       int? createAt,
       int? lastUpdate});
@@ -85,11 +90,11 @@ class _$WalletModelCopyWithImpl<$Res, $Val extends WalletModel>
       balance: freezed == balance
           ? _value.balance
           : balance // ignore: cast_nullable_to_non_nullable
-              as int?,
+              as num?,
       firstBalance: freezed == firstBalance
           ? _value.firstBalance
           : firstBalance // ignore: cast_nullable_to_non_nullable
-              as int?,
+              as num?,
       walletType: freezed == walletType
           ? _value.walletType
           : walletType // ignore: cast_nullable_to_non_nullable
@@ -118,8 +123,8 @@ abstract class _$$WalletModelImplCopyWith<$Res>
       {String? id,
       String? walletImage,
       String? walletName,
-      int? balance,
-      int? firstBalance,
+      num? balance,
+      num? firstBalance,
       int? walletType,
       int? createAt,
       int? lastUpdate});
@@ -161,11 +166,11 @@ class __$$WalletModelImplCopyWithImpl<$Res>
       balance: freezed == balance
           ? _value.balance
           : balance // ignore: cast_nullable_to_non_nullable
-              as int?,
+              as num?,
       firstBalance: freezed == firstBalance
           ? _value.firstBalance
           : firstBalance // ignore: cast_nullable_to_non_nullable
-              as int?,
+              as num?,
       walletType: freezed == walletType
           ? _value.walletType
           : walletType // ignore: cast_nullable_to_non_nullable
@@ -183,7 +188,7 @@ class __$$WalletModelImplCopyWithImpl<$Res>
 }
 
 /// @nodoc
-
+@JsonSerializable()
 class _$WalletModelImpl extends _WalletModel {
   _$WalletModelImpl(
       {this.id,
@@ -196,6 +201,9 @@ class _$WalletModelImpl extends _WalletModel {
       this.lastUpdate})
       : super._();
 
+  factory _$WalletModelImpl.fromJson(Map<String, dynamic> json) =>
+      _$$WalletModelImplFromJson(json);
+
   @override
   final String? id;
   @override
@@ -203,9 +211,9 @@ class _$WalletModelImpl extends _WalletModel {
   @override
   final String? walletName;
   @override
-  final int? balance;
+  final num? balance;
   @override
-  final int? firstBalance;
+  final num? firstBalance;
   @override
   final int? walletType;
   @override
@@ -219,7 +227,7 @@ class _$WalletModelImpl extends _WalletModel {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$WalletModelImpl &&
@@ -239,6 +247,7 @@ class _$WalletModelImpl extends _WalletModel {
                 other.lastUpdate == lastUpdate));
   }
 
+  @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(runtimeType, id, walletImage, walletName,
       balance, firstBalance, walletType, createAt, lastUpdate);
@@ -248,6 +257,13 @@ class _$WalletModelImpl extends _WalletModel {
   @pragma('vm:prefer-inline')
   _$$WalletModelImplCopyWith<_$WalletModelImpl> get copyWith =>
       __$$WalletModelImplCopyWithImpl<_$WalletModelImpl>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$WalletModelImplToJson(
+      this,
+    );
+  }
 }
 
 abstract class _WalletModel extends WalletModel {
@@ -255,12 +271,15 @@ abstract class _WalletModel extends WalletModel {
       {final String? id,
       final String? walletImage,
       final String? walletName,
-      final int? balance,
-      final int? firstBalance,
+      final num? balance,
+      final num? firstBalance,
       final int? walletType,
       final int? createAt,
       final int? lastUpdate}) = _$WalletModelImpl;
   _WalletModel._() : super._();
+
+  factory _WalletModel.fromJson(Map<String, dynamic> json) =
+      _$WalletModelImpl.fromJson;
 
   @override
   String? get id;
@@ -269,9 +288,9 @@ abstract class _WalletModel extends WalletModel {
   @override
   String? get walletName;
   @override
-  int? get balance;
+  num? get balance;
   @override
-  int? get firstBalance;
+  num? get firstBalance;
   @override
   int? get walletType;
   @override

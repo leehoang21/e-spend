@@ -17,7 +17,7 @@ final _privateConstructorUsedError = UnsupportedError(
 /// @nodoc
 mixin _$TransactionModel {
   String? get id => throw _privateConstructorUsedError;
-  int get amount => throw _privateConstructorUsedError;
+  num get amount => throw _privateConstructorUsedError;
   String? get note => throw _privateConstructorUsedError;
   CategoryModel get category => throw _privateConstructorUsedError;
   Timestamp get spendTime => throw _privateConstructorUsedError;
@@ -41,7 +41,7 @@ abstract class $TransactionModelCopyWith<$Res> {
   @useResult
   $Res call(
       {String? id,
-      int amount,
+      num amount,
       String? note,
       CategoryModel category,
       Timestamp spendTime,
@@ -87,7 +87,7 @@ class _$TransactionModelCopyWithImpl<$Res, $Val extends TransactionModel>
       amount: null == amount
           ? _value.amount
           : amount // ignore: cast_nullable_to_non_nullable
-              as int,
+              as num,
       note: freezed == note
           ? _value.note
           : note // ignore: cast_nullable_to_non_nullable
@@ -150,7 +150,7 @@ abstract class _$$TransactionModelImplCopyWith<$Res>
   @useResult
   $Res call(
       {String? id,
-      int amount,
+      num amount,
       String? note,
       CategoryModel category,
       Timestamp spendTime,
@@ -196,7 +196,7 @@ class __$$TransactionModelImplCopyWithImpl<$Res>
       amount: null == amount
           ? _value.amount
           : amount // ignore: cast_nullable_to_non_nullable
-              as int,
+              as num,
       note: freezed == note
           ? _value.note
           : note // ignore: cast_nullable_to_non_nullable
@@ -253,7 +253,7 @@ class _$TransactionModelImpl extends _TransactionModel {
   @override
   final String? id;
   @override
-  final int amount;
+  final num amount;
   @override
   final String? note;
   @override
@@ -285,7 +285,7 @@ class _$TransactionModelImpl extends _TransactionModel {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$TransactionModelImpl &&
@@ -331,7 +331,7 @@ class _$TransactionModelImpl extends _TransactionModel {
 abstract class _TransactionModel extends TransactionModel {
   const factory _TransactionModel(
           {final String? id,
-          required final int amount,
+          required final num amount,
           final String? note,
           required final CategoryModel category,
           required final Timestamp spendTime,
@@ -346,7 +346,7 @@ abstract class _TransactionModel extends TransactionModel {
   @override
   String? get id;
   @override
-  int get amount;
+  num get amount;
   @override
   String? get note;
   @override

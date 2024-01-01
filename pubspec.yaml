@@ -54,6 +54,9 @@ dependencies:
   local_auth_ios: ^1.1.5
   flutter_locker: ^2.1.2
   url_launcher: ^6.2.2
+  notification_listener_service: ^0.3.3
+  notifications:
+    path: ./notifications-3.0.0
 
 dev_dependencies:
   flutter_test:
@@ -102,3 +105,14 @@ flutter_gen:
     lottie: true
 
 
+targets:
+  $default:
+    builders:
+      json_serializable:
+        options:
+          # Options configure how source code is generated for every
+          # `@JsonSerializable`-annotated class in the package.
+          #
+          # The default value for each is listed.
+          explicit_to_json: true
+          field_rename: snake

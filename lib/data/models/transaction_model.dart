@@ -11,7 +11,7 @@ part 'transaction_model.freezed.dart';
 class TransactionModel with _$TransactionModel {
   const factory TransactionModel({
     String? id,
-    required int amount,
+    required num amount,
     String? note,
     required CategoryModel category,
     required Timestamp spendTime,
@@ -24,7 +24,33 @@ class TransactionModel with _$TransactionModel {
 
   const TransactionModel._();
 
-  static TransactionModel fromJson(
+  factory TransactionModel.fromJson(Map<String, dynamic> json) {
+    return TransactionModel(
+      id: json['id'] as String? ?? '',
+      amount: json['amount'] as int? ?? 0,
+      note: json['note'] as String?,
+      category: (json['category'] as Map<String, dynamic>?) != null
+          ? CategoryModel.fromJson(
+              json['category'] as Map<String, dynamic>,
+            )
+          : const CategoryModel(
+              category: CategoryType.other,
+            ),
+      spendTime: json['spendTime'] as Timestamp? ?? Timestamp.now(),
+      photos:
+          (json['photo'] as List<dynamic>?)?.map((e) => e as String).toList(),
+      wallet: (json['wallet'] as Map<String, dynamic>?) != null
+          ? WalletModel.fromJson(
+              json['wallet'],
+            )
+          : WalletModel(),
+      createAt: json['createAt'] as int? ?? 0,
+      lastUpdate: json['lastUpdate'] as int? ?? 0,
+      documentSnapshot: null,
+    );
+  }
+
+  static TransactionModel fromDocument(
       QueryDocumentSnapshot<Map<String, dynamic>> query) {
     final json = query.data();
     final id = query.id;
@@ -46,7 +72,6 @@ class TransactionModel with _$TransactionModel {
       wallet: (json['wallet'] as Map<String, dynamic>?) != null
           ? WalletModel.fromJson(
               json['wallet'],
-              '',
             )
           : WalletModel(),
       createAt: json['createAt'] as int? ?? 0,

@@ -1,17 +1,18 @@
+import 'package:auto_route/auto_route.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_e_spend/common/assets/assets.gen.dart';
-import 'package:flutter_e_spend/common/extension/string_extension.dart';
+import 'package:flutter_e_spend/common/constants/app_dimens.dart';
+import 'package:flutter_e_spend/common/enums/login_type.dart';
 import 'package:flutter_e_spend/presentation/journey/auth/login/cubit/login_cubit.dart';
-import 'package:flutter_e_spend/presentation/journey/auth/login/widget/login_with_item.dart';
-
-import '../../../../common/utils/formatter/mask_input_formatter.dart';
+import 'package:flutter_e_spend/presentation/routers/app_router.dart';
 import '../../../../common/utils/validator.dart';
 import '../../../themes/themes.dart';
 import '../../../widgets/button_widget/text_button_widget.dart';
 import '../../../widgets/text_field_widget/text_field_widget.dart';
+import '../widgets/auth_scaffold/auth_scaffold.dart';
 import 'login_constants.dart';
-import 'widget/devider_text_widget.dart';
 
 class LoginScreen extends StatelessWidget {
   LoginScreen({Key? key}) : super(key: key);
@@ -22,125 +23,113 @@ class LoginScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SingleChildScrollView(
-        padding: EdgeInsets.zero,
-        child: Form(
-          key: formKey,
-          child: Column(
-            children: [
-              Padding(
-                padding: EdgeInsets.only(top: LoginConstants.topHeightLogo),
-                child: Assets.images.logoSplash.image(
-                  height: LoginConstants.sizeLogo,
-                  width: LoginConstants.sizeLogo,
-                ),
+    return AuthScaffold(
+      body: Form(
+        key: formKey,
+        child: Column(
+          children: [
+            Padding(
+              padding: EdgeInsets.only(top: LoginConstants.topHeightLogo),
+              child: Assets.images.logoSplash.image(
+                height: LoginConstants.sizeLogo,
+                width: LoginConstants.sizeLogo,
               ),
-              Padding(
-                padding: EdgeInsets.symmetric(
-                        horizontal: LoginConstants.horizontalScreen)
-                    .copyWith(top: LoginConstants.topColumn),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      LoginConstants.login,
-                      style: ThemeText.style18Bold,
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(
-                          top: LoginConstants.distanceTextToField),
-                      child: SecurityTextFieldWidget(
-                        validate: (value) {
-                          if ((value?.length ?? 0) < 10) {
-                            return 'invalid phone number'.tr;
-                          }
-                          return null;
-                        },
-                        inputFormatter: [MaskedInputFormatter('#### ### ###')],
-                        controller: controller,
-                        keyboardType: TextInputType.phone,
-                        suffixIcon:
-                            !context.watch<LoginCubit>().state.canAuthBiometric
-                                ? const SizedBox()
-                                : InkWell(
-                                    onTap: () {
-                                      context
-                                          .read<LoginCubit>()
-                                          .loginWithBiometric();
-                                    },
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Assets.icons.biometrics.svg(
-                                        height: LoginConstants.sizeIcon,
-                                        width: LoginConstants.sizeIcon,
-                                      ),
-                                    ),
-                                  ),
-                        hintText: LoginConstants.yourPhone,
-                        textStyle: ThemeText.style14Medium
-                            .copyWith(fontWeight: FontWeight.normal),
-                      ),
-                    ),
-                    if (context.watch<LoginCubit>().state.isObscurePassword)
-                      Padding(
-                        padding: EdgeInsets.only(
-                            top: LoginConstants.distanceTextToField),
-                        child: SecurityTextFieldWidget(
-                          controller: controllerPassword,
-                          keyboardType: TextInputType.text,
-                          validate: AppValidator.validatePassword,
-                          hintText: LoginConstants.yourPassword,
-                          textStyle: ThemeText.style14Medium
-                              .copyWith(fontWeight: FontWeight.normal),
-                        ),
-                      ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(
-                        vertical: LoginConstants.distanceButtonToField,
-                      ),
-                      child: TextButtonWidget(
-                        onPressed: () async {
-                          final currentFocus = FocusScope.of(context);
-                          if (!currentFocus.hasPrimaryFocus &&
-                              currentFocus.focusedChild != null) {
-                            FocusManager.instance.primaryFocus!.unfocus();
-                          }
-
-                          final phoneNumberFormat =
-                              controller.text.replaceFirst(RegExp('0'), '+84');
-                          if (!formKey.currentState!.validate()) return;
-                          if (context
-                              .read<LoginCubit>()
-                              .state
-                              .isObscurePassword) {
-                            if (formKey.currentState!.validate()) {
-                              context.read<LoginCubit>().loginWithPassword(
-                                  phoneNumberFormat, controllerPassword.text);
-                            }
-                          } else {
-                            context
-                                .read<LoginCubit>()
-                                .loginWithPhone(phoneNumberFormat);
-                          }
-                        },
-                        title: LoginConstants.signIn,
-                      ),
-                    ),
-                    const DeviderTextWidget(),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: LoginConstants.listIconsLogin(context)
-                          .map(
-                            (e) => ItemLoginWithWidget(data: e),
-                          )
-                          .toList(),
-                    )
-                  ],
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  LoginConstants.login,
+                  style: ThemeText.style18Bold,
                 ),
-              )
-            ],
-          ),
+                Padding(
+                  padding:
+                      EdgeInsets.only(top: LoginConstants.distanceTextToField),
+                  child: TextFieldWidget(
+                    controller: controller,
+                    hintText: LoginConstants.hintEmail,
+                    validate: AppValidator.validateEmail,
+                    keyboardType: TextInputType.emailAddress,
+                    suffixIcon:
+                        !context.watch<LoginCubit>().state.canAuthBiometric
+                            ? const SizedBox()
+                            : InkWell(
+                                onTap: () {
+                                  context.read<LoginCubit>().loginWithOther(
+                                        LoginType.biometrics,
+                                      );
+                                },
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Assets.icons.biometrics.svg(
+                                    height: LoginConstants.sizeIcon,
+                                    width: LoginConstants.sizeIcon,
+                                  ),
+                                ),
+                              ),
+                    textStyle: ThemeText.style14Medium
+                        .copyWith(fontWeight: FontWeight.normal),
+                  ),
+                ),
+                Padding(
+                  padding:
+                      EdgeInsets.only(top: LoginConstants.distanceTextToField),
+                  child: SecurityTextFieldWidget(
+                    controller: controllerPassword,
+                    keyboardType: TextInputType.text,
+                    validate: AppValidator.validatePassword,
+                    hintText: LoginConstants.yourPassword,
+                    textStyle: ThemeText.style14Medium
+                        .copyWith(fontWeight: FontWeight.normal),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.symmetric(
+                    vertical: LoginConstants.distanceButtonToField,
+                  ),
+                  child: TextButtonWidget(
+                    onPressed: () async {
+                      final currentFocus = FocusScope.of(context);
+                      if (!currentFocus.hasPrimaryFocus &&
+                          currentFocus.focusedChild != null) {
+                        FocusManager.instance.primaryFocus!.unfocus();
+                      }
+                      if (formKey.currentState!.validate()) {
+                        context.read<LoginCubit>().login(
+                              controller.text,
+                              controllerPassword.text,
+                            );
+                      }
+                    },
+                    title: LoginConstants.signIn,
+                  ),
+                ),
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: Padding(
+                    padding: EdgeInsets.only(right: AppDimens.width_12),
+                    child: RichText(
+                        text: TextSpan(
+                      text: '${LoginConstants.notHaveAccount} ',
+                      style: ThemeText.caption,
+                      children: [
+                        TextSpan(
+                          text: LoginConstants.register,
+                          style: ThemeText.caption.copyWith(
+                            fontWeight: FontWeight.bold,
+                          ),
+                          recognizer: TapGestureRecognizer()
+                            ..onTap = () {
+                              context.router.replace(const RegisterRoute());
+                            },
+                        ),
+                      ],
+                    )),
+                  ),
+                ),
+              ],
+            )
+          ],
         ),
       ),
     );

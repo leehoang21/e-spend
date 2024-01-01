@@ -1,7 +1,5 @@
-//AppLocalizations.of(context)!.appTitle,
 import 'package:flutter/material.dart';
 import 'package:flutter_translate/flutter_translate.dart';
-import 'common/configs/hive/hive_config.dart';
 import 'common/configs/lang/translate_preferences.dart';
 import 'common/constants/language_constants.dart';
 import 'common/di/di.dart';
@@ -17,9 +15,7 @@ void main() async {
       LanguageConstants.vi,
       LanguageConstants.en,
     ],
-    preferences: TranslatePreferences(
-      getIt<HiveConfig>(),
-    ),
+    preferences: getIt<TranslatePreferences>(),
   );
   runApp(
     LocalizedApp(

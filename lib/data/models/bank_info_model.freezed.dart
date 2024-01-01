@@ -226,7 +226,7 @@ class _$BankInfoModelImpl implements _BankInfoModel {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$BankInfoModelImpl &&

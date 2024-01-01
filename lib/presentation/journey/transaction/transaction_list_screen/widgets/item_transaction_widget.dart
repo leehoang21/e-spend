@@ -41,30 +41,28 @@ class ItemTransactionWidget extends StatelessWidget {
             SizedBox(
               width: 10.w,
             ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  "transaction_category_screen_${(item.category.category.title).toLowerCase()}"
-                      .tr,
-                  style: ThemeText.caption,
-                ),
-                Text(
-                  item.note ?? '',
-                  style: ThemeText.overline,
-                ),
-              ],
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "transaction_category_screen_${(item.category.category.title).toLowerCase()}"
+                        .tr,
+                    style: ThemeText.caption,
+                  ),
+                  Text(
+                    item.note ?? '',
+                    style: ThemeText.overline,
+                    maxLines: 3,
+                  ),
+                ],
+              ),
             ),
             const Spacer(),
             Text(
-              '${(item.category.category.categoryType == CategoryType.expense || item.category.category.categoryType == CategoryType.loan) ? '-' : '+'}${item.amount.getTextCompactCurrencyAmount}',
+              item.amount.getTextCompactCurrencyAmount,
               style: ThemeText.caption.copyWith(
-                color: (item.category.category.categoryType ==
-                            CategoryType.expense ||
-                        item.category.category.categoryType ==
-                            CategoryType.loan)
-                    ? AppColor.red
-                    : AppColor.blue,
+                color: (item.amount < 0) ? AppColor.red : AppColor.blue,
               ),
             ),
           ],

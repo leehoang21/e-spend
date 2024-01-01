@@ -25,7 +25,7 @@ class TransactionWidget extends StatelessWidget {
               style: ThemeText.caption,
             ),
             Text(
-              data.value.fold(0, (previousValue, element) {
+              data.value.fold(0.0, (previousValue, element) {
                 if (element.category.category.categoryType ==
                         CategoryType.expense ||
                     element.category.category.categoryType ==

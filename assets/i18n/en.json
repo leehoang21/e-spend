@@ -259,5 +259,12 @@
   "old_password": "Old password",
   "update": "Update",
   "detail_wallet": "Detail Wallet",
-  "invalid phone number": "Invalid phone number"
+  "invalid phone number": "Invalid phone number",
+  "confirm_password": "Confirm password",
+  "password_not_match": "Password not match",
+  "password": "Password",
+  "phone": "Phone",
+  "your_email": "Your email",
+  "haveAccount": "Already have an account?",
+  "please_pass": "Please enter your password"
 }

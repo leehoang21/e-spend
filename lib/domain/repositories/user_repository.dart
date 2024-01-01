@@ -4,7 +4,6 @@ import '../../common/exception/app_error.dart';
 
 abstract class UserRepository {
   Future<AppError?> updateUser(UserModel data);
-  Future<AppError?> updateUserLocal(UserModel data);
   Future<UserModel?> getUser();
   Future<bool> exits();
 }

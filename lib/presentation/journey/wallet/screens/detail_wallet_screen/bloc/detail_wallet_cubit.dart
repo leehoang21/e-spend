@@ -13,7 +13,7 @@ import '../../../../../widgets/snackbar_widget/snackbar_widget.dart';
 
 class DetailWalletState extends Equatable {
   final WalletTypeModel walletTypeModel;
-  final int balance;
+  final num balance;
   final String walletName;
   final WalletTypeModel walletTypeSelecting;
   final bool isEdit;
@@ -29,7 +29,7 @@ class DetailWalletState extends Equatable {
 
   DetailWalletState update(
           {WalletTypeModel? walletTypeModel,
-          int? balance,
+          num? balance,
           String? walletName,
           WalletTypeModel? walletTypeSelecting,
           bool? isEdit,

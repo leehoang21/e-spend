@@ -162,11 +162,7 @@ class StatisticWidget extends StatelessWidget {
                   style: ThemeText.caption,
                 ),
                 Text(
-                  context
-                      .watch<HomeCubit>()
-                      .state
-                      .statistic
-                      .$2
+                  (-context.watch<HomeCubit>().state.statistic.$2)
                       .getTextCompactCurrencyAmount,
                   style: ThemeText.body1.copyWith(
                     color: AppColor.red,
@@ -200,13 +196,13 @@ class TotalWidget extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Icon(
-                (context.watch<HomeCubit>().state.statistic.$1 -
-                            context.watch<HomeCubit>().state.statistic.$2) >
+                (context.watch<HomeCubit>().state.statistic.$1 +
+                            context.watch<HomeCubit>().state.statistic.$2) >=
                         0
                     ? Icons.arrow_upward
                     : Icons.arrow_downward,
-                color: (context.watch<HomeCubit>().state.statistic.$1 -
-                            context.watch<HomeCubit>().state.statistic.$2) >
+                color: (context.watch<HomeCubit>().state.statistic.$1 +
+                            context.watch<HomeCubit>().state.statistic.$2) >=
                         0
                     ? AppColor.blue
                     : AppColor.red,
@@ -216,12 +212,12 @@ class TotalWidget extends StatelessWidget {
                 width: 3.w,
               ),
               Text(
-                (context.watch<HomeCubit>().state.statistic.$1 -
+                (context.watch<HomeCubit>().state.statistic.$1 +
                         context.watch<HomeCubit>().state.statistic.$2)
                     .getTextCompactCurrencyAmount,
                 style: ThemeText.body1.copyWith(
-                  color: (context.watch<HomeCubit>().state.statistic.$1 -
-                              context.watch<HomeCubit>().state.statistic.$2) >
+                  color: (context.watch<HomeCubit>().state.statistic.$1 +
+                              context.watch<HomeCubit>().state.statistic.$2) >=
                           0
                       ? AppColor.blue
                       : AppColor.red,
