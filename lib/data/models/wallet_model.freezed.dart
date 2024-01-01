@@ -23,8 +23,8 @@ mixin _$WalletModel {
   String? get id => throw _privateConstructorUsedError;
   String? get walletImage => throw _privateConstructorUsedError;
   String? get walletName => throw _privateConstructorUsedError;
-  int? get balance => throw _privateConstructorUsedError;
-  int? get firstBalance => throw _privateConstructorUsedError;
+  num? get balance => throw _privateConstructorUsedError;
+  num? get firstBalance => throw _privateConstructorUsedError;
   int? get walletType => throw _privateConstructorUsedError;
   int? get createAt => throw _privateConstructorUsedError;
   int? get lastUpdate => throw _privateConstructorUsedError;
@@ -45,8 +45,8 @@ abstract class $WalletModelCopyWith<$Res> {
       {String? id,
       String? walletImage,
       String? walletName,
-      int? balance,
-      int? firstBalance,
+      num? balance,
+      num? firstBalance,
       int? walletType,
       int? createAt,
       int? lastUpdate});
@@ -90,11 +90,11 @@ class _$WalletModelCopyWithImpl<$Res, $Val extends WalletModel>
       balance: freezed == balance
           ? _value.balance
           : balance // ignore: cast_nullable_to_non_nullable
-              as int?,
+              as num?,
       firstBalance: freezed == firstBalance
           ? _value.firstBalance
           : firstBalance // ignore: cast_nullable_to_non_nullable
-              as int?,
+              as num?,
       walletType: freezed == walletType
           ? _value.walletType
           : walletType // ignore: cast_nullable_to_non_nullable
@@ -123,8 +123,8 @@ abstract class _$$WalletModelImplCopyWith<$Res>
       {String? id,
       String? walletImage,
       String? walletName,
-      int? balance,
-      int? firstBalance,
+      num? balance,
+      num? firstBalance,
       int? walletType,
       int? createAt,
       int? lastUpdate});
@@ -166,11 +166,11 @@ class __$$WalletModelImplCopyWithImpl<$Res>
       balance: freezed == balance
           ? _value.balance
           : balance // ignore: cast_nullable_to_non_nullable
-              as int?,
+              as num?,
       firstBalance: freezed == firstBalance
           ? _value.firstBalance
           : firstBalance // ignore: cast_nullable_to_non_nullable
-              as int?,
+              as num?,
       walletType: freezed == walletType
           ? _value.walletType
           : walletType // ignore: cast_nullable_to_non_nullable
@@ -211,9 +211,9 @@ class _$WalletModelImpl extends _WalletModel {
   @override
   final String? walletName;
   @override
-  final int? balance;
+  final num? balance;
   @override
-  final int? firstBalance;
+  final num? firstBalance;
   @override
   final int? walletType;
   @override
@@ -227,7 +227,7 @@ class _$WalletModelImpl extends _WalletModel {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$WalletModelImpl &&
@@ -271,8 +271,8 @@ abstract class _WalletModel extends WalletModel {
       {final String? id,
       final String? walletImage,
       final String? walletName,
-      final int? balance,
-      final int? firstBalance,
+      final num? balance,
+      final num? firstBalance,
       final int? walletType,
       final int? createAt,
       final int? lastUpdate}) = _$WalletModelImpl;
@@ -288,9 +288,9 @@ abstract class _WalletModel extends WalletModel {
   @override
   String? get walletName;
   @override
-  int? get balance;
+  num? get balance;
   @override
-  int? get firstBalance;
+  num? get firstBalance;
   @override
   int? get walletType;
   @override

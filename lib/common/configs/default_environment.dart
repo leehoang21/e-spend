@@ -11,6 +11,7 @@ class DefaultEnvironment {
   static const String walletList = 'wallet';
   static const String avatar = 'avatar.jpeg';
   static const String user = 'user';
+  static const String recurring = 'recurring';
   //local
   static const String lang = 'lang';
   static const String theme = 'theme';

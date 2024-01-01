@@ -9,8 +9,8 @@ class WalletModel with _$WalletModel {
     String? id,
     String? walletImage,
     String? walletName,
-    int? balance,
-    int? firstBalance,
+    num? balance,
+    num? firstBalance,
     int? walletType,
     int? createAt,
     int? lastUpdate,
@@ -34,6 +34,7 @@ class WalletModel with _$WalletModel {
         firstBalance: data['firstBalance'] as int?,
       );
 
+  @override
   Map<String, dynamic> toJson() => {
         'walletImage': walletImage,
         'walletName': walletName,

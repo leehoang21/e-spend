@@ -3,7 +3,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_e_spend/common/configs/biometric/biometric_config.dart';
 import 'package:flutter_e_spend/common/configs/firebase_config.dart';
 import 'package:flutter_e_spend/common/configs/hive/hive_config.dart';
-import 'package:flutter_e_spend/common/constants/string_constants.dart';
 import 'package:flutter_e_spend/common/exception/app_error.dart';
 import 'package:flutter_e_spend/common/extension/string_extension.dart';
 import 'package:flutter_e_spend/common/utils/app_utils.dart';
@@ -12,7 +11,6 @@ import 'package:flutter_e_spend/data/models/user_model.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:injectable/injectable.dart';
-import '../../common/configs/default_environment.dart';
 import '../../domain/repositories/auth_repository.dart';
 
 @Injectable(as: AuthRepository)
@@ -25,45 +23,6 @@ class AuthRepositoryImpl extends AuthRepository {
     this.config,
     this.biometricConfig,
   );
-
-  @override
-  Future<void> verifyPhoneNumber({
-    required String phoneNumber,
-    required void Function(FirebaseAuthException) verificationFailed,
-    required void Function(PhoneAuthCredential) verificationCompleted,
-    required Function(String, int?) codeSent,
-    int? reSendToken,
-  }) async {
-    await config.auth.verifyPhoneNumber(
-      phoneNumber: phoneNumber,
-      verificationCompleted: verificationCompleted,
-      verificationFailed: verificationFailed,
-      codeSent: codeSent,
-      codeAutoRetrievalTimeout: (verificationId) {},
-      forceResendingToken: reSendToken,
-    );
-  }
-
-  @override
-  Future<Either<UserModel, AppError>> loginPhoneNumber(
-    String verificationId,
-    String smsCode,
-  ) async {
-    try {
-      final userCredential = await config.auth.signInWithCredential(
-        PhoneAuthProvider.credential(
-          verificationId: verificationId,
-          smsCode: smsCode,
-        ),
-      );
-
-      return Left(AuthMapper.convertUserCredentialToUserModel(userCredential));
-    } on FirebaseException catch (e) {
-      return Right(AppError(message: e.message ?? e.code));
-    } catch (e) {
-      return Right(AppError(message: e.toString()));
-    }
-  }
 
   @override
   Future<AppError?> signOut() async {
@@ -82,100 +41,63 @@ class AuthRepositoryImpl extends AuthRepository {
   }
 
   @override
-  Future<AppError?> register({
+  Future<AppError?> registerWithPassword({
     required String email,
     required String password,
   }) async {
     try {
-      await config.userDoc
-          .collection(config.auth.currentUser?.uid ?? '')
-          .doc(DefaultEnvironment.customer)
-          .set({
-        'email': email,
-        'password': password,
-      });
-      return null;
+      password = hash(password);
+
+      await config.auth.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
     } on FirebaseException catch (e) {
       return AppError(message: e.message ?? e.code);
     } catch (e) {
       return AppError(message: e.toString());
     }
+    return null;
   }
 
   @override
-  Future<Either<UserModel, AppError>> registerWithPassword({
-    required String email,
-    required String password,
-  }) async {
+  Future<AppError?> login(String token) async {
     try {
-      final UserCredential userCredential =
-          await config.auth.createUserWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
-
-      return Left(AuthMapper.convertUserCredentialToUserModel(userCredential));
+      await config.auth.signInWithCustomToken(token);
     } on FirebaseException catch (e) {
-      return Right(AppError(message: e.message ?? e.code));
+      return AppError(message: e.message ?? e.code);
     } catch (e) {
-      return Right(AppError(message: e.toString()));
+      return AppError(message: e.toString());
     }
+    return null;
   }
 
   @override
-  Future<(String, String)> getEmailAndPassword() async {
-    try {
-      final json = await config.userDoc
-          .collection(config.auth.currentUser!.uid)
-          .doc(DefaultEnvironment.customer)
-          .get();
-      final email = json.data()?['email'];
-      final password = json.data()?['password'];
-      return (email.toString(), password.toString());
-    } catch (e) {
-      return ('', '');
-    }
-  }
-
-  @override
-  Future<Either<UserModel, AppError>> login() async {
-    try {
-      final (email, password) = await getEmailAndPassword();
-      if (!isNullEmpty(email) && !isNullEmpty(password)) {
-        return loginWithPassword(
-          userName: email.toString(),
-          pass: password.toString(),
-        );
-      }
-      return Right(AppError(message: StringConstants.accountNotExits));
-    } on FirebaseException catch (e) {
-      return Right(AppError(message: e.message ?? e.code));
-    } catch (e) {
-      return Right(AppError(message: e.toString()));
-    }
-  }
-
-  @override
-  Future<Either<UserModel, AppError>> loginWithPassword({
+  Future<AppError?> loginWithPassword({
     required String userName,
     required String pass,
   }) async {
     try {
-      final UserCredential userCredential =
-          await config.auth.signInWithEmailAndPassword(
+      pass = hash(pass);
+      final credential = EmailAuthProvider.credential(
         email: userName,
         password: pass,
       );
-      return Left(AuthMapper.convertUserCredentialToUserModel(userCredential));
+      if (config.auth.currentUser != null) {
+        await config.auth.currentUser?.reauthenticateWithCredential(credential);
+      } else {
+        await config.auth.signInWithCredential(credential);
+      }
     } on FirebaseException catch (e) {
-      return Right(AppError(message: e.message ?? e.code));
+      return AppError(message: e.message ?? e.code);
     } catch (e) {
-      return Right(AppError(message: 'password_or_email_incorrect'));
+      return AppError(message: 'password_or_email_incorrect');
     }
+    return null;
   }
 
   @override
-  Future<Either<UserModel, AppError>> updatePassword({
+  Future<AppError?> updatePassword({
     required String newPass,
     required String oldPass,
   }) async {
@@ -186,12 +108,12 @@ class AuthRepositoryImpl extends AuthRepository {
       );
       final user = userCredential.user;
       await user?.updatePassword(newPass);
-      return Left(AuthMapper.convertUserCredentialToUserModel(userCredential));
     } on FirebaseException catch (e) {
-      return Right(AppError(message: e.message ?? e.code));
+      return AppError(message: e.message ?? e.code);
     } catch (e) {
-      return Right(AppError(message: e.toString()));
+      return AppError(message: e.toString());
     }
+    return null;
   }
 
   @override
@@ -210,7 +132,6 @@ class AuthRepositoryImpl extends AuthRepository {
         ),
       );
       final user = await config.facebookAuth.getUserData();
-
       return Left(UserModel.fromJson(user));
     } on FirebaseException catch (e) {
       return Right(AppError(message: e.message ?? e.code));
@@ -246,54 +167,42 @@ class AuthRepositoryImpl extends AuthRepository {
   }
 
   @override
-  Future<Either<UserModel, AppError>> registerWithBiometric({
-    required String verificationId,
-    required String smsCode,
+  Future<AppError?> registerWithBiometric({
+    required String password,
   }) async {
     try {
-      final result = await loginPhoneNumber(verificationId, smsCode);
-      return result.fold(
-        (left) async {
-          final (email, password) = await getEmailAndPassword();
-          if (isNullEmpty(email) && isNullEmpty(password)) {
-            return Right(AppError(message: 'auth_fail'));
-          } else {
-            final result = await biometricConfig.saveUser(email, password);
-            if (result != null) {
-              return Right(result);
-            }
-            return loginWithPassword(userName: email, pass: password);
-          }
-        },
-        (right) => Right(right),
-      );
+      final email = hiveConfig.user?.email ?? '';
+      //reauth
+      await loginWithPassword(userName: email, pass: password);
+      hiveConfig.setLocalAuthId = config.auth.currentUser?.uid ?? "";
+      return biometricConfig.saveUser(email, password);
     } on FirebaseException catch (e) {
-      return Right(AppError(message: e.message ?? e.code));
+      return AppError(message: e.message ?? e.code);
     } catch (e) {
-      return Right(AppError(message: e.toString()));
+      return AppError(message: e.toString());
     }
   }
 
   @override
-  Future<Either<UserModel, AppError>> loginWithBiometric() async {
+  Future<AppError?> loginWithBiometric() async {
     try {
       final canAuth = await biometricConfig.canAuthenticateBiometric;
       if (canAuth) {
         final (email, password) = await biometricConfig.user ?? ('', '');
         if (isNullEmpty(email) && isNullEmpty(password)) {
-          return Right(AppError(message: 'auth_fail'));
+          return AppError(message: 'auth_fail');
         } else {
           return loginWithPassword(
             userName: email.toString(),
-            pass: password.toString(),
+            pass: password,
           );
         }
       }
-      return Right(AppError(message: 'biometrics_auth_fail'.tr));
+      return AppError(message: 'biometrics_auth_fail'.tr);
     } on FirebaseException catch (e) {
-      return Right(AppError(message: e.message ?? e.code));
+      return AppError(message: e.message ?? e.code);
     } catch (e) {
-      return Right(AppError(message: e.toString()));
+      return AppError(message: e.toString());
     }
   }
 }

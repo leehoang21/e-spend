@@ -14,7 +14,7 @@ class BugetModel with _$BugetModel {
     List<TransactionModel>? transactions,
     WalletModel? wallet,
     CategoryModel? category,
-    double? amount,
+    num? amount,
     DateTime? time,
     String? id,
     @Default(false) bool isAutoCreate,

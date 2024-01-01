@@ -1,6 +1,5 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import '../../common/enums/login_type.dart';
 import '../../data/models/buget_model.dart';
 import '../../data/models/category_model.dart';
 import '../../data/models/transaction_model.dart';
@@ -8,12 +7,9 @@ import '../../data/models/wallet_model.dart';
 import '../journey/account/account_screen_provider.dart';
 import '../journey/account/auth_setting/auth_setting_screen_provider.dart';
 import '../journey/account/profile/profile_screen_provider.dart';
-import '../journey/account/register_login_with_password/register_login_with_password_screen_provider.dart';
 import '../journey/account/settings/setting_screen_provider.dart';
 import '../journey/auth/login/login_screen_provider.dart';
 import '../journey/auth/register/register_screen_provider.dart';
-import '../journey/auth/register_account/register_account_provider.dart';
-import '../journey/auth/verify_otp/verify_otp_screen_provider.dart';
 import '../journey/home/home_screen_provider.dart';
 import '../journey/main/main_screen_provider.dart';
 import '../journey/planning/main/planning_screen_provider.dart';
@@ -40,15 +36,11 @@ class AppRouter extends _$AppRouter {
           page: LoginRoute.page,
           initial: true,
         ),
-        AutoRoute(
-          page: RegisterAccountRoute.page,
-        ),
+
         AutoRoute(
           page: RegisterRoute.page,
         ),
-        AutoRoute(
-          page: VerifyOtpRoute.page,
-        ),
+
         //transaction
         AutoRoute(
           page: BankListRoute.page,
@@ -91,9 +83,6 @@ class AppRouter extends _$AppRouter {
         //account
         AutoRoute(
           page: AuthSettingsRoute.page,
-        ),
-        AutoRoute(
-          page: RegisterLoginWithPasswordRoute.page,
         ),
         AutoRoute(
           page: SettingsRoute.page,

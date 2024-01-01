@@ -60,6 +60,17 @@ abstract class _$AppRouter extends RootStackRouter {
         ),
       );
     },
+    CreateRecurringRoute.name: (routeData) {
+      final args = routeData.argsAs<CreateRecurringRouteArgs>(
+          orElse: () => const CreateRecurringRouteArgs());
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: CreateRecurringScreenProvider(
+          key: args.key,
+          transaction: args.transaction,
+        ),
+      );
+    },
     CreateTransactionRoute.name: (routeData) {
       final args = routeData.argsAs<CreateTransactionRouteArgs>(
           orElse: () => const CreateTransactionRouteArgs());
@@ -127,30 +138,20 @@ abstract class _$AppRouter extends RootStackRouter {
         child: const ProfileScreenProvider(),
       );
     },
-    RegisterAccountRoute.name: (routeData) {
+    RecurringListRoute.name: (routeData) {
+      final args = routeData.argsAs<RecurringListRouteArgs>();
       return AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const RegisterAccountScreenProvider(),
-      );
-    },
-    RegisterLoginWithPasswordRoute.name: (routeData) {
-      final args = routeData.argsAs<RegisterLoginWithPasswordRouteArgs>();
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: RegisterLoginWithPasswordScreenProvider(
+        child: RecurringListScreenProvider(
           key: args.key,
-          enabled: args.enabled,
+          isDetail: args.isDetail,
         ),
       );
     },
     RegisterRoute.name: (routeData) {
-      final args = routeData.argsAs<RegisterRouteArgs>();
       return AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: RegisterScreenProvider(
-          key: args.key,
-          phoneNumber: args.phoneNumber,
-        ),
+        child: const RegisterScreenProvider(),
       );
     },
     SettingsRoute.name: (routeData) {
@@ -169,18 +170,6 @@ abstract class _$AppRouter extends RootStackRouter {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
         child: const TransactionListScreenProvider(),
-      );
-    },
-    VerifyOtpRoute.name: (routeData) {
-      final args = routeData.argsAs<VerifyOtpRouteArgs>();
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: VerifyOtpScreenProvider(
-          key: args.key,
-          phoneNumber: args.phoneNumber,
-          loginType: args.loginType,
-          password: args.password,
-        ),
       );
     },
     WalletListRoute.name: (routeData) {
@@ -325,6 +314,44 @@ class CreateBugetRouteArgs {
   @override
   String toString() {
     return 'CreateBugetRouteArgs{key: $key, data: $data}';
+  }
+}
+
+/// generated route for
+/// [CreateRecurringScreenProvider]
+class CreateRecurringRoute extends PageRouteInfo<CreateRecurringRouteArgs> {
+  CreateRecurringRoute({
+    Key? key,
+    TransactionModel? transaction,
+    List<PageRouteInfo>? children,
+  }) : super(
+          CreateRecurringRoute.name,
+          args: CreateRecurringRouteArgs(
+            key: key,
+            transaction: transaction,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'CreateRecurringRoute';
+
+  static const PageInfo<CreateRecurringRouteArgs> page =
+      PageInfo<CreateRecurringRouteArgs>(name);
+}
+
+class CreateRecurringRouteArgs {
+  const CreateRecurringRouteArgs({
+    this.key,
+    this.transaction,
+  });
+
+  final Key? key;
+
+  final TransactionModel? transaction;
+
+  @override
+  String toString() {
+    return 'CreateRecurringRouteArgs{key: $key, transaction: $transaction}';
   }
 }
 
@@ -527,94 +554,55 @@ class ProfileRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [RegisterAccountScreenProvider]
-class RegisterAccountRoute extends PageRouteInfo<void> {
-  const RegisterAccountRoute({List<PageRouteInfo>? children})
-      : super(
-          RegisterAccountRoute.name,
-          initialChildren: children,
-        );
-
-  static const String name = 'RegisterAccountRoute';
-
-  static const PageInfo<void> page = PageInfo<void>(name);
-}
-
-/// generated route for
-/// [RegisterLoginWithPasswordScreenProvider]
-class RegisterLoginWithPasswordRoute
-    extends PageRouteInfo<RegisterLoginWithPasswordRouteArgs> {
-  RegisterLoginWithPasswordRoute({
+/// [RecurringListScreenProvider]
+class RecurringListRoute extends PageRouteInfo<RecurringListRouteArgs> {
+  RecurringListRoute({
     Key? key,
-    required bool enabled,
+    required bool isDetail,
     List<PageRouteInfo>? children,
   }) : super(
-          RegisterLoginWithPasswordRoute.name,
-          args: RegisterLoginWithPasswordRouteArgs(
+          RecurringListRoute.name,
+          args: RecurringListRouteArgs(
             key: key,
-            enabled: enabled,
+            isDetail: isDetail,
           ),
           initialChildren: children,
         );
 
-  static const String name = 'RegisterLoginWithPasswordRoute';
+  static const String name = 'RecurringListRoute';
 
-  static const PageInfo<RegisterLoginWithPasswordRouteArgs> page =
-      PageInfo<RegisterLoginWithPasswordRouteArgs>(name);
+  static const PageInfo<RecurringListRouteArgs> page =
+      PageInfo<RecurringListRouteArgs>(name);
 }
 
-class RegisterLoginWithPasswordRouteArgs {
-  const RegisterLoginWithPasswordRouteArgs({
+class RecurringListRouteArgs {
+  const RecurringListRouteArgs({
     this.key,
-    required this.enabled,
+    required this.isDetail,
   });
 
   final Key? key;
 
-  final bool enabled;
+  final bool isDetail;
 
   @override
   String toString() {
-    return 'RegisterLoginWithPasswordRouteArgs{key: $key, enabled: $enabled}';
+    return 'RecurringListRouteArgs{key: $key, isDetail: $isDetail}';
   }
 }
 
 /// generated route for
 /// [RegisterScreenProvider]
-class RegisterRoute extends PageRouteInfo<RegisterRouteArgs> {
-  RegisterRoute({
-    Key? key,
-    required String phoneNumber,
-    List<PageRouteInfo>? children,
-  }) : super(
+class RegisterRoute extends PageRouteInfo<void> {
+  const RegisterRoute({List<PageRouteInfo>? children})
+      : super(
           RegisterRoute.name,
-          args: RegisterRouteArgs(
-            key: key,
-            phoneNumber: phoneNumber,
-          ),
           initialChildren: children,
         );
 
   static const String name = 'RegisterRoute';
 
-  static const PageInfo<RegisterRouteArgs> page =
-      PageInfo<RegisterRouteArgs>(name);
-}
-
-class RegisterRouteArgs {
-  const RegisterRouteArgs({
-    this.key,
-    required this.phoneNumber,
-  });
-
-  final Key? key;
-
-  final String phoneNumber;
-
-  @override
-  String toString() {
-    return 'RegisterRouteArgs{key: $key, phoneNumber: $phoneNumber}';
-  }
+  static const PageInfo<void> page = PageInfo<void>(name);
 }
 
 /// generated route for
@@ -657,54 +645,6 @@ class TransactionListRoute extends PageRouteInfo<void> {
   static const String name = 'TransactionListRoute';
 
   static const PageInfo<void> page = PageInfo<void>(name);
-}
-
-/// generated route for
-/// [VerifyOtpScreenProvider]
-class VerifyOtpRoute extends PageRouteInfo<VerifyOtpRouteArgs> {
-  VerifyOtpRoute({
-    Key? key,
-    required String phoneNumber,
-    required LoginType loginType,
-    String? password,
-    List<PageRouteInfo>? children,
-  }) : super(
-          VerifyOtpRoute.name,
-          args: VerifyOtpRouteArgs(
-            key: key,
-            phoneNumber: phoneNumber,
-            loginType: loginType,
-            password: password,
-          ),
-          initialChildren: children,
-        );
-
-  static const String name = 'VerifyOtpRoute';
-
-  static const PageInfo<VerifyOtpRouteArgs> page =
-      PageInfo<VerifyOtpRouteArgs>(name);
-}
-
-class VerifyOtpRouteArgs {
-  const VerifyOtpRouteArgs({
-    this.key,
-    required this.phoneNumber,
-    required this.loginType,
-    this.password,
-  });
-
-  final Key? key;
-
-  final String phoneNumber;
-
-  final LoginType loginType;
-
-  final String? password;
-
-  @override
-  String toString() {
-    return 'VerifyOtpRouteArgs{key: $key, phoneNumber: $phoneNumber, loginType: $loginType, password: $password}';
-  }
 }
 
 /// generated route for

@@ -5,7 +5,11 @@ import '../../common/exception/app_error.dart';
 import '../../data/models/transaction_model.dart';
 
 abstract class TransactionRepository {
-  Future<Either<String, AppError>> create(TransactionModel transaction);
+  Future<Either<String, AppError>> create(
+    TransactionModel transaction,
+    String? id,
+    String? walletId,
+  );
   Future<AppError?> update(
     TransactionModel transaction, {
     required TransactionModel transactionOld,

@@ -44,9 +44,14 @@ class WalletRepositoryImpl extends WalletRepository {
   }
 
   @override
-  Future<AppError?> put({required WalletModel walletModel}) async {
+  Future<AppError?> put({
+    required WalletModel walletModel,
+    String? id,
+  }) async {
     try {
-      if (walletModel.id == null) {
+      if (id != null) {
+        await _doc.doc(id).set(walletModel.toJson());
+      } else if (walletModel.id == null) {
         await _doc.add(walletModel.toJson());
       } else {
         await _doc.doc(walletModel.id.toString()).update(walletModel.toJson());

@@ -1,11 +1,5 @@
-import 'dart:convert';
-import 'dart:math';
-
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:crypto/crypto.dart';
-import 'package:either_dart/either.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_e_spend/common/configs/hive/hive_config.dart';
+import 'package:flutter_e_spend/common/utils/app_utils.dart';
 import 'package:flutter_e_spend/data/models/user_model.dart';
 import 'package:flutter_e_spend/domain/repositories/auth_repository.dart';
 import 'package:flutter_e_spend/domain/repositories/user_repository.dart';
@@ -25,232 +19,76 @@ class AuthUseCase {
     required this.userRepository,
   });
 
-  Future<void> verifyPhoneNumber({
-    required String phoneNumber,
-    required void Function(FirebaseAuthException) verificationFailed,
-    required void Function(PhoneAuthCredential) verificationCompleted,
-    required Function(String, int?) codeSent,
-    int? reSendToken,
-  }) async {
-    await repository.verifyPhoneNumber(
-      phoneNumber: phoneNumber,
-      verificationFailed: verificationFailed,
-      verificationCompleted: verificationCompleted,
-      codeSent: codeSent,
-      reSendToken: reSendToken,
-    );
-  }
-
   Future<AppError?> signOut() async {
+    hiveConfig.setUser = null;
     return repository.signOut();
   }
 
-  Future<Either<UserModel, AppError>> login({
+  Future<AppError?> login({
     required LoginType loginType,
     String? userName,
     String? password,
   }) async {
-    late final Either<UserModel, AppError> result;
+    late final AppError? result;
     switch (loginType) {
-      case LoginType.phone:
-        result = await repository.loginPhoneNumber(userName!, password!);
-        break;
       case LoginType.password:
         result = await repository.loginWithPassword(
           userName: userName!,
           pass: password!,
         );
         break;
-
-      case LoginType.google:
-        result = await repository.loginWithGoogle();
-        break;
-      case LoginType.facebook:
-        result = await repository.loginWithFacebook();
-        break;
+      // case LoginType.google:
+      //   result = await repository.loginWithGoogle();
+      //   break;
+      // case LoginType.facebook:
+      //   result = await repository.loginWithFacebook();
+      //   break;
       case LoginType.biometrics:
         result = await repository.loginWithBiometric();
         break;
       default:
-        return Right(AppError(message: 'login_type_not_support'));
+        return AppError(message: 'login_type_not_support');
     }
 
-    if (result.isLeft) {
-      final data = await repository.login();
+    if (result == null) {
       final user = await userRepository.getUser();
       if (user != null) {
-        await userRepository.updateUserLocal(user);
+        hiveConfig.setUser = user;
       }
-      return data;
+      if (user == null) {
+        return AppError(message: 'error_message');
+      }
+      return null;
     }
-    return Right(result.right);
+    return result;
   }
 
-  Future<Either<UserModel, AppError>> register({
-    required LoginType loginType,
-    required String verificationId,
-    required String smsCode,
-    (String email, String password)? emailAndPassword,
+  Future<AppError?> registerWithBiometric({
+    required String password,
   }) async {
-    late final String email;
-    late final String pass;
-    UserModel? user;
-    switch (loginType) {
-      case LoginType.phone:
-        (email, pass) = await _genEmailAndPassword();
-        final error = await repository.register(
-          email: email,
-          password: pass,
-        );
-        if (error != null) {
-          return Right(error);
-        }
-        final result =
-            await repository.registerWithPassword(email: email, password: pass);
-        if (result.isRight) {
-          return Right(result.right);
-        }
+    return repository.registerWithBiometric(password: password);
+  }
+
+  Future<AppError?> register({
+    required UserModel user,
+    String? password,
+  }) async {
+    if (!isNullEmpty(user.email) || !isNullEmpty(password)) {
+      final AppError? result = await repository.registerWithPassword(
+        email: user.email ?? '',
+        password: password ?? "",
+      );
+      if (result != null) {
         return result;
-
-      case LoginType.password:
-        final result =
-            await repository.loginPhoneNumber(verificationId, smsCode);
-        (email, pass) = await repository.getEmailAndPassword();
-        if (result.isLeft) {
-          if (emailAndPassword == null) {
-            return Right(AppError(message: 'error_message'));
-          }
-          final results2 = await repository.registerWithPassword(
-            email: emailAndPassword.$1,
-            password: emailAndPassword.$2,
-          );
-          if (results2.isRight) {
-            return Right(results2.right);
-          }
-          //update user info
-          final u = hiveConfig.user;
-          if (u != null) {
-            user = u.copyWith(
-              isPassword: true,
-            );
-          }
-        }
-
-      case LoginType.google:
-        final result =
-            await repository.loginPhoneNumber(verificationId, smsCode);
-        //get email and password
-        (email, pass) = await repository.getEmailAndPassword();
-        if (result.isLeft) {
-          final results2 = await repository.loginWithGoogle();
-          if (results2.isLeft) {
-            //update user info
-            final u = hiveConfig.user;
-            if (u != null) {
-              user = u.copyWith(
-                googleLink: results2.left,
-              );
-            }
-
-            break;
-          } else {
-            return Right(results2.right);
-          }
-        }
-        return Right(result.right);
-      case LoginType.facebook:
-        final result =
-            await repository.loginPhoneNumber(verificationId, smsCode);
-        //get email and password
-        (email, pass) = await repository.getEmailAndPassword();
-        if (result.isLeft) {
-          final results2 = await repository.loginWithFacebook();
-          if (results2.isLeft) {
-            //update user info
-            //update user info
-            final u = hiveConfig.user;
-            if (u != null) {
-              user = u.copyWith(
-                facebookLink: results2.left,
-              );
-            }
-
-            break;
-          } else {
-            return Right(results2.right);
-          }
-        }
-        return Right(result.right);
-
-      default:
-        return Right(AppError(message: 'login_type_not_support'));
-    }
-    final error = await repository.register(
-      email: email,
-      password: pass,
-    );
-    if (error != null) {
-      return Right(error);
-    }
-    final data = await repository.login();
-    if (user != null) {
+      }
       await userRepository.updateUser(user);
+      return null;
+    } else {
+      return AppError(message: 'error_message');
     }
-    return data;
   }
 
-  Future<Either<UserModel, AppError>> registerWithBiometric({
-    required String verificationId,
-    required String smsCode,
-  }) async {
-    final result = await repository.registerWithBiometric(
-      verificationId: verificationId,
-      smsCode: smsCode,
-    );
-    return result.fold(
-      (left) async {
-        final user = await userRepository.getUser();
-        if (user == null) return Right(AppError(message: 'error_message'));
-        final error = await userRepository
-            .updateUser(user.copyWith(isBiometricsAuth: true));
-        if (error != null) {
-          return Right(error);
-        }
-        return Left(left);
-      },
-      (right) => Right(right),
-    );
-  }
-
-  Future<Either<UserModel, AppError>> loginWithBiometric() async {
-    final result = await repository.loginWithBiometric();
-    return result.fold(
-      (left) async {
-        final user = await userRepository.getUser();
-        if (user == null) return Right(AppError(message: 'error_message'));
-        return Left(user);
-      },
-      (right) => Right(right),
-    );
-  }
-
-  Future<(String, String)> _genEmailAndPassword() async {
-    final rd = Random.secure().nextInt(1000000);
-    final rdEmail = '${Random.secure().nextInt(1000000)}';
-    final rdPass = '${Random.secure().nextInt(1000000)}';
-    final key = utf8.encode(rd.toString());
-    final emailBytes = utf8.encode(rdEmail);
-    final passBytes = utf8.encode(rdPass);
-    final Timestamp timestamp = Timestamp.now();
-    final hmacSha256 = Hmac(sha512256, key); // HMAC-SHA256
-    final email =
-        'H${hmacSha256.convert(emailBytes)}${timestamp.microsecondsSinceEpoch}@gmail.com';
-    final pass =
-        '${hmacSha256.convert(passBytes)}${timestamp.microsecondsSinceEpoch}';
-    return (email, pass);
-  }
-
-  Future<Either<UserModel, AppError>> updatePassword({
+  Future<AppError?> updatePassword({
     required String newPass,
     required String oldPass,
   }) async {
@@ -258,11 +96,6 @@ class AuthUseCase {
       newPass: newPass,
       oldPass: oldPass,
     );
-    return result.fold(
-      (left) async {
-        return repository.login();
-      },
-      (right) => Right(right),
-    );
+    return result;
   }
 }

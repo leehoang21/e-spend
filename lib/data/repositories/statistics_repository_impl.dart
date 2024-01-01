@@ -35,7 +35,7 @@ class StatisticsRepositoryImpl implements StatisticsRepository {
           StatisticsListModel statistics = left;
           final dateItem = transaction.spendTime.toDate();
           //
-          int amount = transaction.amount - (transactionOld?.amount ?? 0);
+          num amount = transaction.amount - (transactionOld?.amount ?? 0);
           //update amount year
           final data =
               statistics.data.map((key, value) => MapEntry(key, value));

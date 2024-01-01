@@ -17,7 +17,6 @@ class AccountCubit extends BaseBloc<AccountState> {
 
   void signOut() async {
     await authenticationUseCase.signOut();
-    hiveConfig.clear();
   }
 
   void aboutUs() async {

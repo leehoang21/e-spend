@@ -22,9 +22,9 @@ class _CreateBugetScreenProviderState extends State<CreateBugetScreenProvider> {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => getIt.get<CreateBugetCubit>(),
-      child: CreateBugetScreen(
-        data: widget.data,
-      ),
+      child: const CreateBugetScreen(
+          //data: widget.data,
+          ),
     );
   }
 }

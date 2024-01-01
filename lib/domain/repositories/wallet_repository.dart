@@ -5,6 +5,6 @@ import '../../data/models/wallet_model.dart';
 
 abstract class WalletRepository {
   Future<Either<List<WalletModel>, AppError>> get();
-  Future<AppError?> put({required WalletModel walletModel});
+  Future<AppError?> put({required WalletModel walletModel, String? id});
   Future<AppError?> delete({required String id});
 }

@@ -10,7 +10,7 @@ class CreateTransactionState extends Equatable {
   final CreateTransactionStatus status;
   final Timestamp spendTime;
   final bool buttonIsValid;
-  final int? amount;
+  final num? amount;
   final CategoryModel? category;
   final List<String> photo;
   final WalletModel? wallet;
@@ -51,7 +51,7 @@ class CreateTransactionState extends Equatable {
     CreateTransactionStatus? status,
     Timestamp? spendTime,
     bool? buttonIsValid,
-    int? amount,
+    num? amount,
     CategoryModel? category,
     List<String>? photo,
     WalletModel? wallet,

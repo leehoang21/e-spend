@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:either_dart/either.dart';
 import 'package:flutter_e_spend/common/configs/firebase_config.dart';
-import 'package:flutter_e_spend/common/enums/category.dart';
 import 'package:flutter_e_spend/common/exception/app_error.dart';
 import 'package:flutter_e_spend/domain/repositories/storage_repository.dart';
 import 'package:injectable/injectable.dart';
@@ -29,12 +28,21 @@ class TransactionRepositoryImpl extends TransactionRepository {
       .doc(DefaultEnvironment.customer)
       .collection(DefaultEnvironment.transaction);
   @override
-  Future<Either<String, AppError>> create(TransactionModel transaction) async {
+  Future<Either<String, AppError>> create(
+    TransactionModel transaction,
+    String? id,
+    String? walletId,
+  ) async {
     try {
       final param = transaction.toJson();
-      final result = await _doc.add(param);
-      await _changeWallet(transaction);
-      return Left(result.id);
+      await _changeWallet(transaction, walletId);
+      if (id != null) {
+        await _doc.doc(id).set(param);
+        return Left(id);
+      } else {
+        final result = await _doc.add(param);
+        return Left(result.id);
+      }
     } catch (e) {
       return Right(AppError(message: e.toString()));
     }
@@ -53,6 +61,7 @@ class TransactionRepositoryImpl extends TransactionRepository {
         transaction.copyWith(
           amount: transaction.amount - transactionOld.amount,
         ),
+        null,
       );
       return null;
     } catch (e) {
@@ -64,32 +73,28 @@ class TransactionRepositoryImpl extends TransactionRepository {
   Future<AppError?> delete(TransactionModel transaction) async {
     try {
       await _doc.doc(transaction.id).delete();
-      await _changeWallet(transaction.copyWith(amount: -transaction.amount));
+      await _changeWallet(
+        transaction.copyWith(amount: -transaction.amount),
+        null,
+      );
       return null;
     } catch (e) {
       return AppError(message: e.toString());
     }
   }
 
-  Future<TransactionModel> _changeWallet(TransactionModel transaction) async {
+  Future<TransactionModel> _changeWallet(
+    TransactionModel transaction,
+    String? idWallet,
+  ) async {
     TransactionModel model = transaction;
-    if (model.category.category.categoryType == CategoryType.revenue ||
-        model.category.category.categoryType == CategoryType.debt) {
-      model = model.copyWith(
-        wallet: model.wallet.copyWith(
-          balance: (model.wallet.balance ?? 0) + transaction.amount,
-          lastUpdate: DateTime.now().millisecond,
-        ),
-      );
-    } else {
-      model = model.copyWith(
-        wallet: model.wallet.copyWith(
-          balance: (model.wallet.balance ?? 0) - transaction.amount,
-          lastUpdate: DateTime.now().millisecond,
-        ),
-      );
-    }
-    await walletRepository.put(walletModel: model.wallet);
+    model = model.copyWith(
+      wallet: model.wallet.copyWith(
+        balance: (model.wallet.balance ?? 0) + transaction.amount,
+        lastUpdate: DateTime.now().millisecond,
+      ),
+    );
+    await walletRepository.put(walletModel: model.wallet, id: idWallet);
     return model;
   }
 

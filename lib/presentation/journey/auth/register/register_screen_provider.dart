@@ -7,8 +7,9 @@ import 'package:flutter_e_spend/presentation/journey/auth/register/register_scre
 
 @RoutePage()
 class RegisterScreenProvider extends StatefulWidget {
-  const RegisterScreenProvider({super.key, required this.phoneNumber});
-  final String phoneNumber;
+  const RegisterScreenProvider({
+    super.key,
+  });
 
   @override
   State<RegisterScreenProvider> createState() => _RegisterScreenProviderState();
@@ -20,7 +21,6 @@ class _RegisterScreenProviderState extends State<RegisterScreenProvider> {
   @override
   void initState() {
     _registerCubit = getIt.get<RegisterCubit>();
-    _registerCubit.initState(widget.phoneNumber);
     super.initState();
   }
 

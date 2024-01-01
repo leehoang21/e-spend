@@ -9,7 +9,6 @@ import 'package:flutter_e_spend/presentation/bloc/base_bloc/base_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:injectable/injectable.dart';
 import '../../../../../common/utils/pick_image.dart';
-import '../../../../../domain/use_cases/user_use_case.dart';
 import '../../../../routers/app_router.dart';
 
 part 'register_state.dart';
@@ -17,11 +16,9 @@ part 'register_state.dart';
 @injectable
 class RegisterCubit extends BaseBloc<RegisterState> {
   final StorageUseCase pickImageUseCase;
-  final UserUseCase useCase;
   final AuthUseCase authUseCase;
 
   RegisterCubit({
-    required this.useCase,
     required this.pickImageUseCase,
     required this.authUseCase,
   }) : super(
@@ -56,10 +53,11 @@ class RegisterCubit extends BaseBloc<RegisterState> {
     }
   }
 
-  Future<void> register({
-    required String email,
-    required String userName,
-  }) async {
+  Future<void> register(
+      {required String email,
+      required String userName,
+      required String phoneNumber,
+      required String password}) async {
     showLoading();
     //login
 
@@ -70,15 +68,7 @@ class RegisterCubit extends BaseBloc<RegisterState> {
         imageToUpload: avatar,
         imagePathStorage: storagePath,
       );
-      emit(
-        state.copyWith(
-          userModel: state.userModel.copyWith(
-            avatar: storagePath,
-            email: email,
-            userName: userName,
-          ),
-        ),
-      );
+
       if (result != null) {
         showSnackbar(translationKey: result.toString());
 
@@ -86,18 +76,22 @@ class RegisterCubit extends BaseBloc<RegisterState> {
         return;
       }
     }
-    final result = await useCase.updateUser(
-      state.userModel.copyWith(
-        email: email,
-        userName: userName,
-        avatar: avatar != null ? storagePath : null,
+    emit(
+      state.copyWith(
+        userModel: state.userModel.copyWith(
+          avatar: storagePath,
+          email: email,
+          userName: userName,
+          phoneNumber: phoneNumber,
+        ),
       ),
     );
-    if (result != null) {
-      showSnackbar(translationKey: result.toString());
-
-      hideLoading();
-      return;
+    final error = await authUseCase.register(
+      user: state.userModel,
+      password: password,
+    );
+    if (error != null) {
+      showSnackbar(translationKey: error.message);
     }
     hideLoading();
     replace(

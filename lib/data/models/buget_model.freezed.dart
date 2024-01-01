@@ -20,7 +20,7 @@ mixin _$BugetModel {
       throw _privateConstructorUsedError;
   WalletModel? get wallet => throw _privateConstructorUsedError;
   CategoryModel? get category => throw _privateConstructorUsedError;
-  double? get amount => throw _privateConstructorUsedError;
+  num? get amount => throw _privateConstructorUsedError;
   DateTime? get time => throw _privateConstructorUsedError;
   String? get id => throw _privateConstructorUsedError;
   bool get isAutoCreate => throw _privateConstructorUsedError;
@@ -40,7 +40,7 @@ abstract class $BugetModelCopyWith<$Res> {
       {List<TransactionModel>? transactions,
       WalletModel? wallet,
       CategoryModel? category,
-      double? amount,
+      num? amount,
       DateTime? time,
       String? id,
       bool isAutoCreate});
@@ -86,7 +86,7 @@ class _$BugetModelCopyWithImpl<$Res, $Val extends BugetModel>
       amount: freezed == amount
           ? _value.amount
           : amount // ignore: cast_nullable_to_non_nullable
-              as double?,
+              as num?,
       time: freezed == time
           ? _value.time
           : time // ignore: cast_nullable_to_non_nullable
@@ -139,7 +139,7 @@ abstract class _$$BugetModelImplCopyWith<$Res>
       {List<TransactionModel>? transactions,
       WalletModel? wallet,
       CategoryModel? category,
-      double? amount,
+      num? amount,
       DateTime? time,
       String? id,
       bool isAutoCreate});
@@ -185,7 +185,7 @@ class __$$BugetModelImplCopyWithImpl<$Res>
       amount: freezed == amount
           ? _value.amount
           : amount // ignore: cast_nullable_to_non_nullable
-              as double?,
+              as num?,
       time: freezed == time
           ? _value.time
           : time // ignore: cast_nullable_to_non_nullable
@@ -230,7 +230,7 @@ class _$BugetModelImpl implements _BugetModel {
   @override
   final CategoryModel? category;
   @override
-  final double? amount;
+  final num? amount;
   @override
   final DateTime? time;
   @override
@@ -245,7 +245,7 @@ class _$BugetModelImpl implements _BugetModel {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$BugetModelImpl &&
@@ -284,7 +284,7 @@ abstract class _BugetModel implements BugetModel {
       {final List<TransactionModel>? transactions,
       final WalletModel? wallet,
       final CategoryModel? category,
-      final double? amount,
+      final num? amount,
       final DateTime? time,
       final String? id,
       final bool isAutoCreate}) = _$BugetModelImpl;
@@ -296,7 +296,7 @@ abstract class _BugetModel implements BugetModel {
   @override
   CategoryModel? get category;
   @override
-  double? get amount;
+  num? get amount;
   @override
   DateTime? get time;
   @override

@@ -25,6 +25,8 @@ class UserModel {
   final bool? isPassword;
   @HiveField(8)
   final bool? isBiometricsAuth;
+  @HiveField(9)
+  final String? token;
 
   UserModel({
     this.phoneNumber,
@@ -36,6 +38,7 @@ class UserModel {
     this.googleLink,
     this.isPassword,
     this.isBiometricsAuth,
+    this.token,
   });
 
   UserModel copyWith({
@@ -47,6 +50,8 @@ class UserModel {
     UserModel? googleLink,
     bool? isPassword,
     bool? isBiometricsAuth,
+    String? token,
+    String? phoneNumber,
   }) {
     return UserModel(
       phoneNumber: phoneNumber,
@@ -58,30 +63,36 @@ class UserModel {
       googleLink: googleLink ?? this.googleLink,
       isPassword: isPassword ?? this.isPassword,
       isBiometricsAuth: isBiometricsAuth ?? this.isBiometricsAuth,
+      token: token ?? this.token,
     );
   }
 
-  factory UserModel.fromDocument(DocumentSnapshot snapshot, String uid) {
+  factory UserModel.fromDocument(
+    DocumentSnapshot snapshot,
+    String uid,
+    String token,
+    bool isBiometricsAuth,
+  ) {
     if (snapshot.data() == null) {
       throw Exception;
     }
     final data = snapshot.data() as Map<String, dynamic>;
-    final facebookLink = data['facebookLink'] != null
-        ? UserModel.fromJson(data['facebookLink'] as Map<String, dynamic>)
-        : null;
-    final googleLink = data['googleLink'] != null
-        ? UserModel.fromJson(data['googleLink'] as Map<String, dynamic>)
-        : null;
+    // final facebookLink = data['facebookLink'] != null
+    //     ? UserModel.fromJson(data['facebookLink'] as Map<String, dynamic>)
+    //     : null;
+    // final googleLink = data['googleLink'] != null
+    //     ? UserModel.fromJson(data['googleLink'] as Map<String, dynamic>)
+    //     : null;
     return UserModel(
       userName: data['userName'] as String,
       email: data['email'] as String?,
       avatar: data['avatar'] as String?,
       phoneNumber: data['phoneNumber'] as String,
       uId: uid,
-      facebookLink: facebookLink,
-      googleLink: googleLink,
-      isBiometricsAuth: data['isBiometricsAuth'] as bool? ?? false,
-      isPassword: data['isPassword'] as bool? ?? false,
+      // facebookLink: facebookLink,
+      // googleLink: googleLink,
+      isBiometricsAuth: isBiometricsAuth,
+      token: token,
     );
   }
 
@@ -92,10 +103,6 @@ class UserModel {
       'avatar': avatar,
       'email': email,
       'uId': uId,
-      'facebookLink': facebookLink?.toJson(),
-      'googleLink': googleLink?.toJson(),
-      'isPassword': isPassword,
-      'isBiometricsAuth': isBiometricsAuth,
     };
   }
 
@@ -105,15 +112,6 @@ class UserModel {
       userName: json['userName'] as String?,
       avatar: json['avatar'] as String?,
       email: json['email'] as String?,
-      uId: json['uId'] as String?,
-      facebookLink: json['facebookLink'] != null
-          ? UserModel.fromJson(json['facebookLink'] as Map<String, dynamic>)
-          : null,
-      googleLink: json['googleLink'] != null
-          ? UserModel.fromJson(json['googleLink'] as Map<String, dynamic>)
-          : null,
-      isBiometricsAuth: json['isBiometricsAuth'] as bool? ?? false,
-      isPassword: json['isPassword'] as bool? ?? false,
     );
   }
 }

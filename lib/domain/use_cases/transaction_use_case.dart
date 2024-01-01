@@ -22,7 +22,11 @@ class TransactionUseCase {
   );
 
   Future<Either<String, AppError>> create(TransactionModel transaction) async {
-    return _remoteRepository.create(transaction);
+    return _remoteRepository.create(
+      transaction,
+      null,
+      null,
+    );
   }
 
   Future<AppError?> update(

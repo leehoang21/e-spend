@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_e_spend/common/constants/app_dimens.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../common/constants/layout_constants.dart';
@@ -256,6 +257,9 @@ class _SecurityTextFieldWidgetState extends State<SecurityTextFieldWidget> {
                 color: AppColor.tuna,
               ),
               widget.suffixIcon ?? const SizedBox(),
+              SizedBox(
+                width: AppDimens.width_8,
+              ),
             ],
           ),
         ),

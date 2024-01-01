@@ -11,7 +11,7 @@ part 'transaction_model.freezed.dart';
 class TransactionModel with _$TransactionModel {
   const factory TransactionModel({
     String? id,
-    required int amount,
+    required num amount,
     String? note,
     required CategoryModel category,
     required Timestamp spendTime,
