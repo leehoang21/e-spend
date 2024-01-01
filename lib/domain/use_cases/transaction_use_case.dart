@@ -83,7 +83,7 @@ class TransactionUseCase {
         for (final item in left) {
           if (item.id != null) {
             final photos = <String>[];
-            for (int i = 0; i < (item.photos ?? []).length; i++) {
+            for (int i = 0; i < (item.photos).length; i++) {
               final image = await _getImage(i, item.id!);
               if (image.isNotEmpty) {
                 photos.add(image);

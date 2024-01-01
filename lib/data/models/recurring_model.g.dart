@@ -13,6 +13,7 @@ _$RecurringModelImpl _$$RecurringModelImplFromJson(Map<String, dynamic> json) =>
       startDate: DateTime.parse(json['startDate'] as String),
       recurringType: json['recurringType'] as String,
       recurringCount: json['recurringCount'] as int,
+      id: json['id'] as String?,
     );
 
 Map<String, dynamic> _$$RecurringModelImplToJson(
@@ -22,4 +23,5 @@ Map<String, dynamic> _$$RecurringModelImplToJson(
       'startDate': instance.startDate.toIso8601String(),
       'recurringType': instance.recurringType,
       'recurringCount': instance.recurringCount,
+      'id': instance.id,
     };

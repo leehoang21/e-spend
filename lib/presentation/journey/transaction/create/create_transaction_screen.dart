@@ -52,7 +52,7 @@ class _CreateTransactionScreenState extends State<CreateTransactionScreen> {
       _noteCtl.text = _transaction?.note ?? '';
       _walletImage = _transaction!.wallet.walletImage ?? '';
       context.read<CreateTransactionBloc>().initial(_transaction!);
-      context.read<AddPhotoBloc>().init(_transaction!.photos ?? []);
+      context.read<AddPhotoBloc>().init(_transaction!.photos);
     }
     super.initState();
   }

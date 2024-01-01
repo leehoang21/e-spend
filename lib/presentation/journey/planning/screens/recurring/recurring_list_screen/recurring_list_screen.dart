@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_e_spend/common/enums/category.dart';
 import 'package:flutter_e_spend/common/extension/string_extension.dart';
-import 'package:flutter_e_spend/data/models/transaction_model.dart';
+import 'package:flutter_e_spend/data/models/recurring_model.dart';
 import 'package:flutter_e_spend/presentation/routers/app_router.dart';
 import 'package:flutter_e_spend/presentation/widgets/scaffold_wdiget/scaffold_widget.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
@@ -83,7 +83,7 @@ class RecurringListScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildRecurringItem(BuildContext context, TransactionModel data) {
+  Widget _buildRecurringItem(BuildContext context, RecurringModel data) {
     return InkWell(
       onTap: () async {
         // if (isDetail) {
@@ -122,7 +122,7 @@ class RecurringListScreen extends StatelessWidget {
               height: AppDimens.height_52,
               child: AppImageWidget(
                   path:
-                      "${StringConstants.imagePath}${data.category.category.title.toLowerCase()}.png",
+                      "${StringConstants.imagePath}${data.transaction.category.category.title.toLowerCase()}.png",
                   height: AppDimens.height_52,
                   width: AppDimens.height_52),
             ),
@@ -135,13 +135,13 @@ class RecurringListScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      data.note ?? "",
+                      data.transaction.note ?? "",
                       style: ThemeText.style14Medium,
                       softWrap: true,
                       maxLines: 3,
                     ),
                     Text(
-                      formatMoney(data.amount.toString()),
+                      formatMoney(data.transaction.amount.toString()),
                       style: ThemeText.style12Regular
                           .copyWith(color: AppColor.green),
                     ),

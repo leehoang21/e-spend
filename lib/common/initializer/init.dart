@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_e_spend/presentation/themes/themes.dart';
 import 'package:notification_listener_service/notification_listener_service.dart';
 import '../../presentation/bloc/bloc_observer.dart';
+import '../configs/notification/notification_config.dart';
 import '../configs/service/service.dart';
 import '../di/di.dart';
 //dart pub global run fvm:main flutter pub run build_runner watch --delete-conflicting-outputs
@@ -21,6 +22,10 @@ class AppInitializer {
         .copyWith(statusBarColor: AppColor.backgroundColor));
     Bloc.observer = MyBlocObserver();
     configureDependencies();
+    final NotificationConfig configFirebaseMessage =
+        getIt.get<NotificationConfig>();
+
+    configFirebaseMessage.config();
     NotificationService().startListening();
   }
 }

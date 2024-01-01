@@ -2,6 +2,8 @@ import 'package:flutter/foundation.dart';
 
 class DefaultEnvironment {
   static const String bankHost = 'https://api.vietqr.io';
+  static const String notificationHost =
+      'https://fcm.googleapis.com/v1/projects/espend-b9ba9/messages:send';
   static const String environmentHome = 'e-spend';
   static const String environment = kDebugMode ? 'develop' : 'release';
   static const String customer = 'customer';
@@ -12,6 +14,7 @@ class DefaultEnvironment {
   static const String avatar = 'avatar.jpeg';
   static const String user = 'user';
   static const String recurring = 'recurring';
+  static const String fcmToken = 'fcmToken';
   //local
   static const String lang = 'lang';
   static const String theme = 'theme';

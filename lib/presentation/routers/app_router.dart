@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import '../../data/models/buget_model.dart';
 import '../../data/models/category_model.dart';
+import '../../data/models/recurring_model.dart';
 import '../../data/models/transaction_model.dart';
 import '../../data/models/wallet_model.dart';
 import '../journey/account/account_screen_provider.dart';

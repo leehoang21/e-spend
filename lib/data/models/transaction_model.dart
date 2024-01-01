@@ -15,7 +15,7 @@ class TransactionModel with _$TransactionModel {
     String? note,
     required CategoryModel category,
     required Timestamp spendTime,
-    List<String>? photos,
+    @Default([]) List<String> photos,
     required WalletModel wallet,
     required int createAt,
     required int lastUpdate,
@@ -38,7 +38,8 @@ class TransactionModel with _$TransactionModel {
             ),
       spendTime: json['spendTime'] as Timestamp? ?? Timestamp.now(),
       photos:
-          (json['photo'] as List<dynamic>?)?.map((e) => e as String).toList(),
+          (json['photo'] as List<dynamic>?)?.map((e) => e as String).toList() ??
+              [],
       wallet: (json['wallet'] as Map<String, dynamic>?) != null
           ? WalletModel.fromJson(
               json['wallet'],
@@ -68,7 +69,8 @@ class TransactionModel with _$TransactionModel {
             ),
       spendTime: json['spendTime'] as Timestamp? ?? Timestamp.now(),
       photos:
-          (json['photo'] as List<dynamic>?)?.map((e) => e as String).toList(),
+          (json['photo'] as List<dynamic>?)?.map((e) => e as String).toList() ??
+              [],
       wallet: (json['wallet'] as Map<String, dynamic>?) != null
           ? WalletModel.fromJson(
               json['wallet'],

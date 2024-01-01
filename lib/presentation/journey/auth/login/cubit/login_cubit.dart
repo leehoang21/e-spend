@@ -8,6 +8,7 @@ import 'package:flutter_e_spend/domain/use_cases/auth_use_case.dart';
 import 'package:flutter_e_spend/presentation/routers/app_router.dart';
 import 'package:flutter_e_spend/presentation/bloc/base_bloc/base_bloc.dart';
 import 'package:injectable/injectable.dart';
+import 'package:root/root.dart';
 part 'login_state.dart';
 
 @injectable
@@ -30,6 +31,13 @@ class LoginCubit extends BaseBloc<LoginState> {
     await canAuthBiometric();
     await _checkLogin();
     hideLoading();
+  }
+
+  Future<void> checkRoot() async {
+    bool? result = await Root.isRooted();
+    if (result != true) {
+      await pop(result);
+    }
   }
 
   Future _checkLogin() async {

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_e_spend/common/di/di.dart';
 import 'package:flutter_e_spend/presentation/journey/transaction/create/bloc/add_photo/add_photo_bloc.dart';
-import '../../../../../../data/models/transaction_model.dart';
+import '../../../../../../data/models/recurring_model.dart';
 import 'bloc/create/create_recurring_bloc.dart';
 import 'create_recurring_screen.dart';
 
@@ -11,9 +11,9 @@ import 'create_recurring_screen.dart';
 class CreateRecurringScreenProvider extends StatefulWidget {
   const CreateRecurringScreenProvider({
     super.key,
-    this.transaction,
+    this.data,
   });
-  final TransactionModel? transaction;
+  final RecurringModel? data;
 
   @override
   State<CreateRecurringScreenProvider> createState() =>
@@ -34,7 +34,7 @@ class _CreateRecurringScreenProviderState
         ),
       ],
       child: CreateRecurringScreen(
-        transaction: widget.transaction,
+        data: widget.data,
       ),
     );
   }

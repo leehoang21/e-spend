@@ -134,7 +134,7 @@ class TransactionRepositoryImpl extends TransactionRepository {
     final transaction = TransactionModel.fromDocument(element);
     //get image
     final photos = await Future.wait(
-      (transaction.photos ?? []).map((e) async => await _getUrlImage(e)),
+      (transaction.photos).map((e) async => await _getUrlImage(e)),
     );
     return transaction.copyWith(
       photos:

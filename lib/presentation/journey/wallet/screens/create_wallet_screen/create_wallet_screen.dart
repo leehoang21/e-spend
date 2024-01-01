@@ -104,7 +104,7 @@ class _CreateWalletScreenState extends State<CreateWalletScreen> {
                     SizedBox(height: AppDimens.space_12),
                     TextFieldWidget(
                       onTap: () {
-                        //showBottomSheet(context);
+                        showBottomSheet(context);
                       },
                       prefixIcon: Assets.images.icForm.image(
                         height: AppDimens.space_26,

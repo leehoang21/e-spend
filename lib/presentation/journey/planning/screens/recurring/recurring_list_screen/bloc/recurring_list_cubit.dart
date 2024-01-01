@@ -1,10 +1,10 @@
 import 'dart:async';
 
 import 'package:equatable/equatable.dart';
-import 'package:flutter_e_spend/data/models/transaction_model.dart';
 import 'package:flutter_e_spend/presentation/bloc/base_bloc/base_bloc.dart';
 import 'package:injectable/injectable.dart';
 
+import '../../../../../../../data/models/recurring_model.dart';
 import '../../../../../../../domain/use_cases/recurring_use_case.dart';
 
 class RecurringListState extends Equatable {
@@ -19,7 +19,7 @@ class RecurringListNoResult extends RecurringListState {}
 class RecurringListLoading extends RecurringListState {}
 
 class RecurringListLoaded extends RecurringListState {
-  final List<TransactionModel> list;
+  final List<RecurringModel> list;
 
   const RecurringListLoaded(this.list);
 

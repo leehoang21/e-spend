@@ -2,13 +2,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:either_dart/either.dart';
 import 'package:flutter_e_spend/common/configs/firebase_config.dart';
 import 'package:flutter_e_spend/common/exception/app_error.dart';
-import 'package:flutter_e_spend/data/models/transaction_model.dart';
 import 'package:flutter_e_spend/domain/repositories/storage_repository.dart';
 import 'package:injectable/injectable.dart';
 
 import '../../common/configs/default_environment.dart';
 import '../../domain/repositories/recurring_repository.dart';
 import '../../domain/repositories/wallet_repository.dart';
+import '../models/recurring_model.dart';
 
 @Injectable(as: RecurringRepository)
 class RecurringRepositoryImpl extends RecurringRepository {
@@ -29,16 +29,16 @@ class RecurringRepositoryImpl extends RecurringRepository {
       .collection(DefaultEnvironment.recurring);
   @override
   Future<Either<String, AppError>> put(
-    TransactionModel data,
+    RecurringModel data,
   ) async {
     try {
       final param = data.toJson();
-      if (data.id != null) {
-        await _doc.doc(data.id).set(param);
-        return Left(data.id!);
-      } else {
+      if (data.id == null) {
         final result = await _doc.add(param);
         return Left(result.id);
+      } else {
+        await _doc.doc(data.id).update(param);
+        return Left(data.id ?? '');
       }
     } catch (e) {
       return Right(AppError(message: e.toString()));
@@ -56,16 +56,15 @@ class RecurringRepositoryImpl extends RecurringRepository {
     }
   }
 
-  Future<TransactionModel> _get(
+  Future<RecurringModel> _get(
       QueryDocumentSnapshot<Map<String, dynamic>> element) async {
-    final transaction = TransactionModel.fromDocument(element);
+    final data = RecurringModel.fromDocument(element);
     //get image
     final photos = await Future.wait(
-      (transaction.photos ?? []).map((e) async => await _getUrlImage(e)),
+      (data.transaction.photos).map((e) async => await _getUrlImage(e)),
     );
-    return transaction.copyWith(
-      photos:
-          photos.where((element) => element.isNotEmpty).toList(growable: false),
+    return data.copyWith.transaction.call(
+      photos: photos,
     );
   }
 
@@ -75,14 +74,14 @@ class RecurringRepositoryImpl extends RecurringRepository {
   }
 
   @override
-  Stream<Either<List<TransactionModel>, AppError>> stream() {
+  Stream<Either<List<RecurringModel>, AppError>> stream() {
     try {
       //lấy giao dịch trong khoản thời gian time
       final result = _doc
           .snapshots()
-          .map<Future<Either<List<TransactionModel>, AppError>>>((event) async {
+          .map<Future<Either<List<RecurringModel>, AppError>>>((event) async {
         try {
-          final data = <TransactionModel>[];
+          final data = <RecurringModel>[];
           for (var element in event.docs) {
             final result = await _get(element);
             data.add(result);

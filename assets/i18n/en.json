@@ -268,5 +268,18 @@
   "phone": "Phone",
   "your_email": "Your email",
   "haveAccount": "Already have an account?",
-  "please_pass": "Please enter your password"
+  "please_pass": "Please enter your password",
+  "recurring.create.From": "Start from",
+  "recurring.create.loop": "Loop",
+  "recurring.create.hint_loop": "Choose loop",
+  "recurring.create.count": "Loop later",
+  "recurring.create.hint_count": "Choose loop later",
+  "recurring.create": "Create recurring transaction",
+  "recurring.create_success": "Successful creation of recurring transactions",
+  "recurring.confirm": "Confirm",
+  "recurring.create.none": "No loop",
+  "recurring.create.day": "Daily",
+  "recurring.create.week": "Weekly",
+  "recurring.create.month": "Monthly",
+  "recurring.create.year": "Yearly"
 }

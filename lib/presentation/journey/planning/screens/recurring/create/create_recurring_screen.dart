@@ -5,7 +5,7 @@ import 'package:flutter_e_spend/common/extension/date_time_extension.dart';
 import 'package:flutter_e_spend/common/extension/num_extension.dart';
 import 'package:flutter_e_spend/common/extension/string_extension.dart';
 import '../../../../../../common/constants/app_dimens.dart';
-import '../../../../../../data/models/transaction_model.dart';
+import '../../../../../../data/models/recurring_model.dart';
 import '../../../../../widgets/appbar_widget/appbar_widget.dart';
 import '../../../../../widgets/button_widget/text_button_widget.dart';
 import '../../../../../widgets/scaffold_wdiget/scaffold_widget.dart';
@@ -17,9 +17,9 @@ import 'widget/create_recurring_form.dart';
 import 'widget/inovoice_photos_widget.dart';
 
 class CreateRecurringScreen extends StatefulWidget {
-  final TransactionModel? transaction;
+  final RecurringModel? data;
 
-  const CreateRecurringScreen({Key? key, this.transaction}) : super(key: key);
+  const CreateRecurringScreen({Key? key, this.data}) : super(key: key);
   @override
   State<CreateRecurringScreen> createState() => _CreateRecurringScreenState();
 }
@@ -39,22 +39,22 @@ class _CreateRecurringScreenState extends State<CreateRecurringScreen> {
       TextEditingController();
   final TextEditingController recurringType = TextEditingController();
 
-  TransactionModel? _transaction;
+  RecurringModel? _transaction;
   String _walletImage = '';
 
   @override
   void initState() {
-    _transaction = widget.transaction;
+    _transaction = widget.data;
 
     if (_transaction != null) {
-      _amountCtrl.text = _transaction!.amount.getTextAmount;
-      _walletCtrl.text = _transaction!.wallet.walletName ?? '';
-      _categoryCtl.text = _transaction!.category.category.title;
-      _dateCtl.text = _transaction!.spendTime.toDate().getTextDate;
-      _noteCtl.text = _transaction?.note ?? '';
-      _walletImage = _transaction!.wallet.walletImage ?? '';
+      _amountCtrl.text = _transaction!.transaction.amount.getTextAmount;
+      _walletCtrl.text = _transaction!.transaction.wallet.walletName ?? '';
+      _categoryCtl.text = _transaction!.transaction.category.category.title;
+      _dateCtl.text = _transaction!.transaction.spendTime.toDate().getTextDate;
+      _noteCtl.text = _transaction?.transaction.note ?? '';
+      _walletImage = _transaction!.transaction.wallet.walletImage ?? '';
       context.read<CreateRecurringBloc>().initial(_transaction!);
-      context.read<AddPhotoBloc>().init(_transaction!.photos ?? []);
+      context.read<AddPhotoBloc>().init(_transaction!.transaction.photos);
     }
     super.initState();
   }
@@ -73,7 +73,7 @@ class _CreateRecurringScreenState extends State<CreateRecurringScreen> {
   Widget build(BuildContext context) {
     return ScaffoldWidget(
       appbar: AppBarWidget(
-        title: widget.transaction == null
+        title: widget.data == null
             ? CreateRecurringConstants.addTransaction.tr
             : CreateRecurringConstants.updateTransaction.tr,
       ),
@@ -121,16 +121,19 @@ class _CreateRecurringScreenState extends State<CreateRecurringScreen> {
                         previous.buttonIsValid != current.buttonIsValid,
                     builder: (context, state) {
                       return TextButtonWidget(
+                          buttonState: state.buttonIsValid
+                              ? ButtonState.active
+                              : ButtonState.inactive,
                           onPressed: () {
                             if (state.buttonIsValid) {
-                              if (widget.transaction != null) {
+                              if (widget.data != null) {
                                 _onEdit(context);
                               } else {
                                 _onCreate(context);
                               }
                             }
                           },
-                          title: widget.transaction == null
+                          title: widget.data == null
                               ? CreateRecurringConstants.create.tr
                               : CreateRecurringConstants.update.tr);
                     },
@@ -148,14 +151,20 @@ class _CreateRecurringScreenState extends State<CreateRecurringScreen> {
     context.read<CreateRecurringBloc>().onCreate(
           note: _noteCtl.text,
           photos: context.read<AddPhotoBloc>().state.photos,
+          recurringCount: recurringCountController.text,
+          recurringType: recurringType.text,
+          startFrom: fromController.text,
         );
   }
 
   void _onEdit(BuildContext context) {
     context.read<CreateRecurringBloc>().onEdit(
-          id: _transaction!.id!,
+          id: '',
           note: _noteCtl.text,
           photos: context.read<AddPhotoBloc>().state.photos,
+          recurringCount: recurringCountController.text,
+          recurringType: recurringType.text,
+          startFrom: fromController.text,
         );
   }
 }

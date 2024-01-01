@@ -123,7 +123,7 @@ class _CreateRecurringFormState extends State<CreateRecurringForm> {
         TextFieldWidget(
           controller: widget.dateCtl,
           prefixIcon: Assets.images.calendar.image(),
-          hintText: 'no for'.tr,
+          hintText: 'recurring.create.none'.tr,
           readOnly: true,
           onTap: () {
             _selectDate(context);

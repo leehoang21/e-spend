@@ -47,6 +47,9 @@ class HiveConfig {
     return uId;
   }
 
+  String get fvmToken =>
+      appBox.get(DefaultEnvironment.fcmToken) as String? ?? '';
+
   bool get isLocalAuth => localAuthId == user?.uId;
 
   set setUser(UserModel? user) {
@@ -72,6 +75,14 @@ class HiveConfig {
       appBox.put(DefaultEnvironment.localAuth, id);
     } catch (e) {
       logger('setLocalAuthId$e');
+    }
+  }
+
+  set setFcmToken(String? token) {
+    try {
+      appBox.put(DefaultEnvironment.fcmToken, token);
+    } catch (e) {
+      logger('fcmToken$e');
     }
   }
 }

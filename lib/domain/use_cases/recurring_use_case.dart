@@ -1,5 +1,5 @@
 import 'package:either_dart/either.dart';
-import 'package:flutter_e_spend/data/models/transaction_model.dart';
+import 'package:flutter_e_spend/data/models/recurring_model.dart';
 import 'package:injectable/injectable.dart';
 
 import '../../common/exception/app_error.dart';
@@ -14,7 +14,7 @@ class RecurringUseCase {
   );
 
   Future<Either<String, AppError>> put(
-    TransactionModel data,
+    RecurringModel data,
   ) async {
     return _remoteRepository.put(
       data,
@@ -25,7 +25,7 @@ class RecurringUseCase {
     return _remoteRepository.delete(id);
   }
 
-  Stream<Either<List<TransactionModel>, AppError>> stream() {
+  Stream<Either<List<RecurringModel>, AppError>> stream() {
     return _remoteRepository.stream();
   }
 }

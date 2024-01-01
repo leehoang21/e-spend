@@ -48,19 +48,21 @@ class DioApiClient {
 
   static DioApiClient get instance => DioApiClient();
 
-  Future<BaseResponse> request(
-      {String? url,
-      NetworkMethod method = NetworkMethod.post,
-      String? data,
-      Function? fromJsonModel,
-      Map<String, dynamic>? formData,
-      Map<String, dynamic>? queryParameters,
-      String? basicAuthen,
-      bool getFullResponse = false}) async {
+  Future<BaseResponse> request({
+    String? url,
+    NetworkMethod method = NetworkMethod.post,
+    Map<String, dynamic>? data,
+    Function? fromJsonModel,
+    Map<String, dynamic>? formData,
+    Map<String, dynamic>? queryParameters,
+    String? basicAuthen,
+    bool getFullResponse = false,
+    Map<String, dynamic>? header,
+  }) async {
     if (isNullEmpty(url)) {
       logger('!!!!!!EMPTY URL!!!!!! - data: $data');
     }
-    Map<String, dynamic> headerMap = {};
+    Map<String, dynamic> headerMap = header ?? {};
     headerMap.putIfAbsent("accept", () => "*/*");
     Response response;
     try {

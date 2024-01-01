@@ -24,6 +24,7 @@ mixin _$RecurringModel {
   DateTime get startDate => throw _privateConstructorUsedError;
   String get recurringType => throw _privateConstructorUsedError;
   int get recurringCount => throw _privateConstructorUsedError;
+  String? get id => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -41,7 +42,8 @@ abstract class $RecurringModelCopyWith<$Res> {
       {TransactionModel transaction,
       DateTime startDate,
       String recurringType,
-      int recurringCount});
+      int recurringCount,
+      String? id});
 
   $TransactionModelCopyWith<$Res> get transaction;
 }
@@ -63,6 +65,7 @@ class _$RecurringModelCopyWithImpl<$Res, $Val extends RecurringModel>
     Object? startDate = null,
     Object? recurringType = null,
     Object? recurringCount = null,
+    Object? id = freezed,
   }) {
     return _then(_value.copyWith(
       transaction: null == transaction
@@ -81,6 +84,10 @@ class _$RecurringModelCopyWithImpl<$Res, $Val extends RecurringModel>
           ? _value.recurringCount
           : recurringCount // ignore: cast_nullable_to_non_nullable
               as int,
+      id: freezed == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String?,
     ) as $Val);
   }
 
@@ -105,7 +112,8 @@ abstract class _$$RecurringModelImplCopyWith<$Res>
       {TransactionModel transaction,
       DateTime startDate,
       String recurringType,
-      int recurringCount});
+      int recurringCount,
+      String? id});
 
   @override
   $TransactionModelCopyWith<$Res> get transaction;
@@ -126,6 +134,7 @@ class __$$RecurringModelImplCopyWithImpl<$Res>
     Object? startDate = null,
     Object? recurringType = null,
     Object? recurringCount = null,
+    Object? id = freezed,
   }) {
     return _then(_$RecurringModelImpl(
       transaction: null == transaction
@@ -144,6 +153,10 @@ class __$$RecurringModelImplCopyWithImpl<$Res>
           ? _value.recurringCount
           : recurringCount // ignore: cast_nullable_to_non_nullable
               as int,
+      id: freezed == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -151,12 +164,14 @@ class __$$RecurringModelImplCopyWithImpl<$Res>
 /// @nodoc
 
 @JsonSerializable(explicitToJson: true)
-class _$RecurringModelImpl implements _RecurringModel {
+class _$RecurringModelImpl extends _RecurringModel {
   const _$RecurringModelImpl(
       {required this.transaction,
       required this.startDate,
       required this.recurringType,
-      required this.recurringCount});
+      required this.recurringCount,
+      this.id})
+      : super._();
 
   factory _$RecurringModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$RecurringModelImplFromJson(json);
@@ -169,10 +184,12 @@ class _$RecurringModelImpl implements _RecurringModel {
   final String recurringType;
   @override
   final int recurringCount;
+  @override
+  final String? id;
 
   @override
   String toString() {
-    return 'RecurringModel(transaction: $transaction, startDate: $startDate, recurringType: $recurringType, recurringCount: $recurringCount)';
+    return 'RecurringModel(transaction: $transaction, startDate: $startDate, recurringType: $recurringType, recurringCount: $recurringCount, id: $id)';
   }
 
   @override
@@ -187,13 +204,14 @@ class _$RecurringModelImpl implements _RecurringModel {
             (identical(other.recurringType, recurringType) ||
                 other.recurringType == recurringType) &&
             (identical(other.recurringCount, recurringCount) ||
-                other.recurringCount == recurringCount));
+                other.recurringCount == recurringCount) &&
+            (identical(other.id, id) || other.id == id));
   }
 
   @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(
-      runtimeType, transaction, startDate, recurringType, recurringCount);
+      runtimeType, transaction, startDate, recurringType, recurringCount, id);
 
   @JsonKey(ignore: true)
   @override
@@ -210,12 +228,14 @@ class _$RecurringModelImpl implements _RecurringModel {
   }
 }
 
-abstract class _RecurringModel implements RecurringModel {
+abstract class _RecurringModel extends RecurringModel {
   const factory _RecurringModel(
       {required final TransactionModel transaction,
       required final DateTime startDate,
       required final String recurringType,
-      required final int recurringCount}) = _$RecurringModelImpl;
+      required final int recurringCount,
+      final String? id}) = _$RecurringModelImpl;
+  const _RecurringModel._() : super._();
 
   factory _RecurringModel.fromJson(Map<String, dynamic> json) =
       _$RecurringModelImpl.fromJson;
@@ -228,6 +248,8 @@ abstract class _RecurringModel implements RecurringModel {
   String get recurringType;
   @override
   int get recurringCount;
+  @override
+  String? get id;
   @override
   @JsonKey(ignore: true)
   _$$RecurringModelImplCopyWith<_$RecurringModelImpl> get copyWith =>

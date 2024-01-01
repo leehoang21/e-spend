@@ -9,7 +9,9 @@ import 'package:flutter_e_spend/presentation/themes/themes.dart';
 import 'package:flutter_e_spend/presentation/widgets/text_field_widget/text_field_widget.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_translate/flutter_translate.dart';
+import '../../../../../../widgets/button_widget/text_button_widget.dart';
 import '../../../../../../widgets/drop_down_select/drop_down_select.dart';
+import '../create_recurring_constants.dart';
 
 class ForCurringWidget extends StatefulWidget {
   const ForCurringWidget({
@@ -29,6 +31,18 @@ class ForCurringWidget extends StatefulWidget {
 }
 
 class _ForCurringWidgetState extends State<ForCurringWidget> {
+  late final TextEditingController fromController;
+  late final TextEditingController recurringCountController;
+  late final TextEditingController recurringType;
+
+  @override
+  initState() {
+    super.initState();
+    fromController = widget.fromController;
+    recurringCountController = widget.recurringCountController;
+    recurringType = widget.recurringType;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -45,65 +59,79 @@ class _ForCurringWidgetState extends State<ForCurringWidget> {
           ),
           SizedBox(
             width: 1.sw,
-            child: DropDownSelectCustome(
-              prefixIcon: Assets.icons.categories.image(
-                height: LayoutConstants.iconMediumSize,
-                width: LayoutConstants.iconMediumSize,
-              ),
-              hintText: 'for'.tr,
-              items: const [],
-              childBuilder: fors,
-              onChanged: (value) {
-                widget.recurringType.text = value.toString();
+            child: GestureDetector(
+              onTap: () {
+                showDatePicker(
+                  locale: LocalizedApp.of(context).delegate.currentLocale,
+                  initialDate: DateTime.now(),
+                  firstDate: DateTime(2000),
+                  lastDate: DateTime(2025),
+                  context: context,
+                ).then((value) {
+                  if (value != null) {
+                    fromController.text = value.formatDMY;
+                  }
+                });
               },
+              child: TextFieldWidget(
+                enabled: false,
+                hintText: CreateRecurringConstants.from.tr,
+                controller: fromController,
+                prefixIcon: Assets.images.calendar.image(
+                  height: LayoutConstants.iconMediumSize,
+                  width: LayoutConstants.iconMediumSize,
+                ),
+              ),
             ),
           ),
           SizedBox(
-            height: AppDimens.height_12,
+            height: AppDimens.space_16,
           ),
           Row(
             children: [
               Expanded(
-                child: GestureDetector(
-                  onTap: () {
-                    showDatePicker(
-                      locale: LocalizedApp.of(context).delegate.currentLocale,
-                      initialDate: DateTime.now(),
-                      firstDate: DateTime(2000),
-                      lastDate: DateTime(2025),
-                      context: context,
-                    ).then((value) {
-                      if (value != null) {
-                        widget.fromController.text = value.formatDMY;
-                      }
-                    });
+                child: DropDownSelectCustome(
+                  hintText: CreateRecurringConstants.loop.tr,
+                  items: const [],
+                  labelText: CreateRecurringConstants.hintLoop.tr,
+                  childBuilder: fors,
+                  onChanged: (value) {
+                    recurringType.text = value.toString();
                   },
-                  child: TextFieldWidget(
-                    enabled: false,
-                    hintText: 'From'.tr,
-                    controller: widget.fromController,
-                    prefixIcon: Assets.images.calendar.image(
-                      height: LayoutConstants.iconMediumSize,
-                      width: LayoutConstants.iconMediumSize,
-                    ),
-                  ),
                 ),
               ),
               SizedBox(
                 width: AppDimens.width_8,
               ),
-              Expanded(
-                child: TextFieldWidget(
-                  hintText: 'acount'.tr,
-                  controller: widget.recurringCountController,
-                  keyboardType: TextInputType.number,
-                  prefixIcon: Assets.images.calendar.image(
-                    height: LayoutConstants.iconMediumSize,
-                    width: LayoutConstants.iconMediumSize,
-                  ),
-                ),
-              ),
+              recurringType.text == CreateRecurringConstants.none
+                  ? Container()
+                  : Expanded(
+                      child: TextFieldWidget(
+                        hintText: CreateRecurringConstants.hintCount.tr,
+                        labelText: CreateRecurringConstants.count.tr,
+                        controller: recurringCountController,
+                        keyboardType: TextInputType.number,
+                        prefixIcon: Assets.images.calendar.image(
+                          height: LayoutConstants.iconMediumSize,
+                          width: LayoutConstants.iconMediumSize,
+                        ),
+                      ),
+                    ),
             ],
+          ),
+          Padding(
+            padding: EdgeInsets.only(
+                top: AppDimens.space_16, bottom: AppDimens.space_16),
+            child: TextButtonWidget(
+                buttonColor: AppColor.ebonyClay,
+                title: CreateRecurringConstants.confirm.tr,
+                onPressed: () {
+                  widget.fromController.text = fromController.text;
+                  widget.recurringCountController.text =
+                      recurringCountController.text;
+                  widget.recurringType.text = recurringType.text;
+                  Navigator.pop(context);
+                }),
           ),
         ],
       ),
@@ -111,12 +139,7 @@ class _ForCurringWidgetState extends State<ForCurringWidget> {
   }
 
   List<DropdownMenuItem<String>> get fors {
-    final listFor = [
-      'day',
-      'week',
-      'month',
-      'year',
-    ];
+    const listFor = CreateRecurringConstants.fors;
     final data = <DropdownMenuItem<String>>[];
     for (var i = 0; i < listFor.length; i++) {
       data.add(
@@ -124,9 +147,7 @@ class _ForCurringWidgetState extends State<ForCurringWidget> {
           value: listFor[i],
           child: Text(
             listFor[i].tr,
-            style: ThemeText.body1.copyWith(
-              color: Colors.black,
-            ),
+            style: ThemeText.overline,
           ),
         ),
       );

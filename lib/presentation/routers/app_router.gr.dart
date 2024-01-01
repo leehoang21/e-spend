@@ -67,7 +67,7 @@ abstract class _$AppRouter extends RootStackRouter {
         routeData: routeData,
         child: CreateRecurringScreenProvider(
           key: args.key,
-          transaction: args.transaction,
+          data: args.data,
         ),
       );
     },
@@ -318,13 +318,13 @@ class CreateBugetRouteArgs {
 class CreateRecurringRoute extends PageRouteInfo<CreateRecurringRouteArgs> {
   CreateRecurringRoute({
     Key? key,
-    TransactionModel? transaction,
+    RecurringModel? data,
     List<PageRouteInfo>? children,
   }) : super(
           CreateRecurringRoute.name,
           args: CreateRecurringRouteArgs(
             key: key,
-            transaction: transaction,
+            data: data,
           ),
           initialChildren: children,
         );
@@ -338,16 +338,16 @@ class CreateRecurringRoute extends PageRouteInfo<CreateRecurringRouteArgs> {
 class CreateRecurringRouteArgs {
   const CreateRecurringRouteArgs({
     this.key,
-    this.transaction,
+    this.data,
   });
 
   final Key? key;
 
-  final TransactionModel? transaction;
+  final RecurringModel? data;
 
   @override
   String toString() {
-    return 'CreateRecurringRouteArgs{key: $key, transaction: $transaction}';
+    return 'CreateRecurringRouteArgs{key: $key, data: $data}';
   }
 }
 

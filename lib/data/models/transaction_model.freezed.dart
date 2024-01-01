@@ -21,7 +21,7 @@ mixin _$TransactionModel {
   String? get note => throw _privateConstructorUsedError;
   CategoryModel get category => throw _privateConstructorUsedError;
   Timestamp get spendTime => throw _privateConstructorUsedError;
-  List<String>? get photos => throw _privateConstructorUsedError;
+  List<String> get photos => throw _privateConstructorUsedError;
   WalletModel get wallet => throw _privateConstructorUsedError;
   int get createAt => throw _privateConstructorUsedError;
   int get lastUpdate => throw _privateConstructorUsedError;
@@ -45,7 +45,7 @@ abstract class $TransactionModelCopyWith<$Res> {
       String? note,
       CategoryModel category,
       Timestamp spendTime,
-      List<String>? photos,
+      List<String> photos,
       WalletModel wallet,
       int createAt,
       int lastUpdate,
@@ -73,7 +73,7 @@ class _$TransactionModelCopyWithImpl<$Res, $Val extends TransactionModel>
     Object? note = freezed,
     Object? category = null,
     Object? spendTime = null,
-    Object? photos = freezed,
+    Object? photos = null,
     Object? wallet = null,
     Object? createAt = null,
     Object? lastUpdate = null,
@@ -100,10 +100,10 @@ class _$TransactionModelCopyWithImpl<$Res, $Val extends TransactionModel>
           ? _value.spendTime
           : spendTime // ignore: cast_nullable_to_non_nullable
               as Timestamp,
-      photos: freezed == photos
+      photos: null == photos
           ? _value.photos
           : photos // ignore: cast_nullable_to_non_nullable
-              as List<String>?,
+              as List<String>,
       wallet: null == wallet
           ? _value.wallet
           : wallet // ignore: cast_nullable_to_non_nullable
@@ -154,7 +154,7 @@ abstract class _$$TransactionModelImplCopyWith<$Res>
       String? note,
       CategoryModel category,
       Timestamp spendTime,
-      List<String>? photos,
+      List<String> photos,
       WalletModel wallet,
       int createAt,
       int lastUpdate,
@@ -182,7 +182,7 @@ class __$$TransactionModelImplCopyWithImpl<$Res>
     Object? note = freezed,
     Object? category = null,
     Object? spendTime = null,
-    Object? photos = freezed,
+    Object? photos = null,
     Object? wallet = null,
     Object? createAt = null,
     Object? lastUpdate = null,
@@ -209,10 +209,10 @@ class __$$TransactionModelImplCopyWithImpl<$Res>
           ? _value.spendTime
           : spendTime // ignore: cast_nullable_to_non_nullable
               as Timestamp,
-      photos: freezed == photos
+      photos: null == photos
           ? _value._photos
           : photos // ignore: cast_nullable_to_non_nullable
-              as List<String>?,
+              as List<String>,
       wallet: null == wallet
           ? _value.wallet
           : wallet // ignore: cast_nullable_to_non_nullable
@@ -242,7 +242,7 @@ class _$TransactionModelImpl extends _TransactionModel {
       this.note,
       required this.category,
       required this.spendTime,
-      final List<String>? photos,
+      final List<String> photos = const [],
       required this.wallet,
       required this.createAt,
       required this.lastUpdate,
@@ -260,14 +260,13 @@ class _$TransactionModelImpl extends _TransactionModel {
   final CategoryModel category;
   @override
   final Timestamp spendTime;
-  final List<String>? _photos;
+  final List<String> _photos;
   @override
-  List<String>? get photos {
-    final value = _photos;
-    if (value == null) return null;
+  @JsonKey()
+  List<String> get photos {
     if (_photos is EqualUnmodifiableListView) return _photos;
     // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(value);
+    return EqualUnmodifiableListView(_photos);
   }
 
   @override
@@ -335,7 +334,7 @@ abstract class _TransactionModel extends TransactionModel {
           final String? note,
           required final CategoryModel category,
           required final Timestamp spendTime,
-          final List<String>? photos,
+          final List<String> photos,
           required final WalletModel wallet,
           required final int createAt,
           required final int lastUpdate,
@@ -354,7 +353,7 @@ abstract class _TransactionModel extends TransactionModel {
   @override
   Timestamp get spendTime;
   @override
-  List<String>? get photos;
+  List<String> get photos;
   @override
   WalletModel get wallet;
   @override

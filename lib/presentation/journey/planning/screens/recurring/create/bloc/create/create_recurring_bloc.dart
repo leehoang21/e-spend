@@ -2,49 +2,33 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_e_spend/common/extension/bloc_extension.dart';
+import 'package:flutter_e_spend/domain/use_cases/recurring_use_case.dart';
 import 'package:flutter_e_spend/domain/use_cases/storage_use_case.dart';
 import 'package:injectable/injectable.dart';
-
-import '../../../../../../../../common/configs/default_environment.dart';
 import '../../../../../../../../common/utils/internet_checker.dart';
 import '../../../../../../../../common/utils/validator.dart';
 import '../../../../../../../../data/models/category_model.dart';
+import '../../../../../../../../data/models/recurring_model.dart';
 import '../../../../../../../../data/models/transaction_model.dart';
 import '../../../../../../../../data/models/wallet_model.dart';
-import '../../../../../../../../domain/use_cases/transaction_use_case.dart';
 import '../../../../../../../bloc/base_bloc/base_bloc.dart';
 import 'create_recurring_state.dart';
 
 @injectable
 class CreateRecurringBloc extends BaseBloc<CreateRecurringState> {
-  final TransactionUseCase _transactionUseCase;
+  final RecurringUseCase _useCase;
   final StorageUseCase storageUseCase;
-  TransactionModel? _transaction;
+  // ignore: unused_field
+  RecurringModel? _transaction;
   CreateRecurringBloc(
-    this._transactionUseCase,
+    this._useCase,
     this.storageUseCase,
   ) : super(
           CreateRecurringState.initial(),
         );
 
-  Future<void> initial(TransactionModel transaction) async {
+  Future<void> initial(RecurringModel transaction) async {
     _transaction = transaction;
-    emit(
-      state.copyWith(
-        amount: transaction.amount,
-        wallet: transaction.wallet,
-        category: transaction.category,
-        photo: transaction.photos,
-        spendTime: transaction.spendTime,
-        buttonIsValid: AppValidator.validateCreateTransactionButton(
-          transaction.amount,
-          transaction.category,
-          transaction.spendTime,
-          transaction.wallet,
-        ),
-        lastUpdate: DateTime.now(),
-      ),
-    );
   }
 
   Future<void> chooseCategory(CategoryModel? category) async {
@@ -91,35 +75,42 @@ class CreateRecurringBloc extends BaseBloc<CreateRecurringState> {
     );
   }
 
-  Future<void> onCreate({String? note, List<File> photos = const []}) async {
+  Future<void> onCreate({
+    String? note,
+    List<File> photos = const [],
+    required String startFrom,
+    required String recurringCount,
+    required String recurringType,
+  }) async {
     showLoading();
     if (await InternetChecker.hasConnection()) {
       try {
-        TransactionModel transaction = TransactionModel(
+        // final List<String> imagePaths = [];
+        //     for (int i = 0; i < photos.length; i++) {
+        //       final String storagePath =
+        //           '${DefaultEnvironment.transaction}/$l/$i.jpeg';
+        //       await storageUseCase.put(
+        //           imageToUpload: photos[i], imagePathStorage: storagePath);
+        //       imagePaths.add(storagePath);
+        RecurringModel transaction = RecurringModel(
+          transaction: TransactionModel(
             amount: state.amount!,
+            photos: [],
             category: state.category!,
             spendTime: state.spendTime,
             wallet: state.wallet!,
             note: note,
             createAt: DateTime.now().millisecondsSinceEpoch,
-            lastUpdate: DateTime.now().millisecondsSinceEpoch);
-        final transactionResult = await _transactionUseCase.create(transaction);
+            lastUpdate: DateTime.now().millisecondsSinceEpoch,
+          ),
+          startDate: DateTime.tryParse(startFrom) ?? DateTime.now(),
+          recurringCount: int.tryParse(recurringCount) ?? 1,
+          recurringType: recurringType,
+        );
+        final transactionResult = await _useCase.put(transaction);
 
         transactionResult.fold(
           (l) async {
-            final List<String> imagePaths = [];
-            for (int i = 0; i < photos.length; i++) {
-              final String storagePath =
-                  '${DefaultEnvironment.transaction}/$l/$i.jpeg';
-              await storageUseCase.put(
-                  imageToUpload: photos[i], imagePathStorage: storagePath);
-              imagePaths.add(storagePath);
-            }
-            transaction = transaction.copyWith(id: l, photos: imagePaths);
-            _transactionUseCase.update(
-              transaction,
-              transactionOld: transaction.copyWith(amount: 0),
-            );
             hideLoading();
             emit(
               state.copyWith(
@@ -170,11 +161,15 @@ class CreateRecurringBloc extends BaseBloc<CreateRecurringState> {
     required String id,
     String? note,
     required List<File> photos,
+    required String startFrom,
+    required String recurringCount,
+    required String recurringType,
   }) async {
     showLoading();
     if (await InternetChecker.hasConnection()) {
       try {
-        TransactionModel transaction = TransactionModel(
+        RecurringModel transaction = RecurringModel(
+          transaction: TransactionModel(
             id: id,
             amount: state.amount!,
             category: state.category!,
@@ -183,25 +178,27 @@ class CreateRecurringBloc extends BaseBloc<CreateRecurringState> {
             photos: state.photo,
             note: note,
             createAt: DateTime.now().millisecondsSinceEpoch,
-            lastUpdate: DateTime.now().millisecondsSinceEpoch);
+            lastUpdate: DateTime.now().millisecondsSinceEpoch,
+          ),
+          startDate: DateTime.tryParse(startFrom) ?? DateTime.now(),
+          recurringCount: int.tryParse(recurringCount) ?? 1,
+          recurringType: recurringType,
+        );
         //update photos
 
-        final List<String> imagePaths = [];
-        for (int i = 0; i < photos.length; i++) {
-          final String storagePath =
-              '${DefaultEnvironment.transaction}/${_transaction?.id}/$i.jpeg';
-          if (!_checkRemote(photos[i].path)) {
-            await storageUseCase.put(
-                imageToUpload: photos[i], imagePathStorage: storagePath);
-          }
-          imagePaths.add(storagePath);
-        }
+        // final List<String> imagePaths = [];
+        // for (int i = 0; i < photos.length; i++) {
+        //   final String storagePath =
+        //       '${DefaultEnvironment.transaction}/${_transaction?.id}/$i.jpeg';
+        //   if (!_checkRemote(photos[i].path)) {
+        //     await storageUseCase.put(
+        //         imageToUpload: photos[i], imagePathStorage: storagePath);
+        //   }
+        //   imagePaths.add(storagePath);
+        // }
         //update transaction
-        transaction = transaction.copyWith(photos: imagePaths);
-        _transactionUseCase.update(
-          transaction,
-          transactionOld: _transaction!,
-        );
+        // transaction = transaction.copyWith(photos: imagePaths);
+        _useCase.put(transaction);
         hideLoading();
         await pop(null);
         emit(

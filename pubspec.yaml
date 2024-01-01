@@ -29,7 +29,7 @@ dependencies:
   freezed_annotation: ^2.4.1
   visibility_detector: ^0.4.0+2
   permission_handler: ^11.1.0
-  dio: ^5.3.4
+  dio: ^5.4.0
   connectivity_plus: ^5.0.2
   image_picker: ^1.0.4
   pin_code_fields: ^8.0.1
@@ -57,6 +57,9 @@ dependencies:
   notification_listener_service: ^0.3.3
   notifications:
     path: ./notifications-3.0.0
+  flutter_local_notifications: ^16.3.0
+  firebase_messaging: ^14.7.9
+  root: ^2.0.4
 
 dev_dependencies:
   flutter_test:

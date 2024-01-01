@@ -19,7 +19,7 @@ class _DetailPhotoWidgetState extends State<DetailPhotoWidget> {
   Widget build(BuildContext context) {
     return BlocBuilder<DetailTransactionBloc, DetailTransactionState>(
         builder: (context, state) {
-      final photos = state.data.photos ?? [];
+      final photos = state.data.photos;
       final length = photos.length;
       return GridView.count(
         crossAxisCount: 3,
