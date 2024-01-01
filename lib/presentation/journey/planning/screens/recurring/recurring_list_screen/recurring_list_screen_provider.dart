@@ -8,8 +8,7 @@ import 'recurring_list_screen.dart';
 
 @RoutePage()
 class RecurringListScreenProvider extends StatefulWidget {
-  const RecurringListScreenProvider({super.key, required this.isDetail});
-  final bool isDetail;
+  const RecurringListScreenProvider({super.key});
 
   @override
   State<RecurringListScreenProvider> createState() =>
@@ -22,7 +21,7 @@ class _RecurringListScreenProviderState
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => getIt.get<RecurringListCubit>(),
-      child: RecurringListScreen(isDetail: widget.isDetail),
+      child: RecurringListScreen(),
     );
   }
 }

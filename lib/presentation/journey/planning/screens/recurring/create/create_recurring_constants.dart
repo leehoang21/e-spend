@@ -1,6 +1,8 @@
 class CreateRecurringConstants {
-  static const String addTransaction = 'transaction.create.add_transaction';
-  static const String updateTransaction = 'transaction.update';
+  static const String addTransaction =
+      'transaction.create.add_transaction_recurring';
+  static const String updateTransaction =
+      'transaction.update_transaction_recurring';
 
   static const String note = 'transaction.create.note';
   static const String category = 'transaction.create.category';

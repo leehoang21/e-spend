@@ -34,6 +34,10 @@ class _CreateRecurringScreenState extends State<CreateRecurringScreen> {
   final TextEditingController _dateCtl = TextEditingController();
 
   final TextEditingController _noteCtl = TextEditingController();
+  final TextEditingController fromController = TextEditingController();
+  final TextEditingController recurringCountController =
+      TextEditingController();
+  final TextEditingController recurringType = TextEditingController();
 
   TransactionModel? _transaction;
   String _walletImage = '';
@@ -99,6 +103,9 @@ class _CreateRecurringScreenState extends State<CreateRecurringScreen> {
                         categoryCtl: _categoryCtl,
                         dateCtl: _dateCtl,
                         noteCtl: _noteCtl,
+                        fromController: fromController,
+                        recurringCountController: recurringCountController,
+                        recurringType: recurringType,
                       ),
                       SizedBox(
                         height: AppDimens.height_12,

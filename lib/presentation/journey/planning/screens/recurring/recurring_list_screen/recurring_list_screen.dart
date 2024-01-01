@@ -19,8 +19,9 @@ import '../../../../../widgets/refresh_widget.dart';
 import 'bloc/recurring_list_cubit.dart';
 
 class RecurringListScreen extends StatelessWidget {
-  RecurringListScreen({Key? key, required this.isDetail}) : super(key: key);
-  final bool isDetail;
+  RecurringListScreen({
+    Key? key,
+  }) : super(key: key);
 
   final refreshController = RefreshController(initialRefresh: false);
 
@@ -85,12 +86,12 @@ class RecurringListScreen extends StatelessWidget {
   Widget _buildRecurringItem(BuildContext context, TransactionModel data) {
     return InkWell(
       onTap: () async {
-        if (isDetail) {
-          // await context.pushRoute(DetailRecurringRoute(Recurring: Recurring));
-          await context.read<RecurringListCubit>().getRecurringList();
-        } else {
-          Navigator.pop(context);
-        }
+        // if (isDetail) {
+        //   // await context.pushRoute(DetailRecurringRoute(Recurring: Recurring));
+        //   await context.read<RecurringListCubit>().getRecurringList();
+        // } else {
+        //   Navigator.pop(context);
+        // }
       },
       child: Container(
         margin: EdgeInsets.only(

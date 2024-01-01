@@ -139,13 +139,9 @@ abstract class _$AppRouter extends RootStackRouter {
       );
     },
     RecurringListRoute.name: (routeData) {
-      final args = routeData.argsAs<RecurringListRouteArgs>();
       return AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: RecurringListScreenProvider(
-          key: args.key,
-          isDetail: args.isDetail,
-        ),
+        child: const RecurringListScreenProvider(),
       );
     },
     RegisterRoute.name: (routeData) {
@@ -555,40 +551,16 @@ class ProfileRoute extends PageRouteInfo<void> {
 
 /// generated route for
 /// [RecurringListScreenProvider]
-class RecurringListRoute extends PageRouteInfo<RecurringListRouteArgs> {
-  RecurringListRoute({
-    Key? key,
-    required bool isDetail,
-    List<PageRouteInfo>? children,
-  }) : super(
+class RecurringListRoute extends PageRouteInfo<void> {
+  const RecurringListRoute({List<PageRouteInfo>? children})
+      : super(
           RecurringListRoute.name,
-          args: RecurringListRouteArgs(
-            key: key,
-            isDetail: isDetail,
-          ),
           initialChildren: children,
         );
 
   static const String name = 'RecurringListRoute';
 
-  static const PageInfo<RecurringListRouteArgs> page =
-      PageInfo<RecurringListRouteArgs>(name);
-}
-
-class RecurringListRouteArgs {
-  const RecurringListRouteArgs({
-    this.key,
-    required this.isDetail,
-  });
-
-  final Key? key;
-
-  final bool isDetail;
-
-  @override
-  String toString() {
-    return 'RecurringListRouteArgs{key: $key, isDetail: $isDetail}';
-  }
+  static const PageInfo<void> page = PageInfo<void>(name);
 }
 
 /// generated route for

@@ -54,7 +54,7 @@ class RecurringListCubit extends BaseBloc<RecurringListState> {
       final result = event;
       result.fold((l) {
         if (l.isEmpty) {
-          emit(RecurringListNoResult());
+          emit(const RecurringListLoaded([]));
         } else {
           emit(RecurringListLoaded(l));
         }

@@ -1,12 +1,11 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_e_spend/common/assets/assets.gen.dart';
 import 'package:flutter_e_spend/common/enums/category.dart';
-import 'package:flutter_e_spend/common/extension/date_time_extension.dart';
+import 'package:flutter_e_spend/common/extension/show_extension.dart';
 import 'package:flutter_e_spend/common/extension/string_extension.dart';
 
 import 'package:flutter_e_spend/presentation/routers/app_router.dart';
@@ -21,12 +20,16 @@ import '../../../../../../widgets/text_field_widget/text_field_widget.dart';
 import '../bloc/create/create_recurring_bloc.dart';
 import '../bloc/create/create_recurring_state.dart';
 import '../create_recurring_constants.dart';
+import 'for_curring_widget.dart';
 
 class CreateRecurringForm extends StatefulWidget {
   final TextEditingController amountCtrl;
   final TextEditingController walletCtrl;
   final TextEditingController categoryCtl;
   final TextEditingController dateCtl;
+  final TextEditingController fromController;
+  final TextEditingController recurringCountController;
+  final TextEditingController recurringType;
   final TextEditingController noteCtl;
   final String walletImage;
 
@@ -38,6 +41,9 @@ class CreateRecurringForm extends StatefulWidget {
     required this.dateCtl,
     required this.noteCtl,
     required this.walletImage,
+    required this.fromController,
+    required this.recurringCountController,
+    required this.recurringType,
   }) : super(key: key);
 
   @override
@@ -117,9 +123,11 @@ class _CreateRecurringFormState extends State<CreateRecurringForm> {
         TextFieldWidget(
           controller: widget.dateCtl,
           prefixIcon: Assets.images.calendar.image(),
-          hintText: 'Today'.tr,
+          hintText: 'no for'.tr,
           readOnly: true,
-          onTap: _selectDate,
+          onTap: () {
+            _selectDate(context);
+          },
         ),
         SizedBox(
           height: AppDimens.height_12,
@@ -155,32 +163,14 @@ class _CreateRecurringFormState extends State<CreateRecurringForm> {
     }
   }
 
-  void _selectDate() {
-    showModalBottomSheet(
-      context: context,
-      builder: (_) {
-        return SizedBox(
-          height: MediaQuery.of(context).size.height * 0.3,
-          child: BlocBuilder<CreateRecurringBloc, CreateRecurringState>(
-            bloc: _createRecurringBloc,
-            buildWhen: (previous, current) =>
-                previous.spendTime != current.spendTime,
-            builder: (context, state) {
-              return CupertinoDatePicker(
-                onDateTimeChanged: _onChangeDate,
-                initialDateTime: state.spendTime.toDate(),
-                mode: CupertinoDatePickerMode.date,
-                maximumDate: DateTime.now(),
-              );
-            },
-          ),
-        );
-      },
+  void _selectDate(BuildContext context) {
+    context.showBottomSheet(
+      child: ForCurringWidget(
+        parentContext: context,
+        fromController: widget.fromController,
+        recurringCountController: widget.recurringCountController,
+        recurringType: widget.recurringType,
+      ),
     );
-  }
-
-  void _onChangeDate(DateTime date) {
-    widget.dateCtl.text = date.getTextDate;
-    _createRecurringBloc.changeSpendTime(Timestamp.fromDate(date));
   }
 }
