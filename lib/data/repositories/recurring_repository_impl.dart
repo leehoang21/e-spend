@@ -16,17 +16,20 @@ class RecurringRepositoryImpl extends RecurringRepository {
   final WalletRepository walletRepository;
   final StorageRepository storageRepository;
   RecurringRepositoryImpl(
-    this.firebaseConfig,
     this.walletRepository,
     this.storageRepository,
+    this.firebaseConfig,
   );
 
   String get _uid => firebaseConfig.auth.currentUser?.uid ?? '';
 
-  CollectionReference<Map<String, dynamic>> get _doc => firebaseConfig.userDoc
-      .collection(_uid)
-      .doc(DefaultEnvironment.customer)
-      .collection(DefaultEnvironment.recurring);
+  CollectionReference<Map<String, dynamic>> get _doc {
+    return firebaseConfig.userDoc
+        .collection(_uid)
+        .doc(DefaultEnvironment.customer)
+        .collection(DefaultEnvironment.recurring);
+  }
+
   @override
   Future<Either<String, AppError>> put(
     RecurringModel data,
@@ -34,7 +37,7 @@ class RecurringRepositoryImpl extends RecurringRepository {
     try {
       final param = data.toJson();
       if (data.id == null) {
-        final result = await _doc.add(param);
+        final result = await (_doc).add(param);
         return Left(result.id);
       } else {
         await _doc.doc(data.id).update(param);
@@ -58,26 +61,19 @@ class RecurringRepositoryImpl extends RecurringRepository {
 
   Future<RecurringModel> _get(
       QueryDocumentSnapshot<Map<String, dynamic>> element) async {
-    final data = RecurringModel.fromDocument(element);
-    //get image
-    final photos = await Future.wait(
-      (data.transaction.photos).map((e) async => await _getUrlImage(e)),
-    );
-    return data.copyWith.transaction.call(
-      photos: photos,
-    );
-  }
-
-  Future<String> _getUrlImage(String path) async {
-    final result = await storageRepository.downloadUrl(pathStorage: path);
-    return result.isLeft ? result.left : '';
+    return RecurringModel.fromDocument(element);
   }
 
   @override
-  Stream<Either<List<RecurringModel>, AppError>> stream() {
+  Stream<Either<List<RecurringModel>, AppError>> stream() async* {
     try {
+      final firebaseConfig0 = FirebaseConfig();
+      await firebaseConfig0.initAsync();
       //lấy giao dịch trong khoản thời gian time
-      final result = _doc
+      final result = firebaseConfig0.userDoc
+          .collection(_uid)
+          .doc(DefaultEnvironment.customer)
+          .collection(DefaultEnvironment.recurring)
           .snapshots()
           .map<Future<Either<List<RecurringModel>, AppError>>>((event) async {
         try {
@@ -91,9 +87,9 @@ class RecurringRepositoryImpl extends RecurringRepository {
           return Right(AppError(message: e.toString()));
         }
       });
-      return result.asyncMap((event) => event);
+      yield* result.asyncMap((event) => event);
     } catch (e) {
-      return Stream.value(Right(AppError(message: e.toString())));
+      yield* Stream.value(Right(AppError(message: e.toString())));
     }
   }
 }

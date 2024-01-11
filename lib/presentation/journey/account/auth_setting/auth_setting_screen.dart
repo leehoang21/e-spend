@@ -64,8 +64,8 @@ class AuthSettingsScreen extends StatelessWidget {
               // ),
               if (context.watch<AuthSettingsCubit>().state.isLocalAuth)
                 SettingsItem(
-                  icons: Assets.icons.biometrics.path,
-                  iconDefault: Assets.icons.biometrics.path,
+                  icons: Assets.icons.icBiometrics.path,
+                  iconDefault: Assets.icons.icBiometrics.path,
                   title: AuthSettingsConstants.biometrics.tr,
                   subtitle: isLocalAuth
                       ? AuthSettingsConstants.on.tr

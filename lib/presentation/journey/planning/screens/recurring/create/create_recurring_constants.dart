@@ -1,3 +1,5 @@
+import 'package:flutter_e_spend/data/models/recurring_model.dart';
+
 class CreateRecurringConstants {
   static const String addTransaction =
       'transaction.create.add_transaction_recurring';
@@ -18,11 +20,12 @@ class CreateRecurringConstants {
   static const String confirm = 'confirm';
   static const String count = 'recurring.create.count';
   static const String hintCount = 'recurring.create.hint_count';
-  static const List<String> fors = [
-    "recurring.create.none",
-    "recurring.create.day",
-    "recurring.create.week",
-    "recurring.create.month",
-    "recurring.create.year",
+  static const String repeat = 'recurring.create.repeat';
+  static const List<RepeatType> fors = [
+    RepeatType.none,
+    RepeatType.daily,
+    RepeatType.weekly,
+    RepeatType.monthly,
+    RepeatType.yearly,
   ];
 }

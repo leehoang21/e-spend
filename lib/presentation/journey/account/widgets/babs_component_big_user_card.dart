@@ -73,7 +73,7 @@ class BigUserCard extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          userName!,
+                          userName ?? "",
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: mediaQueryHeight / 30,

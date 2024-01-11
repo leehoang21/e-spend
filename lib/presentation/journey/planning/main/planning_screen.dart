@@ -32,15 +32,15 @@ class PlanningScreen extends StatelessWidget {
               title: PlanningConstants.buget.tr,
               subtitle: PlanningConstants.subtitleBuget.tr,
               onTap: () {
-                // context.pushRoute(const BugetRoute());
+                context.pushRoute(const BugetRoute());
               },
             ),
-            ItemPlanningWidget(
-              icon: Assets.images.icEvent.path,
-              title: PlanningConstants.event.tr,
-              subtitle: PlanningConstants.subtitleEvent.tr,
-              onTap: () {},
-            ),
+            // ItemPlanningWidget(
+            //   icon: Assets.images.icEvent.path,
+            //   title: PlanningConstants.event.tr,
+            //   subtitle: PlanningConstants.subtitleEvent.tr,
+            //   onTap: () {},
+            // ),
             ItemPlanningWidget(
               icon: Assets.images.icMoney.path,
               title: PlanningConstants.recurringTransactions.tr,

@@ -1,4 +1,4 @@
-import 'dart:developer';
+import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -7,11 +7,14 @@ import 'package:flutter_e_spend/common/configs/hive/hive_config.dart';
 import 'package:flutter_e_spend/common/utils/app_utils.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:injectable/injectable.dart';
-
+import 'package:notifications/notifications.dart';
 import '../../../firebase_options.dart';
 import '../../enums/app_enums.dart';
 import '../dio/dio_config.dart';
 import 'notification_service.dart';
+import 'package:timezone/data/latest_all.dart' as tz;
+import 'package:timezone/timezone.dart' as tz;
+import 'package:flutter_timezone/flutter_timezone.dart';
 
 @lazySingleton
 class NotificationConfig {
@@ -31,9 +34,11 @@ class NotificationConfig {
           .collection(DefaultEnvironment.fcmToken);
 
   config() async {
-    await Firebase.initializeApp(
-      options: DefaultFirebaseOptions.currentPlatform,
-    );
+    try {
+      await Firebase.initializeApp(
+        options: DefaultFirebaseOptions.currentPlatform,
+      );
+    } catch (_) {}
     await hiveConfig.initAsync();
     final result = await requestPermission();
     if (!result) return;
@@ -41,7 +46,6 @@ class NotificationConfig {
     await onOpenApp();
     await onForeground();
     await onMessageBackground();
-    pushNotification();
   }
 
   Future<bool> requestPermission() async {
@@ -57,43 +61,76 @@ class NotificationConfig {
     }
   }
 
-  Future sendNotification(token) async {
+  Future schedule(NotificationEvent event) async {
+    final id = Random.secure().nextInt(100000000);
+    final List<PendingNotificationRequest> pendingNotificationRequests =
+        await flutterLocalNotificationsPlugin.pendingNotificationRequests();
+    for (final pendingNotificationRequest in pendingNotificationRequests) {
+      if (pendingNotificationRequest.id == id) {
+        return;
+      }
+    }
+    tz.initializeTimeZones();
+    final String currentTimeZone = await FlutterTimezone.getLocalTimezone();
+    tz.setLocalLocation(tz.getLocation(currentTimeZone));
+
+    await flutterLocalNotificationsPlugin.zonedSchedule(
+        Random.secure().nextInt(100000000),
+        event.title,
+        event.message,
+        tz.TZDateTime.parse(tz.local, event.timeStamp!.toIso8601String()),
+        const NotificationDetails(
+          android: AndroidNotificationDetails(
+            'schedule channel',
+            'schedule channel',
+            channelDescription: 'schedule channel description',
+            importance: Importance.max,
+          ),
+        ),
+        androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+        uiLocalNotificationDateInterpretation:
+            UILocalNotificationDateInterpretation.absoluteTime);
+  }
+
+  Future sendNotification(String token, NotificationEvent event) async {
     try {
       final data = {
         "message": {
           "token": token,
-          "data": {
-            "isScheduled": "true",
-            "scheduledTime": "2024-01-01 10:20:00"
-          },
           "notification": {
-            "title": "FCM Message",
-            "body": "This is an FCM notification message!",
+            "title": event.title ?? 'title',
+            "body": event.message ?? 'body',
           }
         }
       };
-      final response = await dioApiClient.request(
+      final result = await dioApiClient.request(
         method: NetworkMethod.post,
         url: DefaultEnvironment.notificationHost,
         header: {
           'Content-Type': 'application/json',
           'Authorization':
-              'Bearer ya29.a0AfB_byBpU_H_a7QdobLsuhGdzA6xqy4KXTVlIBkggzCYseM_tArUPhhZF1VvZjwahG5eSMSzO9V-wR9NV_D2e-rKQjjrCKOYpbdPIM8L1GSFZVjRHXwHXjizlnIejkdLnNA35FyGWnaxfUzcWw7c84IO9Z6d9wL-Z7s7aCgYKAQQSARASFQHGX2MiOeD4ncUBh9T_E2USMQqPuQ0171'
+              'Bearer ya29.a0AfB_byDhwSkn9g3VZRx-6QInMoZW5PDwxVpY5ZbojQ9dHCD4MQ4cnCFzc86UnSc6R0zdfvkfJlb3uFaBvNZ7Lbkp43Slh0vb40oDuup_iB6nI86ZsOiu6igresVOPkyjpUAuA3KMB5cOpWpb9ipfPFXa2YI9r503kYEaCgYKASoSARASFQHGX2MijC7f_mmqgy1Yv3VGI5id7w0170'
         },
         data: data,
       );
-      log('response: ${response.data}');
+      logger(result);
     } catch (e) {
-      log('error: $e');
+      logger(e.toString());
     }
   }
 
-  pushNotification() async {
-    final tokens = await getTokenRemote();
-    if (tokens.isNotEmpty) {
-      for (final token in tokens) {
-        await sendNotification(token);
+  pushNotification(
+    NotificationEvent event,
+  ) async {
+    try {
+      final tokens = await getTokenRemote();
+      if (tokens.isNotEmpty) {
+        for (final token in tokens) {
+          await sendNotification(token, event);
+        }
       }
+    } catch (e) {
+      logger(e.toString());
     }
   }
 
@@ -122,7 +159,7 @@ class NotificationConfig {
 
   getToken() async {
     String? token = await FirebaseMessaging.instance.getToken(vapidKey: "");
-    log("token: $token");
+    logger("token: $token");
     if (isNullEmpty(token) || token == hiveConfig.fvmToken) {
       return;
     }

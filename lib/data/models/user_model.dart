@@ -25,8 +25,6 @@ class UserModel {
   final bool? isPassword;
   @HiveField(8)
   final bool? isBiometricsAuth;
-  @HiveField(9)
-  final String? token;
 
   UserModel({
     this.phoneNumber,
@@ -38,7 +36,6 @@ class UserModel {
     this.googleLink,
     this.isPassword,
     this.isBiometricsAuth,
-    this.token,
   });
 
   UserModel copyWith({
@@ -50,7 +47,6 @@ class UserModel {
     UserModel? googleLink,
     bool? isPassword,
     bool? isBiometricsAuth,
-    String? token,
     String? phoneNumber,
   }) {
     return UserModel(
@@ -63,7 +59,6 @@ class UserModel {
       googleLink: googleLink ?? this.googleLink,
       isPassword: isPassword ?? this.isPassword,
       isBiometricsAuth: isBiometricsAuth ?? this.isBiometricsAuth,
-      token: token ?? this.token,
     );
   }
 
@@ -84,15 +79,14 @@ class UserModel {
     //     ? UserModel.fromJson(data['googleLink'] as Map<String, dynamic>)
     //     : null;
     return UserModel(
-      userName: data['userName'] as String,
+      userName: data['userName'] as String?,
       email: data['email'] as String?,
       avatar: data['avatar'] as String?,
-      phoneNumber: data['phoneNumber'] as String,
+      phoneNumber: data['phoneNumber'] as String?,
       uId: uid,
       // facebookLink: facebookLink,
       // googleLink: googleLink,
       isBiometricsAuth: isBiometricsAuth,
-      token: token,
     );
   }
 
@@ -109,8 +103,8 @@ class UserModel {
   factory UserModel.fromJson(Map<String, dynamic> json) {
     return UserModel(
       phoneNumber: json['phoneNumber'] as String?,
-      userName: json['userName'] as String?,
-      avatar: json['avatar'] as String?,
+      userName: json['name'] as String?,
+      avatar: '',
       email: json['email'] as String?,
     );
   }

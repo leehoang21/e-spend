@@ -7,15 +7,19 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'transaction_model.dart';
 
 part 'buget_model.freezed.dart';
+part 'buget_model.g.dart';
 
 @freezed
 class BugetModel with _$BugetModel {
+  // ignore: invalid_annotation_target
+  @JsonSerializable(explicitToJson: true)
   const factory BugetModel({
-    List<TransactionModel>? transactions,
+    @Default([]) List<TransactionModel> transactions,
     WalletModel? wallet,
     CategoryModel? category,
     num? amount,
-    DateTime? time,
+    DateTime? lastAt,
+    DateTime? createAt,
     String? id,
     @Default(false) bool isAutoCreate,
   }) = _BugetModel;
@@ -24,18 +28,18 @@ class BugetModel with _$BugetModel {
       QueryDocumentSnapshot<Map<String, dynamic>> query) {
     final json = query.data();
     final id = query.id;
-
+    final category = json['category'] as Map<String, dynamic>?;
     return BugetModel(
       id: id,
-      amount: json['amount'] as double? ?? 0,
-      category: (json['category'] as Map<String, dynamic>?) != null
+      amount: json['amount'] as num? ?? 0,
+      category: category != null
           ? CategoryModel.fromJson(
-              json['categoryType'] as Map<String, dynamic>,
+              category,
             )
           : const CategoryModel(
               category: CategoryType.other,
             ),
-      time: json['time'] != null ? DateTime.parse(json['time']) : null,
+      lastAt: json['lastAt'] != null ? DateTime.parse(json['lastAt']) : null,
       isAutoCreate: json['isAutoCreate'] as bool? ?? false,
       wallet: (json['wallet'] as Map<String, dynamic>?) != null
           ? WalletModel.fromJson(
@@ -43,8 +47,14 @@ class BugetModel with _$BugetModel {
             )
           : WalletModel(),
       transactions: (json['transactions'] as List<dynamic>?)
-          ?.map((e) => TransactionModel.fromJson(e as Map<String, dynamic>))
-          .toList(),
+              ?.map((e) => TransactionModel.fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          [],
+      createAt:
+          json['createAt'] != null ? DateTime.parse(json['createAt']) : null,
     );
   }
+
+  factory BugetModel.fromJson(Map<String, dynamic> json) =>
+      _$BugetModelFromJson(json);
 }

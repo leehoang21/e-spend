@@ -5,8 +5,10 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_e_spend/common/assets/assets.gen.dart';
 import 'package:flutter_e_spend/common/enums/category.dart';
+import 'package:flutter_e_spend/common/extension/date_time_extension.dart';
 import 'package:flutter_e_spend/common/extension/show_extension.dart';
 import 'package:flutter_e_spend/common/extension/string_extension.dart';
+import 'package:flutter_e_spend/data/models/recurring_model.dart';
 
 import 'package:flutter_e_spend/presentation/routers/app_router.dart';
 import 'package:flutter_translate/flutter_translate.dart';
@@ -23,27 +25,8 @@ import '../create_recurring_constants.dart';
 import 'for_curring_widget.dart';
 
 class CreateRecurringForm extends StatefulWidget {
-  final TextEditingController amountCtrl;
-  final TextEditingController walletCtrl;
-  final TextEditingController categoryCtl;
-  final TextEditingController dateCtl;
-  final TextEditingController fromController;
-  final TextEditingController recurringCountController;
-  final TextEditingController recurringType;
-  final TextEditingController noteCtl;
-  final String walletImage;
-
   const CreateRecurringForm({
     Key? key,
-    required this.amountCtrl,
-    required this.walletCtrl,
-    required this.categoryCtl,
-    required this.dateCtl,
-    required this.noteCtl,
-    required this.walletImage,
-    required this.fromController,
-    required this.recurringCountController,
-    required this.recurringType,
   }) : super(key: key);
 
   @override
@@ -53,11 +36,21 @@ class CreateRecurringForm extends StatefulWidget {
 class _CreateRecurringFormState extends State<CreateRecurringForm> {
   late CreateRecurringBloc _createRecurringBloc;
   String _walletImage = '';
+  final TextEditingController _amountCtrl = TextEditingController();
+
+  final TextEditingController _walletCtrl = TextEditingController();
+
+  final TextEditingController _categoryCtl = TextEditingController();
+
+  final TextEditingController _dateCtl = TextEditingController();
+
+  final TextEditingController _noteCtl = TextEditingController();
+  final TextEditingController _recurringType = TextEditingController();
 
   @override
   void initState() {
-    _createRecurringBloc = BlocProvider.of(context);
-    _walletImage = widget.walletImage;
+    _createRecurringBloc = context.read<CreateRecurringBloc>();
+
     super.initState();
   }
 
@@ -66,7 +59,7 @@ class _CreateRecurringFormState extends State<CreateRecurringForm> {
     return Column(
       children: [
         TextFieldWidget(
-          controller: widget.amountCtrl,
+          controller: _amountCtrl,
           keyboardType: const TextInputType.numberWithOptions(signed: true),
           prefixIcon: Assets.images.icCoins.image(),
           inputFormatter: [
@@ -86,7 +79,7 @@ class _CreateRecurringFormState extends State<CreateRecurringForm> {
           height: AppDimens.height_12,
         ),
         TextFieldWidget(
-          controller: widget.walletCtrl,
+          controller: _walletCtrl,
           prefixIcon: AppImageWidget(
             path: _walletImage,
             defultImage: Assets.images.icWallet.image(),
@@ -103,39 +96,57 @@ class _CreateRecurringFormState extends State<CreateRecurringForm> {
         BlocBuilder<CreateRecurringBloc, CreateRecurringState>(
             bloc: _createRecurringBloc,
             buildWhen: (previous, current) =>
-                previous.category != current.category,
+                previous.data.category != current.data.category,
             builder: (context, state) {
               return TextFieldWidget(
-                controller: widget.categoryCtl,
+                controller: _categoryCtl,
                 prefixIcon: AppImageWidget(
-                  path: state.category != null
-                      ? "${StringConstants.imagePath}${state.category!.category.title.toLowerCase()}.png"
+                  path: state.data.category != null
+                      ? "${StringConstants.imagePath}${state.data.category!.title.toLowerCase()}.png"
                       : Assets.images.category.path,
                 ),
                 hintText: CreateRecurringConstants.category.tr,
                 readOnly: true,
-                onTap: () => _chooseCategory(state.category),
+                onTap: () => _chooseCategory(
+                  CategoryModel(
+                    category: state.data.category ?? CategoryType.other,
+                  ),
+                ),
               );
             }),
         SizedBox(
           height: AppDimens.height_12,
         ),
         TextFieldWidget(
-          controller: widget.dateCtl,
+          controller: _dateCtl,
           prefixIcon: Assets.images.calendar.image(),
-          hintText: 'recurring.create.none'.tr,
+          hintText: 'firstAt'.tr,
           readOnly: true,
-          onTap: () {
-            _selectDate(context);
-          },
+          onTap: _selectDate,
         ),
         SizedBox(
           height: AppDimens.height_12,
         ),
         TextFieldWidget(
-          controller: widget.noteCtl,
+          controller: _recurringType,
+          prefixIcon: Assets.icons.repeat.image(
+            width: AppDimens.space_14,
+            height: AppDimens.space_14,
+          ),
+          readOnly: true,
+          onTap: () {
+            _repeat(context);
+          },
+          hintText: CreateRecurringConstants.repeat.tr,
+        ),
+        SizedBox(
+          height: AppDimens.height_12,
+        ),
+        TextFieldWidget(
+          controller: _noteCtl,
           prefixIcon: Assets.images.note.image(),
           hintText: CreateRecurringConstants.note.tr,
+          onChanged: _createRecurringBloc.changeNote,
         ),
       ],
     );
@@ -147,7 +158,8 @@ class _CreateRecurringFormState extends State<CreateRecurringForm> {
     ));
     if (category != null) {
       _createRecurringBloc.chooseCategory(category as CategoryModel);
-      widget.categoryCtl.text = translate(
+
+      _categoryCtl.text = translate(
           "transaction_category_screen_${category.category.title.toLowerCase()}");
     }
   }
@@ -157,19 +169,50 @@ class _CreateRecurringFormState extends State<CreateRecurringForm> {
 
     if (wallet != null) {
       _createRecurringBloc.chooseWallet(wallet as WalletModel);
-      widget.walletCtrl.text = wallet.walletName ?? '';
+      _walletCtrl.text = wallet.walletName ?? '';
       _walletImage = wallet.walletImage ?? '';
       setState(() {});
     }
   }
 
-  void _selectDate(BuildContext context) {
+  void _selectDate() {
+    showModalBottomSheet(
+      context: context,
+      builder: (_) {
+        return SizedBox(
+          height: MediaQuery.of(context).size.height * 0.3,
+          child: BlocBuilder<CreateRecurringBloc, CreateRecurringState>(
+            bloc: _createRecurringBloc,
+            buildWhen: (previous, current) =>
+                previous.data.createAt != current.data.createAt,
+            builder: (_, state) {
+              return CupertinoDatePicker(
+                onDateTimeChanged: _onChangeDate,
+                initialDateTime: state.data.createAt ?? DateTime.now(),
+                mode: CupertinoDatePickerMode.date,
+                maximumDate: DateTime.now(),
+              );
+            },
+          ),
+        );
+      },
+    );
+  }
+
+  void _onChangeDate(DateTime date) {
+    _dateCtl.text = date.getTextDate;
+    _createRecurringBloc.changeSpendTime(date);
+  }
+
+  void _repeat(BuildContext context) {
     context.showBottomSheet(
       child: ForCurringWidget(
+        onConfirm: (repeat) {
+          _recurringType.text = repeat.type?.title.tr ?? "";
+        },
         parentContext: context,
-        fromController: widget.fromController,
-        recurringCountController: widget.recurringCountController,
-        recurringType: widget.recurringType,
+        repeat: context.read<CreateRecurringBloc>().state.data.repeat ??
+            const Repeat(),
       ),
     );
   }

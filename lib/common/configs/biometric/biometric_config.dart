@@ -69,6 +69,24 @@ class BiometricConfig {
     }
   }
 
+  Future<BiometricType> biometricType() async {
+    try {
+      final List<BiometricType> result = await _auth.getAvailableBiometrics();
+      result.remove(BiometricType.weak);
+
+      if (result.contains(BiometricType.strong)) {
+        return BiometricType.strong;
+      } else if (result.length == 1) {
+        return result.first;
+      } else {
+        return BiometricType.weak;
+      }
+    } catch (e) {
+      logger(e);
+      return BiometricType.weak;
+    }
+  }
+
   Future<bool> get canAuthenticateBiometric async {
     try {
       final result = await FlutterLocker.canAuthenticate();

@@ -162,7 +162,9 @@ class StatisticWidget extends StatelessWidget {
                   style: ThemeText.caption,
                 ),
                 Text(
-                  (-context.watch<HomeCubit>().state.statistic.$2)
+                  (context.watch<HomeCubit>().state.statistic.$2 < 0
+                          ? -context.watch<HomeCubit>().state.statistic.$2
+                          : context.watch<HomeCubit>().state.statistic.$2)
                       .getTextCompactCurrencyAmount,
                   style: ThemeText.body1.copyWith(
                     color: AppColor.red,

@@ -1,11 +1,15 @@
 import 'dart:async';
 
 import 'package:equatable/equatable.dart';
+import 'package:flutter_e_spend/common/configs/notification/notification_config.dart';
+import 'package:flutter_e_spend/common/enums/category.dart';
+import 'package:flutter_e_spend/common/extension/string_extension.dart';
 import 'package:flutter_e_spend/presentation/bloc/base_bloc/base_bloc.dart';
 import 'package:injectable/injectable.dart';
+import 'package:notifications/notifications.dart';
 
-import '../../../../../../../data/models/recurring_model.dart';
-import '../../../../../../../domain/use_cases/recurring_use_case.dart';
+import '../../../../data/models/recurring_model.dart';
+import '../../../../domain/use_cases/recurring_use_case.dart';
 
 class RecurringListState extends Equatable {
   const RecurringListState();
@@ -36,12 +40,14 @@ class RecurringListError extends RecurringListState {
   List<Object?> get props => [error];
 }
 
-@injectable
+@singleton
 class RecurringListCubit extends BaseBloc<RecurringListState> {
   final RecurringUseCase useCase;
   StreamSubscription? _subscription;
+  final NotificationConfig notificationConfig;
 
-  RecurringListCubit(this.useCase) : super(RecurringListLoading());
+  RecurringListCubit(this.useCase, this.notificationConfig)
+      : super(RecurringListLoading());
 
   @override
   onInit() {
@@ -57,11 +63,25 @@ class RecurringListCubit extends BaseBloc<RecurringListState> {
           emit(const RecurringListLoaded([]));
         } else {
           emit(RecurringListLoaded(l));
+          handel(l);
         }
       }, (r) {
         emit(RecurringListError(r.toString()));
       });
     });
+  }
+
+  handel(List<RecurringModel> data) {
+    for (var item in data) {
+      notificationConfig.schedule(
+        NotificationEvent(
+          message: item.note,
+          title: item.category!.title.tr,
+          packageName: 'com.schedule',
+          timeStamp: item.repeat?.nextTime ?? DateTime.now(),
+        ),
+      );
+    }
   }
 
   @override

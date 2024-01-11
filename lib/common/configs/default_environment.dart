@@ -15,6 +15,7 @@ class DefaultEnvironment {
   static const String user = 'user';
   static const String recurring = 'recurring';
   static const String fcmToken = 'fcmToken';
+  static const String buget = 'buget';
   //local
   static const String lang = 'lang';
   static const String theme = 'theme';

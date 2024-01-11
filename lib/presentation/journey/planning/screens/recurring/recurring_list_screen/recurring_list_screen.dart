@@ -8,15 +8,16 @@ import 'package:flutter_e_spend/presentation/routers/app_router.dart';
 import 'package:flutter_e_spend/presentation/widgets/scaffold_wdiget/scaffold_widget.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 
+import '../../../../../../common/assets/assets.gen.dart';
 import '../../../../../../common/constants/app_dimens.dart';
 import '../../../../../../common/constants/string_constants.dart';
 import '../../../../../../common/utils/app_utils.dart';
+import '../../../../../bloc/schedule/schedule_cubit.dart';
 import '../../../../../themes/themes.dart';
 import '../../../../../widgets/appbar_widget/appbar_widget.dart';
 import '../../../../../widgets/image_app_widget/image_app.dart';
 import '../../../../../widgets/loading_widget/loader_widget.dart';
 import '../../../../../widgets/refresh_widget.dart';
-import 'bloc/recurring_list_cubit.dart';
 
 class RecurringListScreen extends StatelessWidget {
   RecurringListScreen({
@@ -69,11 +70,7 @@ class RecurringListScreen extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         backgroundColor: AppColor.black,
         onPressed: () async {
-          final result = await context.pushRoute(CreateRecurringRoute());
-
-          if (result is bool && result) {
-            await context.read<RecurringListCubit>().getRecurringList();
-          }
+          await context.pushRoute(CreateRecurringRoute());
         },
         child: Icon(
           Icons.add_rounded,
@@ -86,12 +83,7 @@ class RecurringListScreen extends StatelessWidget {
   Widget _buildRecurringItem(BuildContext context, RecurringModel data) {
     return InkWell(
       onTap: () async {
-        // if (isDetail) {
-        //   // await context.pushRoute(DetailRecurringRoute(Recurring: Recurring));
-        //   await context.read<RecurringListCubit>().getRecurringList();
-        // } else {
-        //   Navigator.pop(context);
-        // }
+        context.pushRoute(DetailRecurringRoute(model: data));
       },
       child: Container(
         margin: EdgeInsets.only(
@@ -118,13 +110,27 @@ class RecurringListScreen extends StatelessWidget {
                   top: AppDimens.space_4,
                   bottom: AppDimens.space_4,
                   right: AppDimens.space_16),
-              width: AppDimens.height_52,
-              height: AppDimens.height_52,
-              child: AppImageWidget(
-                  path:
-                      "${StringConstants.imagePath}${data.transaction.category.category.title.toLowerCase()}.png",
-                  height: AppDimens.height_52,
-                  width: AppDimens.height_52),
+              width: AppDimens.height_60,
+              height: AppDimens.height_60,
+              child: Stack(
+                children: [
+                  AppImageWidget(
+                      path:
+                          "${StringConstants.imagePath}${data.category?.title.toLowerCase()}.png",
+                      height: AppDimens.height_52,
+                      width: AppDimens.height_52),
+                  Positioned(
+                    bottom: 0,
+                    right: 0,
+                    child: AppImageWidget(
+                        path: isNullEmpty(data.wallet?.walletImage)
+                            ? Assets.images.icWallet.path
+                            : data.wallet?.walletImage,
+                        height: AppDimens.height_28,
+                        width: AppDimens.height_28),
+                  ),
+                ],
+              ),
             ),
             Container(
               margin: EdgeInsets.symmetric(vertical: AppDimens.space_4),
@@ -135,13 +141,13 @@ class RecurringListScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      data.transaction.note ?? "",
+                      data.repeat?.type?.title.tr ?? "",
                       style: ThemeText.style14Medium,
                       softWrap: true,
-                      maxLines: 3,
+                      maxLines: 2,
                     ),
                     Text(
-                      formatMoney(data.transaction.amount.toString()),
+                      formatMoney(data.defaultAmount.toString()),
                       style: ThemeText.style12Regular
                           .copyWith(color: AppColor.green),
                     ),

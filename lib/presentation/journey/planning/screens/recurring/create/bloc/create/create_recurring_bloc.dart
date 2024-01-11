@@ -1,15 +1,11 @@
-import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_e_spend/common/extension/bloc_extension.dart';
 import 'package:flutter_e_spend/domain/use_cases/recurring_use_case.dart';
-import 'package:flutter_e_spend/domain/use_cases/storage_use_case.dart';
 import 'package:injectable/injectable.dart';
 import '../../../../../../../../common/utils/internet_checker.dart';
 import '../../../../../../../../common/utils/validator.dart';
 import '../../../../../../../../data/models/category_model.dart';
 import '../../../../../../../../data/models/recurring_model.dart';
-import '../../../../../../../../data/models/transaction_model.dart';
 import '../../../../../../../../data/models/wallet_model.dart';
 import '../../../../../../../bloc/base_bloc/base_bloc.dart';
 import 'create_recurring_state.dart';
@@ -17,105 +13,107 @@ import 'create_recurring_state.dart';
 @injectable
 class CreateRecurringBloc extends BaseBloc<CreateRecurringState> {
   final RecurringUseCase _useCase;
-  final StorageUseCase storageUseCase;
   // ignore: unused_field
-  RecurringModel? _transaction;
+  RecurringModel? _recurring;
   CreateRecurringBloc(
     this._useCase,
-    this.storageUseCase,
   ) : super(
           CreateRecurringState.initial(),
         );
 
-  Future<void> initial(RecurringModel transaction) async {
-    _transaction = transaction;
+  Future<void> initial(RecurringModel recurring) async {
+    _recurring = recurring;
   }
 
   Future<void> chooseCategory(CategoryModel? category) async {
+    if (category == null) return;
+    final data = state.data.copyWith(category: category.category);
     emit(
       state.copyWith(
-        category: category,
-        buttonIsValid: AppValidator.validateCreateTransactionButton(
-            state.amount, category, state.spendTime, state.wallet),
-        lastUpdate: DateTime.now(),
+        data: data,
+        buttonIsValid: AppValidator.validateCreateRecurringButton(
+          data,
+        ),
       ),
     );
   }
 
-  Future<void> changeSpendTime(Timestamp spendTime) async {
+  Future<void> changeNote(
+    String note,
+  ) async {
+    final data = state.data.copyWith(note: note);
     emit(
       state.copyWith(
-        spendTime: spendTime,
-        buttonIsValid: AppValidator.validateCreateTransactionButton(
-            state.amount, state.category, spendTime, state.wallet),
-        lastUpdate: DateTime.now(),
+        data: data,
+      ),
+    );
+  }
+
+  Future<void> changeRepeat(
+    Repeat repeat,
+  ) async {
+    final data = state.data.copyWith(repeat: repeat);
+    emit(
+      state.copyWith(
+        data: data,
+        buttonIsValid: AppValidator.validateCreateRecurringButton(
+          data,
+        ),
+      ),
+    );
+  }
+
+  Future<void> changeSpendTime(DateTime spendTime) async {
+    final data = state.data.copyWith(
+      createAt: spendTime,
+    );
+    emit(
+      state.copyWith(
+        data: data,
+        buttonIsValid: AppValidator.validateCreateRecurringButton(
+          data,
+        ),
       ),
     );
   }
 
   Future<void> chooseWallet(WalletModel? wallet) async {
+    if (wallet == null) return;
+    final data = state.data.copyWith(wallet: wallet);
     emit(
       state.copyWith(
-        wallet: wallet,
-        buttonIsValid: AppValidator.validateCreateTransactionButton(
-            state.amount, state.category, state.spendTime, wallet),
-        lastUpdate: DateTime.now(),
+        data: data,
+        buttonIsValid: AppValidator.validateCreateRecurringButton(
+          data,
+        ),
       ),
     );
   }
 
   Future<void> onChangeAmount(int amount) async {
+    final data = state.data.copyWith(defaultAmount: amount);
     emit(
       state.copyWith(
-        amount: amount,
-        buttonIsValid: AppValidator.validateCreateTransactionButton(
-            amount, state.category, state.spendTime, state.wallet),
-        lastUpdate: DateTime.now(),
+        data: data,
+        buttonIsValid: AppValidator.validateCreateRecurringButton(
+          data,
+        ),
       ),
     );
   }
 
-  Future<void> onCreate({
-    String? note,
-    List<File> photos = const [],
-    required String startFrom,
-    required String recurringCount,
-    required String recurringType,
-  }) async {
+  Future<void> onCreate() async {
     showLoading();
     if (await InternetChecker.hasConnection()) {
       try {
-        // final List<String> imagePaths = [];
-        //     for (int i = 0; i < photos.length; i++) {
-        //       final String storagePath =
-        //           '${DefaultEnvironment.transaction}/$l/$i.jpeg';
-        //       await storageUseCase.put(
-        //           imageToUpload: photos[i], imagePathStorage: storagePath);
-        //       imagePaths.add(storagePath);
-        RecurringModel transaction = RecurringModel(
-          transaction: TransactionModel(
-            amount: state.amount!,
-            photos: [],
-            category: state.category!,
-            spendTime: state.spendTime,
-            wallet: state.wallet!,
-            note: note,
-            createAt: DateTime.now().millisecondsSinceEpoch,
-            lastUpdate: DateTime.now().millisecondsSinceEpoch,
-          ),
-          startDate: DateTime.tryParse(startFrom) ?? DateTime.now(),
-          recurringCount: int.tryParse(recurringCount) ?? 1,
-          recurringType: recurringType,
-        );
-        final transactionResult = await _useCase.put(transaction);
-
-        transactionResult.fold(
+        RecurringModel recurring = state.data;
+        final recurringResult = await _useCase.put(recurring);
+        recurringResult.fold(
           (l) async {
             hideLoading();
             emit(
               state.copyWith(
                 status: CreateRecurringStatus.succes,
-                lastUpdate: DateTime.now(),
               ),
             );
           },
@@ -129,7 +127,6 @@ class CreateRecurringBloc extends BaseBloc<CreateRecurringState> {
         emit(
           state.copyWith(
             status: CreateRecurringStatus.failed,
-            lastUpdate: DateTime.now(),
           ),
         );
         hideLoading();
@@ -141,7 +138,6 @@ class CreateRecurringBloc extends BaseBloc<CreateRecurringState> {
       hideLoading();
       state.copyWith(
         status: CreateRecurringStatus.noInternet,
-        lastUpdate: DateTime.now(),
       );
       showSnackbar(
         translationKey: 'no_internet_connection',
@@ -149,62 +145,18 @@ class CreateRecurringBloc extends BaseBloc<CreateRecurringState> {
     }
   }
 
-  bool _checkRemote(String path) {
-    if (path.toString().contains('http://') ||
-        path.toString().contains('https://')) {
-      return true;
-    }
-    return false;
-  }
-
-  Future<void> onEdit({
-    required String id,
-    String? note,
-    required List<File> photos,
-    required String startFrom,
-    required String recurringCount,
-    required String recurringType,
-  }) async {
+  Future<void> onEdit() async {
     showLoading();
     if (await InternetChecker.hasConnection()) {
       try {
-        RecurringModel transaction = RecurringModel(
-          transaction: TransactionModel(
-            id: id,
-            amount: state.amount!,
-            category: state.category!,
-            spendTime: state.spendTime,
-            wallet: state.wallet!,
-            photos: state.photo,
-            note: note,
-            createAt: DateTime.now().millisecondsSinceEpoch,
-            lastUpdate: DateTime.now().millisecondsSinceEpoch,
-          ),
-          startDate: DateTime.tryParse(startFrom) ?? DateTime.now(),
-          recurringCount: int.tryParse(recurringCount) ?? 1,
-          recurringType: recurringType,
-        );
-        //update photos
+        RecurringModel recurring = state.data;
 
-        // final List<String> imagePaths = [];
-        // for (int i = 0; i < photos.length; i++) {
-        //   final String storagePath =
-        //       '${DefaultEnvironment.transaction}/${_transaction?.id}/$i.jpeg';
-        //   if (!_checkRemote(photos[i].path)) {
-        //     await storageUseCase.put(
-        //         imageToUpload: photos[i], imagePathStorage: storagePath);
-        //   }
-        //   imagePaths.add(storagePath);
-        // }
-        //update transaction
-        // transaction = transaction.copyWith(photos: imagePaths);
-        _useCase.put(transaction);
+        _useCase.put(recurring.copyWith(id: _recurring?.id));
         hideLoading();
         await pop(null);
         emit(
           state.copyWith(
             status: CreateRecurringStatus.succes,
-            lastUpdate: DateTime.now(),
           ),
         );
       } on FirebaseException catch (e) {

@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_e_spend/common/extension/string_extension.dart';
 import 'package:flutter_e_spend/common/utils/app_utils.dart';
+import 'package:flutter_e_spend/data/models/buget_model.dart';
+import 'package:flutter_e_spend/data/models/recurring_model.dart';
 
 import '../../data/models/category_model.dart';
 import '../../data/models/wallet_model.dart';
@@ -24,6 +26,19 @@ class AppValidator {
       category != null &&
       spendTime != null &&
       wallet != null;
+
+  static bool validateCreateRecurringButton(RecurringModel model) =>
+      model.category != null &&
+      model.defaultAmount != null &&
+      model.wallet != null &&
+      model.repeat != null &&
+      model.repeat!.startTime != null &&
+      model.repeat!.length != null &&
+      model.repeat!.type != null &&
+      model.note != null;
+
+  static bool validateCreateBugetButton(BugetModel model) =>
+      model.amount != null && model.lastAt != null;
 
   static String? validatePassword(String? password) {
     if (password == null ||

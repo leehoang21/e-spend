@@ -21,11 +21,15 @@ class AppInitializer {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark
         .copyWith(statusBarColor: AppColor.backgroundColor));
     Bloc.observer = MyBlocObserver();
-    configureDependencies();
-    final NotificationConfig configFirebaseMessage =
-        getIt.get<NotificationConfig>();
+    try {
+      configureDependencies();
+    } catch (_) {}
+    try {
+      final NotificationConfig configFirebaseMessage =
+          getIt.get<NotificationConfig>();
 
-    configFirebaseMessage.config();
+      configFirebaseMessage.config();
+    } catch (_) {}
     NotificationService().startListening();
   }
 }

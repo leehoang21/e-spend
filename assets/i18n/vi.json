@@ -278,5 +278,14 @@
   "recurring.create.day": "Hàng ngày",
   "recurring.create.week": "Hàng tuần",
   "recurring.create.month": "Hàng tháng",
-  "recurring.create.year": "Hàng năm"
+  "recurring.create.year": "Hàng năm",
+  "recurring.create.repeat": "Lặp lại",
+  "buget.create.add_buget": "Thêm ngân sách",
+  "buget.create.update_buget": "Cập nhật ngân sách",
+  "lastAt": "Thời gian kết thúc",
+  "firstAt": "Thời gian bắt đầu",
+  "list_buget": "Ngân sách",
+  "Recurrings": "Giao dịch định kỳ",
+  "week": "Tuần",
+  "none": "Không"
 }

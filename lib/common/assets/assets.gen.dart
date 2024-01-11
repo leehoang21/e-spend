@@ -64,12 +64,23 @@ class $AssetsIconsGen {
   /// File path: assets/icons/ic_apple.svg
   SvgGenImage get icApple => const SvgGenImage('assets/icons/ic_apple.svg');
 
+  /// File path: assets/icons/ic_biometrics.png
+  AssetGenImage get icBiometrics =>
+      const AssetGenImage('assets/icons/ic_biometrics.png');
+
+  /// File path: assets/icons/ic_face_id.png
+  AssetGenImage get icFaceId =>
+      const AssetGenImage('assets/icons/ic_face_id.png');
+
   /// File path: assets/icons/ic_facebook.svg
   SvgGenImage get icFacebook =>
       const SvgGenImage('assets/icons/ic_facebook.svg');
 
   /// File path: assets/icons/ic_google.svg
   SvgGenImage get icGoogle => const SvgGenImage('assets/icons/ic_google.svg');
+
+  /// File path: assets/icons/ic_iris.png
+  AssetGenImage get icIris => const AssetGenImage('assets/icons/ic_iris.png');
 
   /// File path: assets/icons/ic_money.svg
   SvgGenImage get icMoney => const SvgGenImage('assets/icons/ic_money.svg');
@@ -105,6 +116,9 @@ class $AssetsIconsGen {
   /// File path: assets/icons/rateme.png
   AssetGenImage get rateme => const AssetGenImage('assets/icons/rateme.png');
 
+  /// File path: assets/icons/repeat.png
+  AssetGenImage get repeat => const AssetGenImage('assets/icons/repeat.png');
+
   /// File path: assets/icons/snackbar_failed.svg
   SvgGenImage get snackbarFailed =>
       const SvgGenImage('assets/icons/snackbar_failed.svg');
@@ -125,8 +139,11 @@ class $AssetsIconsGen {
         filter,
         help,
         icApple,
+        icBiometrics,
+        icFaceId,
         icFacebook,
         icGoogle,
+        icIris,
         icMoney,
         icWallet,
         icons8Debt96,
@@ -137,6 +154,7 @@ class $AssetsIconsGen {
         notification,
         password,
         rateme,
+        repeat,
         snackbarFailed,
         success
       ];

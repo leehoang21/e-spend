@@ -14,17 +14,22 @@ T _$identity<T>(T value) => value;
 final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
+BugetModel _$BugetModelFromJson(Map<String, dynamic> json) {
+  return _BugetModel.fromJson(json);
+}
+
 /// @nodoc
 mixin _$BugetModel {
-  List<TransactionModel>? get transactions =>
-      throw _privateConstructorUsedError;
+  List<TransactionModel> get transactions => throw _privateConstructorUsedError;
   WalletModel? get wallet => throw _privateConstructorUsedError;
   CategoryModel? get category => throw _privateConstructorUsedError;
   num? get amount => throw _privateConstructorUsedError;
-  DateTime? get time => throw _privateConstructorUsedError;
+  DateTime? get lastAt => throw _privateConstructorUsedError;
+  DateTime? get createAt => throw _privateConstructorUsedError;
   String? get id => throw _privateConstructorUsedError;
   bool get isAutoCreate => throw _privateConstructorUsedError;
 
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
   $BugetModelCopyWith<BugetModel> get copyWith =>
       throw _privateConstructorUsedError;
@@ -37,11 +42,12 @@ abstract class $BugetModelCopyWith<$Res> {
       _$BugetModelCopyWithImpl<$Res, BugetModel>;
   @useResult
   $Res call(
-      {List<TransactionModel>? transactions,
+      {List<TransactionModel> transactions,
       WalletModel? wallet,
       CategoryModel? category,
       num? amount,
-      DateTime? time,
+      DateTime? lastAt,
+      DateTime? createAt,
       String? id,
       bool isAutoCreate});
 
@@ -62,19 +68,20 @@ class _$BugetModelCopyWithImpl<$Res, $Val extends BugetModel>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? transactions = freezed,
+    Object? transactions = null,
     Object? wallet = freezed,
     Object? category = freezed,
     Object? amount = freezed,
-    Object? time = freezed,
+    Object? lastAt = freezed,
+    Object? createAt = freezed,
     Object? id = freezed,
     Object? isAutoCreate = null,
   }) {
     return _then(_value.copyWith(
-      transactions: freezed == transactions
+      transactions: null == transactions
           ? _value.transactions
           : transactions // ignore: cast_nullable_to_non_nullable
-              as List<TransactionModel>?,
+              as List<TransactionModel>,
       wallet: freezed == wallet
           ? _value.wallet
           : wallet // ignore: cast_nullable_to_non_nullable
@@ -87,9 +94,13 @@ class _$BugetModelCopyWithImpl<$Res, $Val extends BugetModel>
           ? _value.amount
           : amount // ignore: cast_nullable_to_non_nullable
               as num?,
-      time: freezed == time
-          ? _value.time
-          : time // ignore: cast_nullable_to_non_nullable
+      lastAt: freezed == lastAt
+          ? _value.lastAt
+          : lastAt // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      createAt: freezed == createAt
+          ? _value.createAt
+          : createAt // ignore: cast_nullable_to_non_nullable
               as DateTime?,
       id: freezed == id
           ? _value.id
@@ -136,11 +147,12 @@ abstract class _$$BugetModelImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {List<TransactionModel>? transactions,
+      {List<TransactionModel> transactions,
       WalletModel? wallet,
       CategoryModel? category,
       num? amount,
-      DateTime? time,
+      DateTime? lastAt,
+      DateTime? createAt,
       String? id,
       bool isAutoCreate});
 
@@ -161,19 +173,20 @@ class __$$BugetModelImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? transactions = freezed,
+    Object? transactions = null,
     Object? wallet = freezed,
     Object? category = freezed,
     Object? amount = freezed,
-    Object? time = freezed,
+    Object? lastAt = freezed,
+    Object? createAt = freezed,
     Object? id = freezed,
     Object? isAutoCreate = null,
   }) {
     return _then(_$BugetModelImpl(
-      transactions: freezed == transactions
+      transactions: null == transactions
           ? _value._transactions
           : transactions // ignore: cast_nullable_to_non_nullable
-              as List<TransactionModel>?,
+              as List<TransactionModel>,
       wallet: freezed == wallet
           ? _value.wallet
           : wallet // ignore: cast_nullable_to_non_nullable
@@ -186,9 +199,13 @@ class __$$BugetModelImplCopyWithImpl<$Res>
           ? _value.amount
           : amount // ignore: cast_nullable_to_non_nullable
               as num?,
-      time: freezed == time
-          ? _value.time
-          : time // ignore: cast_nullable_to_non_nullable
+      lastAt: freezed == lastAt
+          ? _value.lastAt
+          : lastAt // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      createAt: freezed == createAt
+          ? _value.createAt
+          : createAt // ignore: cast_nullable_to_non_nullable
               as DateTime?,
       id: freezed == id
           ? _value.id
@@ -204,25 +221,29 @@ class __$$BugetModelImplCopyWithImpl<$Res>
 
 /// @nodoc
 
+@JsonSerializable(explicitToJson: true)
 class _$BugetModelImpl implements _BugetModel {
   const _$BugetModelImpl(
-      {final List<TransactionModel>? transactions,
+      {final List<TransactionModel> transactions = const [],
       this.wallet,
       this.category,
       this.amount,
-      this.time,
+      this.lastAt,
+      this.createAt,
       this.id,
       this.isAutoCreate = false})
       : _transactions = transactions;
 
-  final List<TransactionModel>? _transactions;
+  factory _$BugetModelImpl.fromJson(Map<String, dynamic> json) =>
+      _$$BugetModelImplFromJson(json);
+
+  final List<TransactionModel> _transactions;
   @override
-  List<TransactionModel>? get transactions {
-    final value = _transactions;
-    if (value == null) return null;
+  @JsonKey()
+  List<TransactionModel> get transactions {
     if (_transactions is EqualUnmodifiableListView) return _transactions;
     // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(value);
+    return EqualUnmodifiableListView(_transactions);
   }
 
   @override
@@ -232,7 +253,9 @@ class _$BugetModelImpl implements _BugetModel {
   @override
   final num? amount;
   @override
-  final DateTime? time;
+  final DateTime? lastAt;
+  @override
+  final DateTime? createAt;
   @override
   final String? id;
   @override
@@ -241,7 +264,7 @@ class _$BugetModelImpl implements _BugetModel {
 
   @override
   String toString() {
-    return 'BugetModel(transactions: $transactions, wallet: $wallet, category: $category, amount: $amount, time: $time, id: $id, isAutoCreate: $isAutoCreate)';
+    return 'BugetModel(transactions: $transactions, wallet: $wallet, category: $category, amount: $amount, lastAt: $lastAt, createAt: $createAt, id: $id, isAutoCreate: $isAutoCreate)';
   }
 
   @override
@@ -255,12 +278,15 @@ class _$BugetModelImpl implements _BugetModel {
             (identical(other.category, category) ||
                 other.category == category) &&
             (identical(other.amount, amount) || other.amount == amount) &&
-            (identical(other.time, time) || other.time == time) &&
+            (identical(other.lastAt, lastAt) || other.lastAt == lastAt) &&
+            (identical(other.createAt, createAt) ||
+                other.createAt == createAt) &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.isAutoCreate, isAutoCreate) ||
                 other.isAutoCreate == isAutoCreate));
   }
 
+  @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(
       runtimeType,
@@ -268,7 +294,8 @@ class _$BugetModelImpl implements _BugetModel {
       wallet,
       category,
       amount,
-      time,
+      lastAt,
+      createAt,
       id,
       isAutoCreate);
 
@@ -277,20 +304,31 @@ class _$BugetModelImpl implements _BugetModel {
   @pragma('vm:prefer-inline')
   _$$BugetModelImplCopyWith<_$BugetModelImpl> get copyWith =>
       __$$BugetModelImplCopyWithImpl<_$BugetModelImpl>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$BugetModelImplToJson(
+      this,
+    );
+  }
 }
 
 abstract class _BugetModel implements BugetModel {
   const factory _BugetModel(
-      {final List<TransactionModel>? transactions,
+      {final List<TransactionModel> transactions,
       final WalletModel? wallet,
       final CategoryModel? category,
       final num? amount,
-      final DateTime? time,
+      final DateTime? lastAt,
+      final DateTime? createAt,
       final String? id,
       final bool isAutoCreate}) = _$BugetModelImpl;
 
+  factory _BugetModel.fromJson(Map<String, dynamic> json) =
+      _$BugetModelImpl.fromJson;
+
   @override
-  List<TransactionModel>? get transactions;
+  List<TransactionModel> get transactions;
   @override
   WalletModel? get wallet;
   @override
@@ -298,7 +336,9 @@ abstract class _BugetModel implements BugetModel {
   @override
   num? get amount;
   @override
-  DateTime? get time;
+  DateTime? get lastAt;
+  @override
+  DateTime? get createAt;
   @override
   String? get id;
   @override

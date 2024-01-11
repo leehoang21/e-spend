@@ -1,24 +1,20 @@
 part of 'buget_cubit.dart';
 
 class BugetState extends Equatable {
-  final bool isObscurePassword;
-  final bool canAuthBiometric;
+  final List<BugetModel> bugets;
 
   const BugetState({
-    this.isObscurePassword = false,
-    this.canAuthBiometric = false,
+    this.bugets = const [],
   });
 
   BugetState copyWith({
-    bool? isObscurePassword,
-    bool? canAuthBiometric,
+    List<BugetModel>? bugets,
   }) {
     return BugetState(
-      isObscurePassword: isObscurePassword ?? this.isObscurePassword,
-      canAuthBiometric: canAuthBiometric ?? this.canAuthBiometric,
+      bugets: bugets ?? this.bugets,
     );
   }
 
   @override
-  List<Object?> get props => [isObscurePassword, canAuthBiometric];
+  List<Object?> get props => [bugets];
 }

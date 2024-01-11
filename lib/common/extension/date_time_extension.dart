@@ -27,6 +27,10 @@ extension DateTimeExtension on DateTime {
   String get formatY {
     return DateFormat('yyyy').format(this);
   }
+
+  String get formatHM {
+    return DateFormat('HH:mm').format(this);
+  }
 }
 
 extension TimestampExtension on Timestamp {

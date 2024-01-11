@@ -64,7 +64,12 @@ class UserRepositoryImpl extends UserRepository {
         (await config.auth.currentUser?.getIdToken()) ?? "",
         hiveConfig.localAuthId == config.auth.currentUser?.uid,
       );
-      final avatar = await _getUrlAvatar();
+      late String avatar;
+      try {
+        avatar = await _getUrlAvatar();
+      } catch (e) {
+        avatar = '';
+      }
       return user.copyWith(
         avatar: avatar,
       );

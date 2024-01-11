@@ -119,7 +119,7 @@ class DropDownSelectCustome<T> extends StatelessWidget {
       value: value,
       child: Text(
         value.toString().tr,
-        style: ThemeText.caption.copyWith(
+        style: ThemeText.body1.copyWith(
           color: AppColor.tuna,
         ),
       ),

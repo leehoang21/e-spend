@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_e_spend/common/configs/firebase_config.dart';
+import 'package:flutter_e_spend/common/configs/notification/notification_config.dart';
 import 'package:flutter_e_spend/common/di/di.dart';
 import 'package:flutter_e_spend/common/enums/category.dart';
 import 'package:flutter_e_spend/data/models/category_model.dart';
@@ -29,6 +30,7 @@ class NotificationService {
       final firebaseConfig = getIt.get<FirebaseConfig>();
       final transactionRepository = getIt.get<TransactionRepository>();
       final statisticsRepository = getIt.get<StatisticsRepository>();
+      final notificationConfig = getIt.get<NotificationConfig>();
 
       final bool status =
           await NotificationListenerService.isPermissionGranted();
@@ -42,6 +44,7 @@ class NotificationService {
             firebaseConfig,
             transactionRepository,
             statisticsRepository,
+            notificationConfig,
           );
         },
       );
@@ -58,25 +61,29 @@ class NotificationService {
     FirebaseConfig firebaseConfig,
     TransactionRepository transactionRepository,
     StatisticsRepository statisticsRepository,
+    NotificationConfig notificationConfig,
   ) async {
-    String token = '';
     try {
-      logger('_onData: ${event.toString()}');
-      token = hiveConfig.user?.token ?? '';
-    } catch (e) {
-      logger(e);
-    }
-    try {
-      if (firebaseConfig.auth.currentUser == null) {
-        await firebaseConfig.auth.signInWithCustomToken(token);
-      }
       if (firebaseConfig.auth.currentUser != null &&
           listBankSupport.contains(
             event.packageName,
           )) {
         final map = mapNotificationToTransaction(event);
-        await transactionRepository.create(map.$1, map.$2, map.$1.wallet.id);
-        await statisticsRepository.update(map.$1);
+        try {
+          await transactionRepository.create(map.$1, map.$2, map.$1.wallet.id);
+        } catch (_) {}
+        try {
+          await statisticsRepository.update(map.$1);
+        } catch (_) {}
+
+        await notificationConfig.pushNotification(
+          NotificationEvent(
+            packageName: event.packageName,
+            title: 'Thông báo tạo giao dịch tự động',
+            message: map.$1.note,
+            timeStamp: event.timeStamp,
+          ),
+        );
         // FlutterForegroundTask.updateService(
         //   notificationTitle: 'transaction',
         //   callback: startCallback,

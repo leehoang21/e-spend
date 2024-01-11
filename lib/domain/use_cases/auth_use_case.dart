@@ -1,3 +1,4 @@
+import 'package:either_dart/either.dart';
 import 'package:flutter_e_spend/common/configs/hive/hive_config.dart';
 import 'package:flutter_e_spend/common/utils/app_utils.dart';
 import 'package:flutter_e_spend/data/models/user_model.dart';
@@ -37,12 +38,14 @@ class AuthUseCase {
           pass: password!,
         );
         break;
-      // case LoginType.google:
-      //   result = await repository.loginWithGoogle();
-      //   break;
-      // case LoginType.facebook:
-      //   result = await repository.loginWithFacebook();
-      //   break;
+      case LoginType.google:
+        final result0 = await repository.loginWithGoogle();
+        result = await _loginWithSocial(result0);
+        return result;
+      case LoginType.facebook:
+        final result0 = await repository.loginWithFacebook();
+        result = await _loginWithSocial(result0);
+        return result;
       case LoginType.biometrics:
         result = await repository.loginWithBiometric();
         break;
@@ -55,12 +58,32 @@ class AuthUseCase {
       if (user != null) {
         hiveConfig.setUser = user;
       }
+
       if (user == null) {
         return AppError(message: 'error_message');
       }
       return null;
     }
     return result;
+  }
+
+  Future<AppError?> _loginWithSocial(
+      Either<UserModel, AppError> result0) async {
+    try {
+      late final AppError? result;
+      if (await userRepository.exits()) {
+        if (result0.isRight) {
+          result = result0.right;
+        } else {
+          result = null;
+        }
+      } else {
+        await userRepository.updateUser(result0.left);
+      }
+      return result;
+    } catch (e) {
+      return AppError(message: 'error_message');
+    }
   }
 
   Future<AppError?> registerWithBiometric({

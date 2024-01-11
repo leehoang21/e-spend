@@ -23,4 +23,8 @@ extension StringExtension on String {
 
     return '${StringConstants.espend}$phone@${StringConstants.espend}.com';
   }
+
+  DateTime get toDate {
+    return DateTime.tryParse(this) ?? DateTime.now();
+  }
 }

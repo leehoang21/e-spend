@@ -7,6 +7,7 @@ import 'package:flutter_e_spend/common/constants/app_dimens.dart';
 import 'package:flutter_e_spend/common/enums/login_type.dart';
 import 'package:flutter_e_spend/presentation/journey/auth/login/cubit/login_cubit.dart';
 import 'package:flutter_e_spend/presentation/routers/app_router.dart';
+import 'package:local_auth/local_auth.dart';
 import '../../../../common/utils/validator.dart';
 import '../../../themes/themes.dart';
 import '../../../widgets/button_widget/text_button_widget.dart';
@@ -61,10 +62,10 @@ class LoginScreen extends StatelessWidget {
                                 },
                                 child: Padding(
                                   padding: const EdgeInsets.all(8.0),
-                                  child: Assets.icons.biometrics.svg(
-                                    height: LoginConstants.sizeIcon,
-                                    width: LoginConstants.sizeIcon,
-                                  ),
+                                  child: canCheckBiometricsSupport(context
+                                      .watch<LoginCubit>()
+                                      .state
+                                      .biometricType),
                                 ),
                               ),
                     textStyle: ThemeText.style14Medium
@@ -133,5 +134,31 @@ class LoginScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Widget canCheckBiometricsSupport(BiometricType type) {
+    switch (type) {
+      case BiometricType.face:
+        return Assets.icons.icFaceId.image(
+          height: AppDimens.space_24,
+          width: AppDimens.space_24,
+        );
+      case BiometricType.fingerprint:
+        return const Icon(
+          Icons.fingerprint,
+        );
+      case BiometricType.iris:
+        return Assets.icons.icIris.image(
+          height: AppDimens.space_24,
+          width: AppDimens.space_24,
+        );
+      case BiometricType.strong:
+        return Assets.icons.icBiometrics.image(
+          height: AppDimens.space_24,
+          width: AppDimens.space_24,
+        );
+      default:
+        return const SizedBox();
+    }
   }
 }

@@ -4,6 +4,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_e_spend/common/configs/hive/hive_config.dart';
 import 'package:flutter_e_spend/common/di/di.dart';
+import 'package:flutter_e_spend/common/utils/app_utils.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:injectable/injectable.dart';
@@ -11,7 +12,7 @@ import 'package:injectable/injectable.dart';
 import '../../firebase_options.dart';
 import 'default_environment.dart';
 
-@singleton
+@lazySingleton
 class FirebaseConfig {
   late FirebaseApp app;
   late DocumentReference userDoc;
@@ -22,9 +23,13 @@ class FirebaseConfig {
 
   @postConstruct
   init() async {
-    app = await Firebase.initializeApp(
-      options: DefaultFirebaseOptions.currentPlatform,
-    );
+    try {
+      app = await Firebase.initializeApp(
+        options: DefaultFirebaseOptions.currentPlatform,
+      );
+    } catch (e) {
+      app = Firebase.app();
+    }
     userDoc = FirebaseFirestore.instance
         .collection(DefaultEnvironment.environmentHome)
         .doc(DefaultEnvironment.environment);
@@ -32,18 +37,37 @@ class FirebaseConfig {
         .ref(DefaultEnvironment.environmentHome)
         .child(DefaultEnvironment.environment);
     auth = FirebaseAuth.instance;
+    googleSignIn = GoogleSignIn();
+    facebookAuth = FacebookAuth.i;
+  }
 
+  Future initAsync() async {
+    try {
+      app = await Firebase.initializeApp(
+        options: DefaultFirebaseOptions.currentPlatform,
+      );
+    } catch (e) {
+      app = Firebase.app();
+    }
+    userDoc = FirebaseFirestore.instance
+        .collection(DefaultEnvironment.environmentHome)
+        .doc(DefaultEnvironment.environment);
+    userStorage = FirebaseStorage.instance
+        .ref(DefaultEnvironment.environmentHome)
+        .child(DefaultEnvironment.environment);
+    auth = FirebaseAuth.instance;
     googleSignIn = GoogleSignIn();
     facebookAuth = FacebookAuth.i;
   }
 
   Future<bool> singIn() async {
     try {
-      final token = getIt.get<HiveConfig>().user?.token ?? '';
-      if (token.isNotEmpty) {
-        final result = await auth.signInWithCustomToken(token);
-        return result.user != null;
-      } else {
+      try {
+        final hiveConfig = getIt.get<HiveConfig>();
+        await hiveConfig.init();
+        return auth.currentUser != null;
+      } catch (e) {
+        logger(e);
         return false;
       }
     } catch (e) {

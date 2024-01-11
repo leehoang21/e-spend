@@ -14,6 +14,7 @@ import 'dart:developer' as developer;
 
 import '../../common/utils/app_utils.dart';
 import '../bloc/loading_bloc/loading_bloc.dart';
+import '../bloc/schedule/schedule_cubit.dart';
 import '../widgets/change_time/time/time_cubit.dart';
 import '../widgets/loading_widget/loading_container_widget.dart';
 
@@ -79,6 +80,9 @@ class _AppState extends State<App> with WidgetsBindingObserver {
                   ),
                   BlocProvider(
                     create: (_) => getIt.get<TimeCubit>(),
+                  ),
+                  BlocProvider(
+                    create: (_) => getIt.get<RecurringListCubit>(),
                   ),
                 ],
                 child: MaterialApp.router(

@@ -15,8 +15,10 @@ import '../journey/home/home_screen_provider.dart';
 import '../journey/main/main_screen_provider.dart';
 import '../journey/planning/main/planning_screen_provider.dart';
 import '../journey/planning/screens/buget/screens/buget_list/buget_screen_provider.dart';
-import '../journey/planning/screens/buget/screens/create_buget/create_buget_screen_provider.dart';
+import '../journey/planning/screens/buget/screens/create/create_budget_screen_provider.dart';
+import '../journey/planning/screens/buget/screens/detail/detail_buget.dart';
 import '../journey/planning/screens/recurring/create/create_recurring_screen_provider.dart';
+import '../journey/planning/screens/recurring/detail/detail.dart';
 import '../journey/planning/screens/recurring/recurring_list_screen/recurring_list_screen_provider.dart';
 import '../journey/statistics/statistic_screen_provider.dart';
 import '../journey/transaction/bank_list_screen/bank_list_screen_provider.dart';
@@ -104,14 +106,21 @@ class AppRouter extends _$AppRouter {
         AutoRoute(
           page: BugetRoute.page,
         ),
+
         AutoRoute(
           page: CreateBugetRoute.page,
+        ),
+        AutoRoute(
+          page: DetailBugetRoute.page,
         ),
         AutoRoute(
           page: RecurringListRoute.page,
         ),
         AutoRoute(
           page: CreateRecurringRoute.page,
+        ),
+        AutoRoute(
+          page: DetailRecurringRoute.page,
         ),
       ];
 }

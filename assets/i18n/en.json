@@ -281,5 +281,14 @@
   "recurring.create.day": "Daily",
   "recurring.create.week": "Weekly",
   "recurring.create.month": "Monthly",
-  "recurring.create.year": "Yearly"
+  "recurring.create.year": "Yearly",
+  "recurring.create.repeat": "Repeat",
+  "buget.create.add_buget": "Add Buget",
+  "buget.create.update_buget": "Update Buget",
+  "lastAt": "End time",
+  "firstAt": "Start time",
+  "list_buget": "Buget",
+  "Recurrings": "Recurrings",
+  "week": "Week",
+  "none": "None"
 }

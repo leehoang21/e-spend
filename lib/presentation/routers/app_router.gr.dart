@@ -88,6 +88,26 @@ abstract class _$AppRouter extends RootStackRouter {
         child: const CreateWalletScreenProvider(),
       );
     },
+    DetailBugetRoute.name: (routeData) {
+      final args = routeData.argsAs<DetailBugetRouteArgs>();
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: DetailBugetScreenProvider(
+          key: args.key,
+          bugetModel: args.bugetModel,
+        ),
+      );
+    },
+    DetailRecurringRoute.name: (routeData) {
+      final args = routeData.argsAs<DetailRecurringRouteArgs>();
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: DetailRecurringScreenProvider(
+          key: args.key,
+          model: args.model,
+        ),
+      );
+    },
     DetailTransactionRoute.name: (routeData) {
       final args = routeData.argsAs<DetailTransactionRouteArgs>();
       return AutoRoutePage<dynamic>(
@@ -401,6 +421,82 @@ class CreateWalletRoute extends PageRouteInfo<void> {
   static const String name = 'CreateWalletRoute';
 
   static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
+/// [DetailBugetScreenProvider]
+class DetailBugetRoute extends PageRouteInfo<DetailBugetRouteArgs> {
+  DetailBugetRoute({
+    Key? key,
+    required BugetModel bugetModel,
+    List<PageRouteInfo>? children,
+  }) : super(
+          DetailBugetRoute.name,
+          args: DetailBugetRouteArgs(
+            key: key,
+            bugetModel: bugetModel,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'DetailBugetRoute';
+
+  static const PageInfo<DetailBugetRouteArgs> page =
+      PageInfo<DetailBugetRouteArgs>(name);
+}
+
+class DetailBugetRouteArgs {
+  const DetailBugetRouteArgs({
+    this.key,
+    required this.bugetModel,
+  });
+
+  final Key? key;
+
+  final BugetModel bugetModel;
+
+  @override
+  String toString() {
+    return 'DetailBugetRouteArgs{key: $key, bugetModel: $bugetModel}';
+  }
+}
+
+/// generated route for
+/// [DetailRecurringScreenProvider]
+class DetailRecurringRoute extends PageRouteInfo<DetailRecurringRouteArgs> {
+  DetailRecurringRoute({
+    Key? key,
+    required RecurringModel model,
+    List<PageRouteInfo>? children,
+  }) : super(
+          DetailRecurringRoute.name,
+          args: DetailRecurringRouteArgs(
+            key: key,
+            model: model,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'DetailRecurringRoute';
+
+  static const PageInfo<DetailRecurringRouteArgs> page =
+      PageInfo<DetailRecurringRouteArgs>(name);
+}
+
+class DetailRecurringRouteArgs {
+  const DetailRecurringRouteArgs({
+    this.key,
+    required this.model,
+  });
+
+  final Key? key;
+
+  final RecurringModel model;
+
+  @override
+  String toString() {
+    return 'DetailRecurringRouteArgs{key: $key, model: $model}';
+  }
 }
 
 /// generated route for

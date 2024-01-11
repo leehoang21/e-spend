@@ -26,14 +26,13 @@ class UserModelAdapter extends TypeAdapter<UserModel> {
       googleLink: fields[6] as UserModel?,
       isPassword: fields[7] as bool?,
       isBiometricsAuth: fields[8] as bool?,
-      token: fields[9] as String?,
     );
   }
 
   @override
   void write(BinaryWriter writer, UserModel obj) {
     writer
-      ..writeByte(10)
+      ..writeByte(9)
       ..writeByte(0)
       ..write(obj.userName)
       ..writeByte(1)
@@ -51,9 +50,7 @@ class UserModelAdapter extends TypeAdapter<UserModel> {
       ..writeByte(7)
       ..write(obj.isPassword)
       ..writeByte(8)
-      ..write(obj.isBiometricsAuth)
-      ..writeByte(9)
-      ..write(obj.token);
+      ..write(obj.isBiometricsAuth);
   }
 
   @override

@@ -1,13 +1,16 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:either_dart/either.dart';
 import 'package:flutter_e_spend/common/configs/firebase_config.dart';
+import 'package:flutter_e_spend/common/enums/category.dart';
 import 'package:flutter_e_spend/common/exception/app_error.dart';
+import 'package:flutter_e_spend/domain/repositories/buget_repository.dart';
 import 'package:flutter_e_spend/domain/repositories/storage_repository.dart';
 import 'package:injectable/injectable.dart';
 
 import '../../common/configs/default_environment.dart';
 import '../../domain/repositories/transaction_repository.dart';
 import '../../domain/repositories/wallet_repository.dart';
+import '../models/buget_model.dart';
 import '../models/transaction_model.dart';
 
 @Injectable(as: TransactionRepository)
@@ -15,10 +18,12 @@ class TransactionRepositoryImpl extends TransactionRepository {
   final FirebaseConfig firebaseConfig;
   final WalletRepository walletRepository;
   final StorageRepository storageRepository;
+  final BugetRepository bugetRepository;
   TransactionRepositoryImpl(
     this.firebaseConfig,
     this.walletRepository,
     this.storageRepository,
+    this.bugetRepository,
   );
 
   String get _uid => firebaseConfig.auth.currentUser?.uid ?? '';
@@ -36,6 +41,7 @@ class TransactionRepositoryImpl extends TransactionRepository {
     try {
       final param = transaction.toJson();
       await _changeWallet(transaction, walletId);
+      await _changBuget(transaction);
       if (id != null) {
         await _doc.doc(id).set(param);
         return Left(id);
@@ -96,6 +102,25 @@ class TransactionRepositoryImpl extends TransactionRepository {
     );
     await walletRepository.put(walletModel: model.wallet, id: idWallet);
     return model;
+  }
+
+  Future<void> _changBuget(
+    TransactionModel transaction,
+  ) async {
+    final result = await bugetRepository.get();
+    final bugets = result.fold<List<BugetModel>>((l) => l, (r) => []);
+    for (var element in bugets) {
+      if (element.category!.category.type ==
+          transaction.category.category.type) {
+        try {
+          element = element.copyWith(
+            amount: (element.amount ?? 0) + transaction.amount,
+            transactions: [...element.transactions, transaction],
+          );
+          await bugetRepository.put(element);
+        } catch (_) {}
+      }
+    }
   }
 
   @override
